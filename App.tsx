@@ -10,19 +10,25 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { Home } from './src/container/Home/Home';
 
 declare const global: { HermesInternal: null | {} };
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="">
-        
-      </Stack.Navigator>
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{ tabBarLabel: '首頁' }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
