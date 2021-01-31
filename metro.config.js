@@ -1,6 +1,11 @@
-const { getDefaultConfig, mergeConfig } = require('metro-config');
+/**
+ * Metro configuration for React Native
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
 
-const defaultConfig = {
+module.exports = {
   transformer: {
     getTransformOptions: async () => ({
       transform: {
@@ -10,20 +15,3 @@ const defaultConfig = {
     }),
   },
 };
-
-const svgTransformerConfig = (async () => {
-  const {
-    resolver: { sourceExts, assetExts },
-  } = await getDefaultConfig();
-  return {
-    transformer: {
-      babelTransformerPath: require.resolve('react-native-svg-transformer'),
-    },
-    resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
-      sourceExts: [...sourceExts, 'svg'],
-    },
-  };
-})();
-
-module.exports = mergeConfig(defaultConfig, svgTransformerConfig);
