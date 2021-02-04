@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-export const MfcTextStyle = StyleSheet.create({
-  body1: {
+export const MfcTextSizes = StyleSheet.create({
+  large: {
     fontSize: 16,
   },
-  body2: {
+  normal: {
     fontSize: 14,
   },
-  body3: {
+  small: {
     fontSize: 12,
   },
 });

@@ -1,4 +1,7 @@
+import { StyleProp, ViewStyle } from 'react-native';
+import { ButtonColors } from './Button.style';
 export interface MfcButtonProps {
-  text: string;
+  color?: keyof typeof ButtonColors;
+  style?: StyleProp<ViewStyle>;
   onPress: () => any;
 }

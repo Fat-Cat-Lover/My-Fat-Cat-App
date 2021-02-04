@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-export const MfcHeaderTextStyle = StyleSheet.create({
-  header1: {
+export const MfcHeaderTextSizes = StyleSheet.create({
+  large: {
     fontSize: 24,
   },
-  header2: {
+  normal: {
     fontSize: 20,
   },
-  header3: {
+  small: {
     fontSize: 18,
   },
 });
