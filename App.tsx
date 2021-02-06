@@ -13,21 +13,46 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Home } from './src/container/Home/Home';
+import Colors from 'styles/colors';
+import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
+import { HomeNavigator } from 'navigations/home-navigator';
 
 declare const global: { HermesInternal: null | {} };
+
+const tabIcon: { [key: string]: 'home' | 'bookmark' | 'pet' | 'setting' } = {
+  Home: 'home',
+  Diary: 'bookmark',
+  Pets: 'pet',
+  Setting: 'setting',
+};
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="Home">
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            const iconName = tabIcon[route.name];
+            return <MfcIcon name={iconName} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: Colors.darkOrange,
+          inactiveTintColor: Colors.lightGray,
+        }}>
         <Tab.Screen
           name="Home"
-          component={Home}
-          options={{ tabBarLabel: '首頁' }}
+          component={HomeNavigator}
+          options={{
+            tabBarLabel: '首頁',
+          }}
         />
+        <Tab.Screen name="Diary" component={} options={{ tabBarLabel: '日記' }} />
+        <Tab.Screen name="Pets" component={} options={{ tabBarLabel: '寵物' }} />
+        <Tab.Screen name="Setting" component={} options={{ tabBarLabel: '設定' }} />
       </Tab.Navigator>
     </NavigationContainer>
   );
