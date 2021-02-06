@@ -3,12 +3,10 @@ import { RoundImageButton } from 'components/Round-Image-Button/Round-Image-Butt
 import { catImages, CatPhotoButtonProps } from './Cat-Photo-Button.interface';
 
 export const CatPhotoButton: React.FC<CatPhotoButtonProps> = props => {
-  const size = props.size ? props.size : 65;
-
   if (typeof props.image === 'string') {
     const image = catImages[props.image];
-    return <RoundImageButton image={image} size={size} onPress={props.onPress} />;
+    return <RoundImageButton image={image} onPress={props.onPress} style={props.style} />;
   } else {
-    return <RoundImageButton image={props.image} size={size} onPress={props.onPress} />;
+    return <RoundImageButton image={props.image} onPress={props.onPress} style={props.style} />;
   }
 };
