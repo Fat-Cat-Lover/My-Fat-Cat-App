@@ -1,9 +1,9 @@
 export default {
-  spacing1: '8px',
-  spacing2: '10px',
-  spacing3: '12px',
-  spacing4: '13px',
-  spacing5: '16px',
-  spacing6: '24px',
-  spacing7: '32px',
+  spacing1: 8,
+  spacing2: 10,
+  spacing3: 12,
+  spacing4: 13,
+  spacing5: 16,
+  spacing6: 24,
+  spacing7: 32,
 };

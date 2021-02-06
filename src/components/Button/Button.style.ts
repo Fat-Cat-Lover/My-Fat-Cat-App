@@ -1,5 +1,6 @@
 import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import baseColors from 'styles/colors';
+import Spacings from 'styles/spacings';
 
 interface ButtonStyle {
   container: ViewStyle;
@@ -11,7 +12,7 @@ export const ButtonMainStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacings.spacing5,
   },
 });
 

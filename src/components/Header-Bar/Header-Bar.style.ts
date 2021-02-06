@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Spacings from 'styles/spacings';
 
 export const HeadBarStyle = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export const HeadBarStyle = StyleSheet.create({
   headerSide: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacings.spacing5,
     flex: 1,
   },
   headerTitle: {
