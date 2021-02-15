@@ -8,33 +8,28 @@ import { DatePickerStyle } from './Date-Picker.style';
 import { DatePickerProps } from './Date-Picker.interface';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export class DatePicker extends React.Component<DatePickerProps, { date: dayjs.Dayjs; showDatePicker: boolean }> {
+export class DatePicker extends React.Component<DatePickerProps, { showDatePicker: boolean }> {
   constructor(props: DatePickerProps) {
     super(props);
     this.state = {
-      date: dayjs(props.currentTime),
       showDatePicker: false,
     };
-    this.moveToNextDay.bind(this);
-    this.moveToPreviousDay.bind(this);
-    this.openTimePicker.bind(this);
+    this.moveToNextDay = this.moveToNextDay.bind(this);
+    this.moveToPreviousDay = this.moveToPreviousDay.bind(this);
+    this.openTimePicker = this.openTimePicker.bind(this);
   }
 
   moveToNextDay() {
-    this.setState({
-      date: this.state.date.add(1, 'date'),
-    });
     if (this.props.onDateChange) {
-      this.props.onDateChange(this.state.date.toDate());
+      const nextDay = dayjs(this.props.currentTime).add(1, 'day').toDate();
+      this.props.onDateChange(nextDay);
     }
   }
 
   moveToPreviousDay() {
-    this.setState({
-      date: this.state.date.subtract(1, 'date'),
-    });
     if (this.props.onDateChange) {
-      this.props.onDateChange(this.state.date.toDate());
+      const preDay = dayjs(this.props.currentTime).subtract(1, 'day').toDate();
+      this.props.onDateChange(preDay);
     }
   }
 
@@ -46,17 +41,13 @@ export class DatePicker extends React.Component<DatePickerProps, { date: dayjs.D
 
   onDateChange(event: Event, date?: Date) {
     if (date) {
-      this.setState({
-        date: dayjs(date),
-      });
       if (this.props.onDateChange) {
-        this.props.onDateChange(this.state.date.toDate());
+        this.props.onDateChange(date);
       }
-    } else {
-      this.setState({
-        showDatePicker: false,
-      });
     }
+    this.setState({
+      showDatePicker: false,
+    });
   }
 
   render() {
@@ -67,7 +58,7 @@ export class DatePicker extends React.Component<DatePickerProps, { date: dayjs.D
         </TouchableOpacity>
         <TouchableOpacity style={DatePickerStyle.datePicker} onPress={this.openTimePicker}>
           <MfcHeaderText type="regular" size="small">
-            {this.state.date.format('YYYY/MM/DD')}
+            {dayjs(this.props.currentTime).format('YYYY/MM/DD')}
           </MfcHeaderText>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.moveToNextDay}>
@@ -75,7 +66,7 @@ export class DatePicker extends React.Component<DatePickerProps, { date: dayjs.D
         </TouchableOpacity>
         {this.state.showDatePicker && (
           <DateTimePicker
-            value={this.state.date.toDate()}
+            value={this.props.currentTime}
             mode="date"
             onChange={(event, date) => this.onDateChange(event, date)}
           />

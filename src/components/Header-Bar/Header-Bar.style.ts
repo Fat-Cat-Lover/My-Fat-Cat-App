@@ -7,14 +7,15 @@ export const HeadBarStyle = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
+    padding: Spacings.spacing5,
   },
   headerSide: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacings.spacing5,
     flex: 1,
   },
   headerTitle: {
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 8,

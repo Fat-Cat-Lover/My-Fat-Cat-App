@@ -3,5 +3,5 @@ import { ButtonColors } from './Button.style';
 export interface MfcButtonProps {
   color?: keyof typeof ButtonColors;
   style?: StyleProp<ViewStyle>;
-  onPress: () => any;
+  onPress?: () => any;
 }

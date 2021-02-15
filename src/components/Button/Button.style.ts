@@ -9,10 +9,12 @@ interface ButtonStyle {
 
 export const ButtonMainStyle = StyleSheet.create({
   container: {
+    height: 48,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacings.spacing5,
+    borderRadius: 8,
   },
 });
 
