@@ -3,6 +3,9 @@ import Colors from 'styles/colors';
 import Spacings from 'styles/spacings';
 
 export const CatDiaryStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   listContainer: {
     height: 89,
     paddingTop: Spacings.spacing3,
@@ -21,6 +24,7 @@ export const CatDiaryStyle = StyleSheet.create({
     borderColor: Colors.darkOrange,
   },
   DiaryContainer: {
+    flex: 1,
     backgroundColor: Colors.lightWhite,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
@@ -30,5 +34,6 @@ export const CatDiaryStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  DiaryContent: {},
+  DiaryContent: {
+  },
 });

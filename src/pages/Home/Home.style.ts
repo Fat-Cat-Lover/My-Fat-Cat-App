@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native';
 import Spacings from 'styles/spacings';
 
 export const HomeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   diaryContent: {
     paddingTop: Spacings.spacing2,
   },

@@ -44,7 +44,7 @@ export class Home extends Component<{}, { date: Date; cats: Cat[]; selectedCat: 
 
   render() {
     return (
-      <View>
+      <View style={HomeStyles.container}>
         <HeaderBar>
           <DatePicker currentTime={this.state.date} onDateChange={newDate => this.onDateChange(newDate)} />
         </HeaderBar>

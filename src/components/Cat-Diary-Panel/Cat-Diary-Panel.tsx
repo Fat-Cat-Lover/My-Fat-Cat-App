@@ -28,42 +28,44 @@ export class CatDiary extends React.Component<CatDiaryProps, { selectedCatIndex:
 
   render() {
     return (
-      <View>
-        <ScrollView horizontal={true} style={CatDiaryStyle.listContainer}>
-          {this.props.cats.map((cat, index) => {
-            let image: ImageSourcePropType;
-            if (cat.image) {
-              image = { uri: cat.image };
-            } else {
-              image = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
-            }
-            const isSelected = this.state.selectedCatIndex === index;
-            return (
-              <View style={CatDiaryStyle.catButtonContainer} key={cat.id}>
-                <CatPhotoButton
-                  size={55}
-                  image={image}
-                  onPress={() => this.selectCat(index)}
-                  style={[isSelected && CatDiaryStyle.selectedCat]}
-                />
-                {isSelected && (
-                  <View style={CatDiaryStyle.selectedTriangle}>
-                    <RoundTriangle />
-                  </View>
-                )}
-              </View>
-            );
-          })}
-          <RoundImageButton size={55}>
-            <MfcIcon name="add" />
-          </RoundImageButton>
-        </ScrollView>
+      <View style={CatDiaryStyle.container}>
+        <View style={CatDiaryStyle.listContainer}>
+          <ScrollView horizontal={true}>
+            {this.props.cats.map((cat, index) => {
+              let image: ImageSourcePropType;
+              if (cat.image) {
+                image = { uri: cat.image };
+              } else {
+                image = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
+              }
+              const isSelected = this.state.selectedCatIndex === index;
+              return (
+                <View style={CatDiaryStyle.catButtonContainer} key={cat.id}>
+                  <CatPhotoButton
+                    size={55}
+                    image={image}
+                    onPress={() => this.selectCat(index)}
+                    style={[isSelected && CatDiaryStyle.selectedCat]}
+                  />
+                  {isSelected && (
+                    <View style={CatDiaryStyle.selectedTriangle}>
+                      <RoundTriangle />
+                    </View>
+                  )}
+                </View>
+              );
+            })}
+            <RoundImageButton size={55}>
+              <MfcIcon name="add" />
+            </RoundImageButton>
+          </ScrollView>
+        </View>
         <View style={CatDiaryStyle.DiaryContainer}>
           <View style={CatDiaryStyle.DiaryHeader}>
             <MfcHeaderText size="large">{this.props.cats[this.state.selectedCatIndex]?.name}</MfcHeaderText>
             {this.props.DiaryHeaderLeft}
           </View>
-          <View style={CatDiaryStyle.DiaryContent}>{this.props.children}</View>
+          <ScrollView style={CatDiaryStyle.DiaryContent}>{this.props.children}</ScrollView>
         </View>
       </View>
     );
