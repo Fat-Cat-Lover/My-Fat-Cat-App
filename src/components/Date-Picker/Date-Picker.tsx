@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { View } from 'react-native';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
@@ -7,71 +7,65 @@ import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { DatePickerStyle } from './Date-Picker.style';
 import { DatePickerProps } from './Date-Picker.interface';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useRootDispatch, useRootSelector } from 'redux/hooks';
+import { setDiaryDate } from 'redux/diary-date/slice';
+import { selectDiaryDate } from 'redux/diary-date/selector';
 
-export class DatePicker extends React.Component<DatePickerProps, { showDatePicker: boolean }> {
-  constructor(props: DatePickerProps) {
-    super(props);
-    this.state = {
-      showDatePicker: false,
-    };
-    this.moveToNextDay = this.moveToNextDay.bind(this);
-    this.moveToPreviousDay = this.moveToPreviousDay.bind(this);
-    this.openTimePicker = this.openTimePicker.bind(this);
-  }
+export const DatePicker: React.FC<DatePickerProps> = props => {
+  const currentDate = dayjs(useRootSelector(selectDiaryDate));
+  const dispatch = useRootDispatch();
+  const [showDatePicker, toggleShowPicker] = useState(false);
 
-  moveToNextDay() {
-    if (this.props.onDateChange) {
-      const nextDay = dayjs(this.props.currentTime).add(1, 'day').toDate();
-      this.props.onDateChange(nextDay);
+  function moveToNextDay() {
+    const nextDay = currentDate.add(1, 'day');
+    dispatch(setDiaryDate(nextDay.unix()));
+    if (props.onDateChange) {
+      props.onDateChange(nextDay.toDate());
     }
   }
 
-  moveToPreviousDay() {
-    if (this.props.onDateChange) {
-      const preDay = dayjs(this.props.currentTime).subtract(1, 'day').toDate();
-      this.props.onDateChange(preDay);
+  function moveToPreviousDay() {
+    const preDay = currentDate.subtract(1, 'day');
+    dispatch(setDiaryDate(preDay.unix()));
+    if (props.onDateChange) {
+      props.onDateChange(preDay.toDate());
     }
   }
 
-  openTimePicker() {
-    this.setState({
-      showDatePicker: true,
-    });
+  function openTimePicker() {
+    toggleShowPicker(true);
   }
 
-  onDateChange(event: Event, date?: Date) {
-    if (date) {
-      if (this.props.onDateChange) {
-        this.props.onDateChange(date);
+  function onDateChange(event: Event, newDate?: Date) {
+    toggleShowPicker(false);
+    if (newDate && newDate.getTime() / 1000 !== currentDate.unix()) {
+      dispatch(setDiaryDate(dayjs(newDate).unix()));
+      if (props.onDateChange) {
+        props.onDateChange(newDate);
       }
     }
-    this.setState({
-      showDatePicker: false,
-    });
   }
 
-  render() {
-    return (
-      <View style={DatePickerStyle.container}>
-        <TouchableOpacity onPress={this.moveToPreviousDay}>
-          <MfcIcon name="keyboardArrowLeft" />
-        </TouchableOpacity>
-        <TouchableOpacity style={DatePickerStyle.datePicker} onPress={this.openTimePicker}>
-          <MfcHeaderText type="regular" size="small">
-            {dayjs(this.props.currentTime).format('YYYY/MM/DD')}
-          </MfcHeaderText>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.moveToNextDay}>
-          <MfcIcon name="keyboardArrowRight" />
-        </TouchableOpacity>
-        {this.state.showDatePicker && (
-          <DateTimePicker
-            value={this.props.currentTime}
-            mode="date"
-            onChange={(event, date) => this.onDateChange(event, date)}
-          />
-        )}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={DatePickerStyle.container}>
+      <TouchableOpacity onPress={moveToPreviousDay}>
+        <MfcIcon name="keyboardArrowLeft" />
+      </TouchableOpacity>
+      <TouchableOpacity style={DatePickerStyle.datePicker} onPress={openTimePicker}>
+        <MfcHeaderText type="regular" size="small">
+          {currentDate.format('YYYY/MM/DD')}
+        </MfcHeaderText>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={moveToNextDay}>
+        <MfcIcon name="keyboardArrowRight" />
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={currentDate.toDate()}
+          mode="date"
+          onChange={(event, date) => onDateChange(event, date)}
+        />
+      )}
+    </View>
+  );
+};

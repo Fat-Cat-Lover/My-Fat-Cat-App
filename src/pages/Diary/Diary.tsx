@@ -1,8 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 
-export class Diary extends React.Component {
-  render() {
-    return <View>{}</View>;
-  }
-}
+export const Diary: React.FC = props => {
+  return <View>{}</View>;
+};
