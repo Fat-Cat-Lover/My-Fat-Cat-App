@@ -8,10 +8,11 @@ import { DefaultCatsImages } from 'common/default-cat-images';
 import { RoundTriangle } from 'components/Round-Triangle/Round-Triangle';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { useRootDispatch } from 'redux/hooks';
+import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { setSelectedCat } from 'redux/cats/slice';
 
 export const CatDiary: React.FC<CatDiaryProps> = props => {
+  const selectedCat = useRootSelector(state => state.cats.selectedCat);
   const dispatch = useRootDispatch();
 
   function selectCat(index: number) {
@@ -32,7 +33,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
             } else {
               image = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
             }
-            const isSelected = props.selectedCat === index;
+            const isSelected = selectedCat === index;
             return (
               <View style={CatDiaryStyle.catButtonContainer} key={cat.id}>
                 <CatPhotoButton
@@ -55,11 +56,15 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
         </ScrollView>
       </View>
       <View style={CatDiaryStyle.DiaryContainer}>
-        <View style={CatDiaryStyle.DiaryHeader}>
-          <MfcHeaderText size="large">{props.cats[props.selectedCat]?.name}</MfcHeaderText>
-          {props.DiaryHeaderLeft}
-        </View>
-        <ScrollView style={CatDiaryStyle.DiaryContent}>{props.children}</ScrollView>
+        {props.cats.length > 0 && (
+          <>
+            <View style={CatDiaryStyle.DiaryHeader}>
+              <MfcHeaderText size="large">{props.cats[selectedCat]?.name}</MfcHeaderText>
+              {props.DiaryHeaderLeft}
+            </View>
+            <ScrollView style={CatDiaryStyle.DiaryContent}>{props.children}</ScrollView>
+          </>
+        )}
       </View>
     </View>
   );

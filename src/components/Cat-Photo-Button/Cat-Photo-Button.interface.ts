@@ -1,8 +1,8 @@
-import { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
+import { ImageSourcePropType, ImageStyle, StyleProp } from 'react-native';
 
 export interface CatPhotoButtonProps {
   image: ImageSourcePropType;
   size?: number;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ImageStyle>;
   onPress?: () => any;
 }

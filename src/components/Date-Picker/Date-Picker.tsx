@@ -18,7 +18,7 @@ export const DatePicker: React.FC<DatePickerProps> = props => {
 
   function moveToNextDay() {
     const nextDay = currentDate.add(1, 'day');
-    dispatch(setDiaryDate(nextDay.unix()));
+    dispatch(setDiaryDate(nextDay.toISOString()));
     if (props.onDateChange) {
       props.onDateChange(nextDay.toDate());
     }
@@ -26,7 +26,7 @@ export const DatePicker: React.FC<DatePickerProps> = props => {
 
   function moveToPreviousDay() {
     const preDay = currentDate.subtract(1, 'day');
-    dispatch(setDiaryDate(preDay.unix()));
+    dispatch(setDiaryDate(preDay.toISOString()));
     if (props.onDateChange) {
       props.onDateChange(preDay.toDate());
     }
@@ -39,7 +39,7 @@ export const DatePicker: React.FC<DatePickerProps> = props => {
   function onDateChange(event: Event, newDate?: Date) {
     toggleShowPicker(false);
     if (newDate && newDate.getTime() / 1000 !== currentDate.unix()) {
-      dispatch(setDiaryDate(dayjs(newDate).unix()));
+      dispatch(setDiaryDate(newDate.toISOString()));
       if (props.onDateChange) {
         props.onDateChange(newDate);
       }

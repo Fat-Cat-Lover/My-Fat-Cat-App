@@ -4,10 +4,10 @@ import dayjs from 'dayjs';
 const diaryDateSlice = createSlice({
   name: 'diaryDate',
   initialState: {
-    value: dayjs().unix(),
+    value: dayjs().toISOString(),
   },
   reducers: {
-    setDiaryDate: (state, action: PayloadAction<number>) => {
+    setDiaryDate: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
   },

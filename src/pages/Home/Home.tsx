@@ -5,37 +5,43 @@ import { DatePicker } from 'components/Date-Picker/Date-Picker';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { ProgressButton } from 'components/Progress-Button/Progress-Button';
 import { MfcText } from 'components/Text/Text';
-import { MockCats } from 'mocks/cats';
-import { Cat } from 'models/cat';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { HomeStyles } from './Home.style';
 import { setCats } from 'redux/cats/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
+import { getCats } from 'services/cat';
+import { getDiary } from 'services/diary';
+import { setCurrentDiary } from 'redux/diary/slice';
+import { selectDiary } from 'redux/diary/selector';
 
 export const Home: React.FC = props => {
   const currentDate = useRootSelector(selectDiaryDate);
   const cats = useRootSelector(state => state.cats.cats);
-  const dispatch = useRootDispatch();
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
+  const diary = useRootSelector(selectDiary);
+  const dispatch = useRootDispatch();
 
   useEffect(() => {
-    dispatch(setCats(getCats()));
+    getCats().then(_cats => {
+      dispatch(setCats(_cats));
+      if (_cats) {
+        return getCatDiary(_cats[selectedCat].id, currentDate);
+      }
+    });
   }, []);
 
-  function getCats(): Cat[] {
-    return MockCats;
-  }
-
-  function getDiary(catId: number, date: Date) {
-    return;
+  function getCatDiary(selectCatId: number, date: string) {
+    return getDiary(selectCatId, date).then(_diary => {
+      dispatch(setCurrentDiary(_diary));
+    });
   }
 
   function onDateChange(newDate: Date) {
-    getDiary(cats[selectedCat].id, newDate);
+    getCatDiary(cats[selectedCat].id, newDate.toISOString());
   }
 
   function onCatSelect(index: number) {
-    getDiary(cats[index].id, currentDate);
+    getCatDiary(cats[index].id, currentDate);
   }
 
   return (
@@ -43,14 +49,14 @@ export const Home: React.FC = props => {
       <HeaderBar>
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
-      <CatDiary cats={cats} selectedCat={selectedCat} onCatSelect={onCatSelect}>
+      <CatDiary cats={cats} onCatSelect={onCatSelect}>
         <View style={HomeStyles.diaryContent}>
           <MfcText>體重(kg): </MfcText>
           <View style={HomeStyles.dailySummaryContainer}>
             <ProgressButton
               icon="sport"
-              progress={10 / 30}
-              progressText="10/30 Mins"
+              progress={(diary?.excerciseTime || 0) / 30}
+              progressText={`${diary?.excerciseTime || 0}/30 Mins`}
               progressBarColor="#2EC4B6"
               buttonText="運動"
               buttonColor="green"
@@ -58,8 +64,8 @@ export const Home: React.FC = props => {
             <View style={HomeStyles.SummarySpacing} />
             <ProgressButton
               icon="food"
-              progress={1600 / 3200}
-              progressText="1600/3200 Cal"
+              progress={(diary?.caloriesEatenToday || 0) / 3200}
+              progressText={`${diary?.caloriesEatenToday || 0}/3200 Cal`}
               progressBarColor="#FF9F1C"
               buttonText="餵食"
               buttonColor="primary"
