@@ -1,12 +1,18 @@
 import React from 'react';
-import { RoundImageButton } from 'components/Round-Image-Button/Round-Image-Button';
-import { catImages, CatPhotoButtonProps } from './Cat-Photo-Button.interface';
+import { CatPhotoButtonProps } from './Cat-Photo-Button.interface';
+import { Image, TouchableOpacity } from 'react-native';
+import { CatPhotoButtonStyle } from './Cat-Photo-Button.style';
 
 export const CatPhotoButton: React.FC<CatPhotoButtonProps> = props => {
-  if (typeof props.image === 'string') {
-    const image = catImages[props.image];
-    return <RoundImageButton image={image} onPress={props.onPress} style={props.style} />;
-  } else {
-    return <RoundImageButton image={props.image} onPress={props.onPress} style={props.style} />;
-  }
+  const size = props.size ? props.size : 55;
+  const styleStyle = {
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+  };
+  return (
+    <TouchableOpacity onPress={props.onPress}>
+      <Image source={props.image} style={[styleStyle, CatPhotoButtonStyle.image, props.style]} />
+    </TouchableOpacity>
+  );
 };

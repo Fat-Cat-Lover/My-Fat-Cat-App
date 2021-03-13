@@ -7,54 +7,36 @@
  *
  * @format
  */
-
+import 'reflect-metadata';
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Colors from 'styles/colors';
-import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { HomeNavigator } from 'navigations/home-navigator';
+import Colors from './src/styles/colors';
+import { TabBar } from 'components/Tab-Bar/Tab-Bar';
+import { store } from 'redux/store';
 
 declare const global: { HermesInternal: null | {} };
 
-const tabIcon: { [key: string]: 'home' | 'bookmark' | 'pet' | 'setting' } = {
-  Home: 'home',
-  Diary: 'bookmark',
-  Pets: 'pet',
-  Setting: 'setting',
-};
-
-const Tab = createBottomTabNavigator();
-
 const App = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            const iconName = tabIcon[route.name];
-            return <MfcIcon name={iconName} color={color} />;
+    <Provider store={store}>
+      <NavigationContainer
+        theme={{
+          dark: false,
+          colors: {
+            primary: Colors.darkOrange,
+            background: Colors.mainWhite,
+            card: Colors.lightWhite,
+            text: Colors.darkGray,
+            border: Colors.lightWhite,
+            notification: Colors.darkOrange,
           },
-        })}
-        tabBarOptions={{
-          activeTintColor: Colors.darkOrange,
-          inactiveTintColor: Colors.lightGray,
         }}>
-        <Tab.Screen
-          name="Home"
-          component={HomeNavigator}
-          options={{
-            tabBarLabel: '首頁',
-          }}
-        />
-        <Tab.Screen name="Diary" component={} options={{ tabBarLabel: '日記' }} />
-        <Tab.Screen name="Pets" component={} options={{ tabBarLabel: '寵物' }} />
-        <Tab.Screen name="Setting" component={} options={{ tabBarLabel: '設定' }} />
-      </Tab.Navigator>
-    </NavigationContainer>
+        <TabBar />
+      </NavigationContainer>
+    </Provider>
   );
 };
 
