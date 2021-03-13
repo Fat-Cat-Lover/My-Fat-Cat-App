@@ -1,5 +1,4 @@
 import React from 'react';
-import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { CatPhotoButtonProps } from './Cat-Photo-Button.interface';
 import { Image, TouchableOpacity } from 'react-native';
 import { CatPhotoButtonStyle } from './Cat-Photo-Button.style';
