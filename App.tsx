@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 
 import Colors from './src/styles/colors';
-import { TabBar } from 'components/Tab-Bar/Tab-Bar';
+import { TabBar } from 'navigations/Tab-Bar/Tab-Bar';
 import { store } from 'redux/store';
 
 declare const global: { HermesInternal: null | {} };
