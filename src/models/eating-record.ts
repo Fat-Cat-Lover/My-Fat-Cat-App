@@ -1,5 +1,11 @@
+import { Transform } from 'class-transformer';
+
 export class EatingRecord {
   id: string;
+
+  @Transform(({ value }) => value.toISOString(), {
+    toPlainOnly: true,
+  })
   created_time: Date;
   constructor(
     public weight: number,

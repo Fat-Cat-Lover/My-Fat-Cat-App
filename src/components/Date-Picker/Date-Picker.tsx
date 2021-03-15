@@ -6,7 +6,7 @@ import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { DatePickerStyle } from './Date-Picker.style';
 import { DatePickerProps } from './Date-Picker.interface';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { setDiaryDate } from 'redux/diary-date/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';

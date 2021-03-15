@@ -35,5 +35,6 @@ export const CatDiaryStyle = StyleSheet.create({
     justifyContent: 'space-between',
   },
   DiaryContent: {
+    flex: 1,
   },
 });

@@ -12,6 +12,7 @@ import { EatingRecord } from 'components/Eating-Record/Eating-Record';
 import { MfcText } from 'components/Text/Text';
 import { DiaryStyle } from './Diary.style';
 import { ScrollView } from 'react-native-gesture-handler';
+import { CommonStyle } from 'styles/common-style';
 
 export const Diary: React.FC = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -35,13 +36,21 @@ export const Diary: React.FC = props => {
   }
 
   let content: React.ReactNode;
-  if (diary.records.length > 0) {
-    content = diary.records.map(record => <EatingRecord key={record.id} record={record} />);
+  if (diary && diary.records.length > 0) {
+    content = (
+      <View style={DiaryStyle.diaryContent}>
+        {diary.records.map(record => (
+          <ScrollView key={record.id} contentContainerStyle={DiaryStyle.eatingRecord}>
+            <EatingRecord record={record} />
+          </ScrollView>
+        ))}
+      </View>
+    );
   } else {
     content = (
       <View style={DiaryStyle.noFoodCatContainer}>
         <Image source={require('assets/images/others/no-food.png')} />
-        <MfcText>他可能餓壞了？快去餵食</MfcText>
+        <MfcText style={[CommonStyle.grayText, DiaryStyle.noFoodText]}>他可能餓壞了？快去餵食</MfcText>
       </View>
     );
   }
@@ -52,7 +61,7 @@ export const Diary: React.FC = props => {
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
       <CatDiary cats={cats} onCatSelect={onCatSelect}>
-        <ScrollView style={DiaryStyle.diaryContent}>{content}</ScrollView>
+        {content}
       </CatDiary>
     </View>
   );

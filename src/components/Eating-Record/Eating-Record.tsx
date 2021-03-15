@@ -4,6 +4,7 @@ import { Image, View, ImageSourcePropType } from 'react-native';
 import { MfcText } from 'components/Text/Text';
 import { EatingRecordProps } from './Eating-Record.interface';
 import { EatingRecordStyle } from './Eating-Record.style';
+import { CommonStyle } from 'styles/common-style';
 
 const eatingRecordIcon = {
   morning: require('assets/images/eating-record-icon/morning.png'),
@@ -27,12 +28,18 @@ export const EatingRecord: React.FC<EatingRecordProps> = props => {
     <View style={EatingRecordStyle.container}>
       <View style={EatingRecordStyle.iconBlock}>
         <Image source={icon} />
-        <MfcText size="small">{recordTime.format('HH:mm')}</MfcText>
+        <MfcText size="small" style={CommonStyle.grayText}>
+          {recordTime.format('HH:mm')}
+        </MfcText>
       </View>
       <View style={EatingRecordStyle.recordBlockContainer}>
         <View style={EatingRecordStyle.recordBlcokContent}>
-          <MfcText size="normal">{props.record.foodType}</MfcText>
-          <MfcText size="small">{props.record.foodName}</MfcText>
+          <MfcText size="normal" style={CommonStyle.grayText}>
+            {props.record.foodType}
+          </MfcText>
+          <MfcText size="small" style={CommonStyle.grayText}>
+            {props.record.foodName}
+          </MfcText>
         </View>
       </View>
       <View style={EatingRecordStyle.caloryBlock}>

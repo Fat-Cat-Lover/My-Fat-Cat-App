@@ -6,10 +6,17 @@ export const DiaryStyle = StyleSheet.create({
     flex: 1,
   },
   diaryContent: {
-    paddingTop: spacings.spacing5,
+    paddingTop: spacings.spacing3,
+  },
+  eatingRecord: {
+    paddingVertical: 4,
   },
   noFoodCatContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  noFoodText: {
+    paddingTop: spacings.spacing3,
   },
 });
