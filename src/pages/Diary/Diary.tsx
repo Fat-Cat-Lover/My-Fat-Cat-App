@@ -13,6 +13,7 @@ import { MfcText } from 'components/Text/Text';
 import { DiaryStyle } from './Diary.style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonStyle } from 'styles/common-style';
+import { NutritionBlock } from './components/Nutrition-Block/Nutrition-Block';
 
 export const Diary: React.FC = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -38,13 +39,33 @@ export const Diary: React.FC = props => {
   let content: React.ReactNode;
   if (diary && diary.records.length > 0) {
     content = (
-      <View style={DiaryStyle.diaryContent}>
+      <ScrollView contentContainerStyle={DiaryStyle.diaryContent}>
         {diary.records.map(record => (
-          <ScrollView key={record.id} contentContainerStyle={DiaryStyle.eatingRecord}>
+          <View key={record.id} style={DiaryStyle.eatingRecord}>
             <EatingRecord record={record} />
-          </ScrollView>
+          </View>
         ))}
-      </View>
+        <View style={DiaryStyle.nutritionBlock}>
+          <NutritionBlock
+            title="碳水化合物"
+            weight={diary.records.reduce((pre, record) => {
+              return pre + (record.carbohydrate || 0);
+            }, 0)}
+          />
+          <NutritionBlock
+            title="蛋白質"
+            weight={diary.records.reduce((pre, record) => {
+              return pre + (record.crudeProtein || 0);
+            }, 0)}
+          />
+          <NutritionBlock
+            title="脂肪"
+            weight={diary.records.reduce((pre, record) => {
+              return pre + (record.crudeFat || 0);
+            }, 0)}
+          />
+        </View>
+      </ScrollView>
     );
   } else {
     content = (
