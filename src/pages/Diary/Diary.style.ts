@@ -21,8 +21,12 @@ export const DiaryStyle = StyleSheet.create({
   noFoodText: {
     paddingTop: spacings.spacing3,
   },
+  nutritionCotainer: {
+    alignItems: 'center',
+  },
   nutritionBlock: {
     top: 24,
+    width: '97%',
     borderTopWidth: 1,
     borderTopColor: colors.lightGray,
     paddingTop: spacings.spacing5,

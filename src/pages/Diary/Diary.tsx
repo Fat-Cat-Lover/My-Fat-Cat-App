@@ -45,26 +45,29 @@ export const Diary: React.FC = props => {
             <EatingRecord record={record} />
           </View>
         ))}
-        <View style={DiaryStyle.nutritionBlock}>
-          <NutritionBlock
-            title="碳水化合物"
-            weight={diary.records.reduce((pre, record) => {
-              return pre + (record.carbohydrate || 0);
-            }, 0)}
-          />
-          <NutritionBlock
-            title="蛋白質"
-            weight={diary.records.reduce((pre, record) => {
-              return pre + (record.crudeProtein || 0);
-            }, 0)}
-          />
-          <NutritionBlock
-            title="脂肪"
-            weight={diary.records.reduce((pre, record) => {
-              return pre + (record.crudeFat || 0);
-            }, 0)}
-          />
+        <View style={DiaryStyle.nutritionCotainer}>
+          <View style={DiaryStyle.nutritionBlock}>
+            <NutritionBlock
+              title="碳水化合物"
+              weight={diary.records.reduce((pre, record) => {
+                return pre + (record.carbohydrate || 0);
+              }, 0)}
+            />
+            <NutritionBlock
+              title="蛋白質"
+              weight={diary.records.reduce((pre, record) => {
+                return pre + (record.crudeProtein || 0);
+              }, 0)}
+            />
+            <NutritionBlock
+              title="脂肪"
+              weight={diary.records.reduce((pre, record) => {
+                return pre + (record.crudeFat || 0);
+              }, 0)}
+            />
+          </View>
         </View>
+
       </ScrollView>
     );
   } else {
