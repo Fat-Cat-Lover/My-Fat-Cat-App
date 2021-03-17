@@ -2,6 +2,6 @@ import { Cat } from 'models/cat';
 
 export interface CatDiaryProps {
   cats: Cat[];
-  DiaryHeaderLeft?: React.ComponentType;
+  DiaryHeaderRight?: React.ReactNode;
   onCatSelect?: (index: number) => any;
 }

@@ -64,8 +64,8 @@ export const Home: React.FC = props => {
             <View style={HomeStyles.SummarySpacing} />
             <ProgressButton
               icon="food"
-              progress={(diary?.caloriesEatenToday || 0) / 3200}
-              progressText={`${diary?.caloriesEatenToday || 0}/3200 Cal`}
+              progress={(diary?.caloriesEatenToday || 0) / (cats[selectedCat]?.dailyCalories || 0)}
+              progressText={`${diary?.caloriesEatenToday || 0}/${cats[selectedCat]?.dailyCalories || 0} Cal`}
               progressBarColor="#FF9F1C"
               buttonText="餵食"
               buttonColor="primary"

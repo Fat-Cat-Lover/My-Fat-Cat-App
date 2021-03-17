@@ -7,4 +7,5 @@ export class Cat {
   age: number;
   sex: 'male' | 'female';
   isNeuter: boolean;
+  dailyCalories: number;
 }

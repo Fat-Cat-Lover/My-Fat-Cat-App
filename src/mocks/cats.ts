@@ -9,6 +9,7 @@ export const MockCats: Cat[] = [
     age: 12,
     sex: 'male',
     isNeuter: true,
+    dailyCalories: 3200,
   },
   {
     id: 2,
@@ -19,5 +20,6 @@ export const MockCats: Cat[] = [
     age: 6,
     sex: 'female',
     isNeuter: true,
+    dailyCalories: 2500,
   },
 ];

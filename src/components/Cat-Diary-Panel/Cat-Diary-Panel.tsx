@@ -60,7 +60,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
           <>
             <View style={CatDiaryStyle.DiaryHeader}>
               <MfcHeaderText size="large">{props.cats[selectedCat]?.name}</MfcHeaderText>
-              {props.DiaryHeaderLeft}
+              <View style={CatDiaryStyle.HeaderRight}>{props.DiaryHeaderRight}</View>
             </View>
             <View style={CatDiaryStyle.DiaryContent}>{props.children}</View>
           </>

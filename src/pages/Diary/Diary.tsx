@@ -79,18 +79,35 @@ export const Diary: React.FC = () => {
     );
   }
 
+  let caloriesSummary: React.ReactNode;
+  if (cats.length > 0 && diary) {
+    if (diary.caloriesEatenToday > cats[selectedCat].dailyCalories) {
+      caloriesSummary = (
+        <MfcText type="medium">超量進食：{diary.caloriesEatenToday - cats[selectedCat].dailyCalories} cal</MfcText>
+      );
+    } else if (diary.caloriesEatenToday < cats[selectedCat].dailyCalories) {
+      caloriesSummary = <MfcText>尚未進食：{cats[selectedCat].dailyCalories - diary.caloriesEatenToday} cal</MfcText>;
+    } else {
+      caloriesSummary = <MfcText>吃飽啦！</MfcText>;
+    }
+  }
+
   return (
     <View style={DiaryStyle.container}>
       <HeaderBar>
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
-      <CatDiary cats={cats} onCatSelect={onCatSelect}>
+      <CatDiary cats={cats} onCatSelect={onCatSelect} DiaryHeaderRight={caloriesSummary}>
         {/* <View style={DiaryStyle.diaryContainer}>{content}</View> */}
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
-          <MfcButton color="green" style={DiaryStyle.bottomButton}>體重記錄</MfcButton>
+          <MfcButton color="green" style={DiaryStyle.bottomButton}>
+            體重記錄
+          </MfcButton>
           <View style={DiaryStyle.bottomButtonSpacing} />
-          <MfcButton color="lightOrange" style={DiaryStyle.bottomButton}>餵食</MfcButton>
+          <MfcButton color="lightOrange" style={DiaryStyle.bottomButton}>
+            餵食
+          </MfcButton>
         </View>
       </CatDiary>
     </View>
