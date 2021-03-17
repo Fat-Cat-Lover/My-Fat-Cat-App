@@ -6,14 +6,17 @@ export const DiaryStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
+  diaryContainer: {
+    marginTop: spacings.spacing3,
+    marginBottom: spacings.spacing6,
+  },
   diaryContent: {
-    flex: 1,
-    paddingTop: spacings.spacing3,
+    flexGrow: 1,
   },
   eatingRecord: {
     paddingVertical: 4,
   },
-  noFoodCatContainer: {
+  noFoodContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -25,7 +28,7 @@ export const DiaryStyle = StyleSheet.create({
     alignItems: 'center',
   },
   nutritionBlock: {
-    top: 24,
+    marginTop: 24,
     width: '97%',
     borderTopWidth: 1,
     borderTopColor: colors.lightGray,
@@ -33,4 +36,15 @@ export const DiaryStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  bottomButtonContainer: {
+    height: 48,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  bottomButtonSpacing: {
+    width: spacings.spacing5,
+  },
+  bottomButton: {
+    flex: 1,
+  }
 });

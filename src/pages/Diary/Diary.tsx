@@ -14,8 +14,9 @@ import { DiaryStyle } from './Diary.style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonStyle } from 'styles/common-style';
 import { NutritionBlock } from './components/Nutrition-Block/Nutrition-Block';
+import { MfcButton } from 'components/Button/Button';
 
-export const Diary: React.FC = props => {
+export const Diary: React.FC = () => {
   const currentDate = useRootSelector(selectDiaryDate);
   const cats = useRootSelector(state => state.cats.cats);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
@@ -39,7 +40,7 @@ export const Diary: React.FC = props => {
   let content: React.ReactNode;
   if (diary && diary.records.length > 0) {
     content = (
-      <ScrollView contentContainerStyle={DiaryStyle.diaryContent}>
+      <ScrollView style={DiaryStyle.diaryContainer} contentContainerStyle={DiaryStyle.diaryContent}>
         {diary.records.map(record => (
           <View key={record.id} style={DiaryStyle.eatingRecord}>
             <EatingRecord record={record} />
@@ -67,12 +68,11 @@ export const Diary: React.FC = props => {
             />
           </View>
         </View>
-
       </ScrollView>
     );
   } else {
     content = (
-      <View style={DiaryStyle.noFoodCatContainer}>
+      <View style={DiaryStyle.noFoodContainer}>
         <Image source={require('assets/images/others/no-food.png')} />
         <MfcText style={[CommonStyle.grayText, DiaryStyle.noFoodText]}>他可能餓壞了？快去餵食</MfcText>
       </View>
@@ -85,7 +85,13 @@ export const Diary: React.FC = props => {
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
       <CatDiary cats={cats} onCatSelect={onCatSelect}>
+        {/* <View style={DiaryStyle.diaryContainer}>{content}</View> */}
         {content}
+        <View style={DiaryStyle.bottomButtonContainer}>
+          <MfcButton color="green" style={DiaryStyle.bottomButton}>體重記錄</MfcButton>
+          <View style={DiaryStyle.bottomButtonSpacing} />
+          <MfcButton color="lightOrange" style={DiaryStyle.bottomButton}>餵食</MfcButton>
+        </View>
       </CatDiary>
     </View>
   );
