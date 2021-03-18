@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { CatDiary } from 'components/Cat-Diary-Panel/Cat-Diary-Panel';
 import { DatePicker } from 'components/Date-Picker/Date-Picker';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
-import { ProgressButton } from 'pages/Home/Progress-Button/Progress-Button';
+import { ProgressButton } from 'pages/Home/components/Progress-Button/Progress-Button';
 import { MfcText } from 'components/Text/Text';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { HomeStyles } from './Home.style';
