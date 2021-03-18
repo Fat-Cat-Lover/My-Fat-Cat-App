@@ -9,4 +9,5 @@ export const ICONS = {
   add: require('./images/add.png'),
   sport: require('./images/sport.png'),
   food: require('./images/food.png'),
+  arrowRight: require('./images/arrow_right.png'),
 };

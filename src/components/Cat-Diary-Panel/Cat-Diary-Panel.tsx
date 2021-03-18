@@ -5,7 +5,7 @@ import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { CatDiaryProps } from './Cat-Diary-Panel.interface';
 import { CatDiaryStyle } from './Cat-Diary-style';
 import { DefaultCatsImages } from 'common/default-cat-images';
-import { RoundTriangle } from 'components/Round-Triangle/Round-Triangle';
+import { RoundTriangle } from 'components/Cat-Diary-Panel/components/Round-Triangle/Round-Triangle';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';

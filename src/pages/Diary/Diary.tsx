@@ -8,7 +8,7 @@ import { CatDiary } from 'components/Cat-Diary-Panel/Cat-Diary-Panel';
 import { DatePicker } from 'components/Date-Picker/Date-Picker';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { getDiary } from 'services/diary';
-import { EatingRecord } from 'components/Eating-Record/Eating-Record';
+import { EatingRecord } from 'pages/Diary/components/Eating-Record/Eating-Record';
 import { MfcText } from 'components/Text/Text';
 import { DiaryStyle } from './Diary.style';
 import { ScrollView } from 'react-native-gesture-handler';

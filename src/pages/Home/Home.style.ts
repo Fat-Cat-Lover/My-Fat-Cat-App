@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import spacings from 'styles/spacings';
 import Spacings from 'styles/spacings';
 
 export const HomeStyles = StyleSheet.create({
@@ -7,6 +8,17 @@ export const HomeStyles = StyleSheet.create({
   },
   diaryContent: {
     paddingTop: Spacings.spacing2,
+  },
+  weightTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  weightContent: {
+    paddingLeft: spacings.spacing1,
+    flexDirection: 'row',
+  },
+  weightArrow: {
+    marginHorizontal: 12.11,
   },
   dailySummaryContainer: {
     flexDirection: 'row',
