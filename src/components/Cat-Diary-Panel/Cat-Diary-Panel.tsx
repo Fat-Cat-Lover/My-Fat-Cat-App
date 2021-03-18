@@ -5,7 +5,7 @@ import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { CatDiaryProps } from './Cat-Diary-Panel.interface';
 import { CatDiaryStyle } from './Cat-Diary-style';
 import { DefaultCatsImages } from 'common/default-cat-images';
-import { RoundTriangle } from 'components/Round-Triangle/Round-Triangle';
+import { RoundTriangle } from 'components/Cat-Diary-Panel/components/Round-Triangle/Round-Triangle';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
@@ -50,7 +50,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
               </View>
             );
           })}
-          <RoundImageButton size={55}>
+          <RoundImageButton size={55} style={CatDiaryStyle.catButtonContainer}>
             <MfcIcon name="add" />
           </RoundImageButton>
         </ScrollView>
@@ -60,9 +60,9 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
           <>
             <View style={CatDiaryStyle.DiaryHeader}>
               <MfcHeaderText size="large">{props.cats[selectedCat]?.name}</MfcHeaderText>
-              {props.DiaryHeaderLeft}
+              <View style={CatDiaryStyle.HeaderRight}>{props.DiaryHeaderRight}</View>
             </View>
-            <ScrollView style={CatDiaryStyle.DiaryContent}>{props.children}</ScrollView>
+            <View style={CatDiaryStyle.DiaryContent}>{props.children}</View>
           </>
         )}
       </View>

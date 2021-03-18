@@ -34,6 +34,10 @@ export const CatDiaryStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  HeaderRight: {
+    justifyContent: 'center',
+  },
   DiaryContent: {
+    flex: 1,
   },
 });

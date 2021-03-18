@@ -7,4 +7,8 @@ export class Cat {
   age: number;
   sex: 'male' | 'female';
   isNeuter: boolean;
+  dailyCalories: number;
+  currentWeight: number;
+  targetWeight: number;
+  preWeight?: number;
 }

@@ -2,14 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LabelPosition } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { HomeNavigator } from 'navigations/home-navigator';
-import { DiaryNavigator } from 'navigations/diary-navigator';
-import { PetsNavigator } from 'navigations/pets-navigator';
-import { SettingNavigator } from 'navigations/settings-navigator';
 import Colors from 'styles/colors';
+import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { TabBarStyle } from './Tab-Bar.style';
 import { MfcText } from 'components/Text/Text';
+import { Home } from 'pages/Home/Home';
+import { Pets } from 'pages/Pets/Pets';
+import { Setting } from 'pages/Setting/Setting';
+import { Diary } from 'pages/Diary/Diary';
 
 function createTabLabel(props: { focused: boolean; color: string; position: LabelPosition }, labelName: string) {
   return (
@@ -41,7 +41,7 @@ export const TabBar = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeNavigator}
+        component={Home}
         options={{
           tabBarLabel: props => createTabLabel(props, '首頁'),
           tabBarIcon: props => createTabIcon(props, 'home'),
@@ -49,7 +49,7 @@ export const TabBar = () => {
       />
       <Tab.Screen
         name="Diary"
-        component={DiaryNavigator}
+        component={Diary}
         options={{
           tabBarLabel: props => createTabLabel(props, '日記'),
           tabBarIcon: props => createTabIcon(props, 'bookmark'),
@@ -57,7 +57,7 @@ export const TabBar = () => {
       />
       <Tab.Screen
         name="Pets"
-        component={PetsNavigator}
+        component={Pets}
         options={{
           tabBarLabel: props => createTabLabel(props, '寵物'),
           tabBarIcon: props => createTabIcon(props, 'pet'),
@@ -65,7 +65,7 @@ export const TabBar = () => {
       />
       <Tab.Screen
         name="Setting"
-        component={SettingNavigator}
+        component={Setting}
         options={{
           tabBarLabel: props => createTabLabel(props, '設定'),
           tabBarIcon: props => createTabIcon(props, 'setting'),
