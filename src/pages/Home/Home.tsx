@@ -14,10 +14,11 @@ import { getDiary } from 'services/diary';
 import { setCurrentDiary } from 'redux/diary/slice';
 import { selectDiary } from 'redux/diary/selector';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
+import { selectCats } from 'redux/cats/selector';
 
 export const Home: React.FC = props => {
   const currentDate = useRootSelector(selectDiaryDate);
-  const cats = useRootSelector(state => state.cats.cats);
+  const cats = useRootSelector(selectCats);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
   const diary = useRootSelector(selectDiary);
   const dispatch = useRootDispatch();

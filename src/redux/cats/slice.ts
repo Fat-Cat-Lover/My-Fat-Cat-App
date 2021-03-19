@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { classToPlain } from 'class-transformer';
 import { Cat } from 'models/cat';
 
 interface CatsState {
-  cats: Cat[];
+  cats: Record<string, any>[];
   selectedCat: number;
 }
 
@@ -15,8 +16,13 @@ const catsSlice = createSlice({
   name: 'cats',
   initialState: initState,
   reducers: {
-    setCats: (state, action) => {
-      state.cats = action.payload;
+    setCats: {
+      reducer: (state, action: PayloadAction<Record<string, any>[]>) => {
+        state.cats = action.payload;
+      },
+      prepare: (cats: Cat[]) => {
+        return { payload: classToPlain(cats) as Record<string, any>[] };
+      },
     },
     setSelectedCat: (state, action) => {
       state.selectedCat = action.payload;

@@ -12,4 +12,5 @@ export const ICONS = {
   arrowRight: require('./images/arrow_right.png'),
   male: require('./images/male.png'),
   female: require('./images/female.png'),
+  create: require('./images/create.png'),
 };
