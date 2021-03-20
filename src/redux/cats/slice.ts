@@ -3,7 +3,7 @@ import { classToPlain } from 'class-transformer';
 import { Cat } from 'models/cat';
 
 interface CatsState {
-  cats: Record<string, any>[];
+  cats: Record<keyof Cat, any>[];
   selectedCat: number;
 }
 
@@ -17,11 +17,11 @@ const catsSlice = createSlice({
   initialState: initState,
   reducers: {
     setCats: {
-      reducer: (state, action: PayloadAction<Record<string, any>[]>) => {
+      reducer: (state, action: PayloadAction<Record<keyof Cat, any>[]>) => {
         state.cats = action.payload;
       },
       prepare: (cats: Cat[]) => {
-        return { payload: classToPlain(cats) as Record<string, any>[] };
+        return { payload: cats.map(cat => classToPlain(cat)) };
       },
     },
     setSelectedCat: (state, action) => {

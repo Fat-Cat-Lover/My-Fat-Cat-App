@@ -14,7 +14,8 @@ export class Cat {
   currentWeight: number;
   targetWeight: number;
   preWeight?: number;
-  @Transform(({ value }) => value.toISOString(), {
+
+  @Transform(({ value }) => (value ? value.toISOString() : undefined), {
     toPlainOnly: true,
   })
   latestHealthCheck?: Date;

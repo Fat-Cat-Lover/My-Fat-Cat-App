@@ -5,7 +5,7 @@ export const MockCats: Cat[] = [
     id: 1,
     name: 'Kiwi',
     image: 'https://pbs.twimg.com/media/ErS3SKeVcAQVnAJ?format=jpg&name=medium',
-    description: '胖',
+    description: '老貓咪了沒牙齒了，很愛爆吃爆吐，還好沒有潛在疾病，腸胃不太好',
     age: 12,
     sex: 'male',
     isNeuter: true,

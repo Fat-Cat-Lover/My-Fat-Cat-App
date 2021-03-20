@@ -8,7 +8,12 @@ export const PetDetailStyle = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: colors.lightWhite,
     padding: spacings.spacing5,
-    marginVertical: spacings.spacing1,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.lightGray,
+    borderRightWidth: 1,
+    borderRightColor: colors.lightGray,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightGray,
   },
   content: {
     flexDirection: 'row',

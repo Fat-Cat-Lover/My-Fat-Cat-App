@@ -4,7 +4,6 @@ import spacings from 'styles/spacings';
 
 export const PetTagStyle = StyleSheet.create({
   container: {
-    height: 29,
     paddingHorizontal: spacings.spacing1,
     paddingVertical: 6,
     backgroundColor: colors.lightWhite,

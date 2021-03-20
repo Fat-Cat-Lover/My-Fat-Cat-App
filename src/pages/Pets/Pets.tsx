@@ -6,19 +6,30 @@ import { PetDetail } from './components/Pet-Detail/Pet-Detail';
 import { PetsStyle } from './Pets.style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { selectCats } from 'redux/cats/selector';
+import { MfcButton } from 'components/Button/Button';
+import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
+import { MfcText } from 'components/Text/Text';
+import { CommonStyle } from 'styles/common-style';
 
 export const Pets: React.FC = props => {
   const cats = useRootSelector(selectCats);
-
   return (
     <View style={PetsStyle.container}>
       <HeaderBar>寵物資訊</HeaderBar>
       <ScrollView contentContainerStyle={PetsStyle.petsDetailContent}>
         {cats.length > 0
           ? cats.map(cat => {
-              return <PetDetail cat={cat} key={cat.id} />;
+              return <PetDetail cat={cat} key={cat.id} style={PetsStyle.elementVerticalSpacing} />;
             })
           : undefined}
+        <MfcButton style={PetsStyle.elementVerticalSpacing} color="gray">
+          <View style={PetsStyle.addButton}>
+            <MfcIcon style={PetsStyle.addButtonIcon} name="add" />
+            <MfcText size="large" type="medium" style={CommonStyle.grayText}>
+              新增新的貓主子
+            </MfcText>
+          </View>
+        </MfcButton>
       </ScrollView>
     </View>
   );

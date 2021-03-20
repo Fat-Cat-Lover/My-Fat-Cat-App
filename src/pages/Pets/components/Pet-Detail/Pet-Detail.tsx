@@ -29,7 +29,7 @@ export const PetDetail: React.FC<PetDetailProps> = props => {
     activeTag = '活動量普通';
   }
   return (
-    <View style={PetDetailStyle.container}>
+    <View style={[PetDetailStyle.container, props.style]}>
       <View style={PetDetailStyle.content}>
         <View style={PetDetailStyle.leftBlock}>
           <Image style={PetDetailStyle.catImage} source={imageSource} />

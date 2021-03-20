@@ -10,4 +10,15 @@ export const PetsStyle = StyleSheet.create({
     paddingVertical: spacings.spacing1,
     paddingHorizontal: spacings.spacing5,
   },
+  elementVerticalSpacing: {
+    marginVertical: spacings.spacing1,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  addButtonIcon: {
+    marginRight: spacings.spacing5,
+  },
 });
