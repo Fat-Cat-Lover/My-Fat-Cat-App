@@ -1,8 +1,9 @@
-import { compose, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { classToPlain } from 'class-transformer';
+import { Diary } from 'models/diary';
 
 interface CurrentDiary {
-  currentDiary: Record<string, any> | null;
+  currentDiary: Record<keyof Diary, any> | null;
 }
 const initState: CurrentDiary = {
   currentDiary: null,
@@ -13,7 +14,7 @@ const DiarySlice = createSlice({
   initialState: initState,
   reducers: {
     setCurrentDiary: {
-      reducer: (state, action: PayloadAction<Record<string, any>>) => {
+      reducer: (state, action: PayloadAction<Record<keyof Diary, any>>) => {
         state.currentDiary = action.payload;
       },
       prepare: diary => {

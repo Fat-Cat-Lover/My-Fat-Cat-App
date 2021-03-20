@@ -10,4 +10,7 @@ export const ICONS = {
   sport: require('./images/sport.png'),
   food: require('./images/food.png'),
   arrowRight: require('./images/arrow_right.png'),
+  male: require('./images/male.png'),
+  female: require('./images/female.png'),
+  create: require('./images/create.png'),
 };
