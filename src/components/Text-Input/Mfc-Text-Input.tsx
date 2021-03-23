@@ -41,7 +41,7 @@ export const MfcTextInput: React.FC<MfcTextInputProps> = props => {
   }
 
   return (
-    <BaseInput>
+    <BaseInput label={props.label}>
       <TextInput
         keyboardType={props.keyboardType ? props.keyboardType : 'default'}
         placeholderTextColor={colors.mainGray}
