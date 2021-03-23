@@ -5,50 +5,61 @@ import { TextInput } from 'react-native-gesture-handler';
 import { MfcTextInputProps } from './Mfc-Text-Input.interface';
 import { MfcTextInputStyle } from './Mfc-Text-Input.style';
 import colors from 'styles/colors';
+import { BaseInput } from 'components/Base-Input/Base-Input';
 
 export const MfcTextInput: React.FC<MfcTextInputProps> = props => {
-  const [inputText, setInputText] = React.useState('');
   const [inputStyle, setInputStyle] = React.useState(MfcTextInputStyle.emptyInput);
-  const [errorMessage, setErrorMessage] = React.useState('');
 
   React.useEffect(() => {
-    if (props.inputText) {
-      setInputText(props.inputText);
+    if (props.value) {
       setInputStyle(MfcTextInputStyle.filledInput);
     }
   }, []);
 
   function onFocus() {
-    if (!inputText) {
+    if (!props.value) {
       setInputStyle(MfcTextInputStyle.filledInput);
+    }
+
+    if (props.onFocus) {
+      props.onFocus();
     }
   }
 
   function onBlur() {
-    if (!inputText) {
+    if (!props.value) {
       setInputStyle(MfcTextInputStyle.emptyInput);
-    } else {
-      if (props.validation) {
-        const error = props.validation(inputText);
-        if (error?.errorMessage) {
-          setErrorMessage(errorMessage);
-        }
-      }
+    }
+
+    if (props.onBlur) {
+      props.onBlur();
     }
   }
 
+  function onChangeText(text: string) {
+    props.onTextChange(text);
+  }
+
   return (
-    <View style={MfcTextInputStyle.constainer}>
-      {props.label && <MfcText style={MfcTextInputStyle.label}>{props.label}</MfcText>}
+    <BaseInput>
       <TextInput
         keyboardType={props.keyboardType ? props.keyboardType : 'default'}
         placeholderTextColor={colors.mainGray}
-        style={[MfcTextInputStyle.textInput, inputStyle, errorMessage ? MfcTextInputStyle.errorBorder : undefined]}
+        style={[
+          MfcTextInputStyle.textInput,
+          inputStyle,
+          props.errorMessage ? MfcTextInputStyle.errorBorder : undefined,
+        ]}
         onFocus={onFocus}
         onBlur={onBlur}
-        value={inputText}
+        onChangeText={onChangeText}
+        value={props.value}
       />
-      {errorMessage && <MfcText style={MfcTextInputStyle.errorMessage}>{errorMessage}</MfcText>}
-    </View>
+      {props.errorMessage && (
+        <View style={MfcTextInputStyle.errorMessageContainer}>
+          <MfcText style={MfcTextInputStyle.errorMessage}>{props.errorMessage}</MfcText>
+        </View>
+      )}
+    </BaseInput>
   );
 };

@@ -26,6 +26,10 @@ export const MfcTextInputStyle = StyleSheet.create({
   errorBorder: {
     borderColor: colors.darkOrange,
   },
+  errorMessageContainer: {
+    paddingRight: spacings.spacing1,
+    alignItems: 'flex-end',
+  },
   errorMessage: {
     color: colors.darkOrange,
   },
