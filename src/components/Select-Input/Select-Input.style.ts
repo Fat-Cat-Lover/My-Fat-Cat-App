@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 import colors from 'styles/colors';
 import spacings from 'styles/spacings';
 
-export const MfcTextAreaStyle = StyleSheet.create({
-  textInput: {
+export const SelectInputStyle = StyleSheet.create({
+  container: {
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.lightGray,
@@ -11,12 +11,5 @@ export const MfcTextAreaStyle = StyleSheet.create({
     fontFamily: 'NotoSansTC-Medium',
     fontSize: 16,
     lineHeight: 23.17,
-  },
-  emptyInput: {
-    backgroundColor: colors.mainWhite,
-  },
-  filledInput: {
-    backgroundColor: colors.lightWhite,
-    color: colors.black,
   },
 });

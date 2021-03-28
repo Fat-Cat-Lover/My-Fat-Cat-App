@@ -1,59 +1,82 @@
 import React from 'react';
-import { TextStyle } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { Keyboard, TextInput, TextStyle } from 'react-native';
 import colors from 'styles/colors';
 import { BaseInput } from 'components/Base-Input/Base-Input';
 import { MfcTextAreaProps } from './Mfc-Text-Area.interface';
 import { MfcTextAreaStyle } from './Mfc-Text-Area.style';
 
-export const MfcTextArea: React.FC<MfcTextAreaProps> = props => {
-  const [inputStyle, setInputStyle] = React.useState<TextStyle>(MfcTextAreaStyle.emptyInput);
+export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle: TextStyle }> {
+  ref: React.RefObject<TextInput>;
+  constructor(props: MfcTextAreaProps) {
+    super(props);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onChangeText = this.onChangeText.bind(this);
+    const initStyle = props.value ? MfcTextAreaStyle.filledInput : MfcTextAreaStyle.emptyInput;
+    this.state = {
+      inputStyle: initStyle,
+    };
+    this.ref = React.createRef();
+  }
 
-  React.useEffect(() => {
-    if (props.value) {
-      setInputStyle(MfcTextAreaStyle.filledInput);
+  componentDidMount() {
+    Keyboard.addListener('keyboardDidHide', () => {
+      this.ref.current?.blur();
+    });
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardDidHide', () => {
+      this.ref.current?.blur();
+    });
+  }
+
+  onFocus() {
+    if (!this.props.value) {
+      this.setState({
+        inputStyle: MfcTextAreaStyle.filledInput,
+      });
     }
-  }, []);
 
-  function onFocus() {
-    if (!props.value) {
-      const style = props.filledInputStyle ? props.filledInputStyle : MfcTextAreaStyle.filledInput;
-      setInputStyle(style);
-    }
-
-    if (props.onFocus) {
-      props.onFocus();
+    if (this.props.onFocus) {
+      this.props.onFocus();
     }
   }
 
-  function onBlur() {
-    if (!props.value) {
-      const style = props.emptyInputStyle ? props.emptyInputStyle : MfcTextAreaStyle.emptyInput;
-      setInputStyle(style);
+  onBlur() {
+    if (!this.props.value) {
+      this.setState({
+        inputStyle: MfcTextAreaStyle.emptyInput,
+      });
     }
 
-    if (props.onBlur) {
-      props.onBlur();
+    if (this.props.onBlur) {
+      this.props.onBlur();
     }
   }
 
-  function onChangeText(text: string) {
-    props.onTextChange(text);
+  onChangeText(text: string) {
+    this.props.onTextChange(text);
   }
 
-  return (
-    <BaseInput label={props.label}>
-      <TextInput
-        keyboardType="default"
-        placeholderTextColor={colors.mainGray}
-        style={[MfcTextAreaStyle.textInput, inputStyle]}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        onChangeText={onChangeText}
-        value={props.value}
-        numberOfLines={props.numberOfLines}
-        maxLength={props.maxLength}
-      />
-    </BaseInput>
-  );
-};
+  render() {
+    return (
+      <BaseInput label={this.props.label}>
+        <TextInput
+          keyboardType="default"
+          placeholderTextColor={colors.mainGray}
+          style={[MfcTextAreaStyle.textInput, this.state.inputStyle]}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          onChangeText={this.onChangeText}
+          value={this.props.value}
+          numberOfLines={this.props.numberOfLines ? this.props.numberOfLines : 3}
+          caretHidden={true}
+          textAlignVertical="top"
+          maxLength={this.props.maxLength}
+          ref={this.ref}
+        />
+      </BaseInput>
+    );
+  }
+}

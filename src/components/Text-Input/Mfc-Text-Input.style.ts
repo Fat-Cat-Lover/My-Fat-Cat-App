@@ -5,9 +5,12 @@ import spacings from 'styles/spacings';
 export const MfcTextInputStyle = StyleSheet.create({
   textInput: {
     borderRadius: 8,
+    borderWidth: 1,
     borderColor: colors.lightGray,
     paddingHorizontal: spacings.spacing5,
     fontFamily: 'NotoSansTC-Medium',
+    fontSize: 16,
+    lineHeight: 23.17,
   },
   emptyInput: {
     backgroundColor: colors.mainWhite,
