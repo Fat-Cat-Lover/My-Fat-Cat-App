@@ -65,6 +65,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
       <BaseInput label={this.props.label}>
         <TextInput
           keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
+          placeholder={this.props.placeholder}
           placeholderTextColor={colors.mainGray}
           style={[
             MfcTextInputStyle.textInput,
@@ -74,8 +75,8 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}
-          caretHidden={true}
           ref={this.ref}
+          textAlignVertical="center"
           value={this.props.value}
         />
         {this.props.errorMessage && (

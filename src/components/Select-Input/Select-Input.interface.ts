@@ -10,4 +10,5 @@ export interface SelectInputProps {
   options: Option[];
   selectedIndex: number;
   onChange: (value: ItemValue, index: number) => void;
+  placeholder?: string;
 }

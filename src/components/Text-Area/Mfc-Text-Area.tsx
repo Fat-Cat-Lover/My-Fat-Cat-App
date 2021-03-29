@@ -64,6 +64,7 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
       <BaseInput label={this.props.label}>
         <TextInput
           keyboardType="default"
+          placeholder={this.props.placeholder}
           placeholderTextColor={colors.mainGray}
           style={[MfcTextAreaStyle.textInput, this.state.inputStyle]}
           onFocus={this.onFocus}

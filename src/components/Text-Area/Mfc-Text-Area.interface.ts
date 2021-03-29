@@ -10,4 +10,5 @@ export interface MfcTextAreaProps {
   maxLength?: number;
   emptyInputStyle?: TextStyle;
   filledInputStyle?: TextStyle;
+  placeholder?: string;
 }
