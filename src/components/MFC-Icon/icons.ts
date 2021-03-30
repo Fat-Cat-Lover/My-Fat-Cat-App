@@ -13,4 +13,5 @@ export const ICONS = {
   male: require('./images/male.png'),
   female: require('./images/female.png'),
   create: require('./images/create.png'),
+  expandMore: require('./images/expand_more.png'),
 };
