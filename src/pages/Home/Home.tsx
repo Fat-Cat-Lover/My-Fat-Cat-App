@@ -15,8 +15,9 @@ import { setCurrentDiary } from 'redux/diary/slice';
 import { selectDiary } from 'redux/diary/selector';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { selectCats } from 'redux/cats/selector';
+import { HomeProps } from './Home.interface';
 
-export const Home: React.FC = props => {
+export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
   const cats = useRootSelector(selectCats);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
@@ -47,6 +48,10 @@ export const Home: React.FC = props => {
     getCatDiary(cats[index].id, currentDate);
   }
 
+  function navToAddCat() {
+    props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
+  }
+
   let mainContent: React.ReactNode;
   if (currentCat) {
     let weightBlock: React.ReactNode;
@@ -71,7 +76,8 @@ export const Home: React.FC = props => {
           currentCat.currentWeight > currentCat.targetWeight ? (
             <MfcText>距離目標：{currentCat.currentWeight} kg</MfcText>
           ) : undefined
-        }>
+        }
+        addButtonOnPress={navToAddCat}>
         <View style={HomeStyles.diaryContent}>
           <View style={HomeStyles.weightTextContainer}>
             <MfcText>體重(kg)：</MfcText>

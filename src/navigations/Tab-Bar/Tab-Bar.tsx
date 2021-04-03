@@ -11,6 +11,13 @@ import { Pets } from 'pages/Pets/Pets';
 import { Setting } from 'pages/Setting/Setting';
 import { Diary } from 'pages/Diary/Diary';
 
+export type TabNavParams = {
+  Home: undefined;
+  Diary: undefined;
+  Pets: undefined;
+  Setting: undefined;
+};
+
 function createTabLabel(props: { focused: boolean; color: string; position: LabelPosition }, labelName: string) {
   return (
     <View style={TabBarStyle.label}>

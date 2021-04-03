@@ -9,6 +9,7 @@ export const AddCatProgressBarStyle = StyleSheet.create({
     backgroundColor: colors.darkOrange,
   },
   stepText: {
+    marginTop: 4,
     color: colors.darkOrange,
   },
 });

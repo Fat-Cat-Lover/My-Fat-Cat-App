@@ -50,7 +50,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
               </View>
             );
           })}
-          <RoundImageButton size={55} style={CatDiaryStyle.catButtonContainer}>
+          <RoundImageButton size={55} style={CatDiaryStyle.catButtonContainer} onPress={props.addButtonOnPress}>
             <MfcIcon name="add" />
           </RoundImageButton>
         </ScrollView>

@@ -98,7 +98,6 @@ export const Diary: React.FC = () => {
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
       <CatDiary cats={cats} onCatSelect={onCatSelect} DiaryHeaderRight={caloriesSummary}>
-        {/* <View style={DiaryStyle.diaryContainer}>{content}</View> */}
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
           <MfcButton color="green" style={DiaryStyle.bottomButton}>

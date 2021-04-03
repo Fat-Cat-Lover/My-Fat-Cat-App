@@ -1,13 +1,12 @@
-import { HeaderBar } from 'components/Header-Bar/Header-Bar';
-import { ProgressBar } from 'components/Progress-Bar/Progress-Bar';
 import React from 'react';
 import { View } from 'react-native';
+import { AddCatProgressBar } from '../components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
+import { ChoosePhotoStyle } from './Choose-Photo.style';
 
 export const ChoosePhoto: React.FC = props => {
   return (
-    <View>
-      <HeaderBar>新增寵物</HeaderBar>
-      <ProgressBar barStyle={} barColor={} progress={1 / 3} />
+    <View style={ChoosePhotoStyle.container}>
+      <AddCatProgressBar currnetStep={1} totalStep={3} />
     </View>
   );
 };
