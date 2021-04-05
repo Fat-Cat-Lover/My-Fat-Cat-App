@@ -14,11 +14,30 @@ import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { ChoosePhotoProps } from './Choose-Photo.interface';
 
 export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
-  const [selectedImage, setSelectedImage] = React.useState<ImageSourcePropType>();
+  const [selectedImage, setSelectedImage] = React.useState<number>();
+  const [uploadedImage, setUploadedImage] = React.useState<string>();
   const defaultCats = Object.keys(DefaultCatsImages);
 
   function navBack() {
     props.navigation.pop();
+  }
+
+  let imageButton: React.ReactNode;
+  if (selectedImage) {
+    imageButton = <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={selectedImage} />;
+  } else if (uploadedImage) {
+    imageButton = (
+      <View>
+        <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={{ uri: uploadedImage }} />;
+        
+      </View>
+    );
+  } else {
+    imageButton = (
+      <RoundImageButton style={ChoosePhotoStyle.uploadButton} size={154}>
+        <MfcIcon name="perm_media" />
+      </RoundImageButton>
+    );
   }
 
   return (
@@ -31,13 +50,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         <MfcText size="large" style={CommonStyle.grayText}>
           或使用預設圖片
         </MfcText>
-        {selectedImage ? (
-          <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={selectedImage} />
-        ) : (
-          <RoundImageButton style={ChoosePhotoStyle.uploadButton} size={154}>
-            <MfcIcon name="perm_media" />
-          </RoundImageButton>
-        )}
+        {imageButton}
       </View>
       <ScrollView
         horizontal={true}
@@ -55,7 +68,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
               <CatPhotoButton
                 image={DefaultCatsImages[cat]}
                 onPress={() => {
-                  setSelectedImage(DefaultCatsImages[cat]);
+                  setSelectedImage(index);
                 }}
               />
             </View>
