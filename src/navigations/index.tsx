@@ -7,8 +7,7 @@ import { AddCatStack } from 'navigations/Stacks/Add-Cat';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AddCatNavParams } from './Stacks/Add-Cat';
 
-export type RootNavParams = {
-  TabBar: NavigatorScreenParams<TabNavParams>;
+export type RootNavParams = TabNavParams & {
   AddCat: NavigatorScreenParams<AddCatNavParams>;
 };
 
