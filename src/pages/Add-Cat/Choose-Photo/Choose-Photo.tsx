@@ -12,6 +12,7 @@ import { CommonStyle } from 'styles/common-style';
 import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { ChoosePhotoProps } from './Choose-Photo.interface';
+import { SelectedCheckmark } from 'components/Selected-Checkmark/Selected-Checkmark';
 
 export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   const [selectedImage, setSelectedImage] = React.useState<number>();
@@ -24,12 +25,17 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
 
   let imageButton: React.ReactNode;
   if (selectedImage) {
-    imageButton = <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={selectedImage} />;
+    imageButton = (
+      <CatPhotoButton
+        style={ChoosePhotoStyle.uploadButton}
+        size={154}
+        image={DefaultCatsImages[defaultCats[selectedImage]]}
+      />
+    );
   } else if (uploadedImage) {
     imageButton = (
       <View>
         <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={{ uri: uploadedImage }} />;
-        
       </View>
     );
   } else {
@@ -62,8 +68,8 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
               key={index}
               style={[
                 ChoosePhotoStyle.catButtonContainer,
-                index === 0 ? { paddingLeft: spacings.spacing6 } : undefined,
-                index === defaultCats.length - 1 ? { paddingRight: spacings.spacing6 } : undefined,
+                index === 0 ? { marginLeft: spacings.spacing6 } : undefined,
+                index === defaultCats.length - 1 ? { marginRight: spacings.spacing6 } : undefined,
               ]}>
               <CatPhotoButton
                 image={DefaultCatsImages[cat]}
@@ -71,6 +77,9 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
                   setSelectedImage(index);
                 }}
               />
+              {selectedImage === index ? (
+                <SelectedCheckmark style={ChoosePhotoStyle.selectedCheckmark} size={45} />
+              ) : undefined}
             </View>
           );
         })}

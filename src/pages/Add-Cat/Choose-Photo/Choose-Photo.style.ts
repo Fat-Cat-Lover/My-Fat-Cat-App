@@ -23,7 +23,12 @@ export const ChoosePhotoStyle = StyleSheet.create({
     paddingVertical: spacings.spacing1,
   },
   catButtonContainer: {
-    paddingHorizontal: spacings.spacing1,
+    marginHorizontal: spacings.spacing1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedCheckmark: {
+    position: 'absolute',
   },
   BottomButtonsContainer: {
     flexDirection: 'row',
