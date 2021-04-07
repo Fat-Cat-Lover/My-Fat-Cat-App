@@ -1,5 +1,6 @@
 import React from 'react';
-import { ImageSourcePropType, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
@@ -28,7 +29,18 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
     setUploadedImage(undefined);
   }
 
-  function onUploadCatPress() {}
+  function onUploadCatPress() {
+    ImagePicker.openPicker({
+      width: 400,
+      height: 400,
+      cropping: true,
+      cropperCircleOverlay: true,
+    }).then(image => {
+      console.log(image);
+      setSelectedImage(undefined);
+      setUploadedImage(image.path);
+    });
+  }
 
   let imageButton: React.ReactNode;
   if (selectedImage !== undefined) {
@@ -42,12 +54,17 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   } else if (uploadedImage) {
     imageButton = (
       <View>
-        <CatPhotoButton style={ChoosePhotoStyle.uploadButton} size={154} image={{ uri: uploadedImage }} />;
+        <CatPhotoButton
+          style={ChoosePhotoStyle.uploadButton}
+          size={154}
+          image={{ uri: uploadedImage }}
+          onPress={onUploadCatPress}
+        />
       </View>
     );
   } else {
     imageButton = (
-      <RoundImageButton style={ChoosePhotoStyle.uploadButton} size={154}>
+      <RoundImageButton style={ChoosePhotoStyle.uploadButton} size={154} onPress={onUploadCatPress}>
         <MfcIcon name="perm_media" />
       </RoundImageButton>
     );
