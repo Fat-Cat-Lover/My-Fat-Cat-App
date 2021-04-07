@@ -23,8 +23,15 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
     props.navigation.pop();
   }
 
+  function onDefaultCatSelect(index: number) {
+    setSelectedImage(index);
+    setUploadedImage(undefined);
+  }
+
+  function onUploadCatPress() {}
+
   let imageButton: React.ReactNode;
-  if (selectedImage) {
+  if (selectedImage !== undefined) {
     imageButton = (
       <CatPhotoButton
         style={ChoosePhotoStyle.uploadButton}
@@ -71,12 +78,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
                 index === 0 ? { marginLeft: spacings.spacing6 } : undefined,
                 index === defaultCats.length - 1 ? { marginRight: spacings.spacing6 } : undefined,
               ]}>
-              <CatPhotoButton
-                image={DefaultCatsImages[cat]}
-                onPress={() => {
-                  setSelectedImage(index);
-                }}
-              />
+              <CatPhotoButton image={DefaultCatsImages[cat]} onPress={() => onDefaultCatSelect(index)} />
               {selectedImage === index ? (
                 <SelectedCheckmark style={ChoosePhotoStyle.selectedCheckmark} size={45} />
               ) : undefined}
