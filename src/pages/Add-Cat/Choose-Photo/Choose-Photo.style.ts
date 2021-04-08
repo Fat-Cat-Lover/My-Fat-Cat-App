@@ -7,16 +7,22 @@ export const ChoosePhotoStyle = StyleSheet.create({
     flex: 1,
   },
   uploadContainer: {
-    flex: 1,
     paddingTop: 44,
     alignItems: 'center',
   },
-  uploadButton: {
+  uploadButtonContainer: {
     marginTop: spacings.spacing7,
     marginBottom: 82,
+  },
+  uploadButton: {
     borderWidth: 5,
     borderColor: colors.lightGray,
     backgroundColor: colors.lightWhite,
+  },
+  uploadedCheckMark: {
+    position: 'absolute',
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
   },
   catButtonList: {
     alignSelf: 'flex-end',

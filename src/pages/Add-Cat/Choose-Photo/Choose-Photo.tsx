@@ -35,11 +35,16 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
       height: 400,
       cropping: true,
       cropperCircleOverlay: true,
-    }).then(image => {
-      console.log(image);
-      setSelectedImage(undefined);
-      setUploadedImage(image.path);
-    });
+    })
+      .then(image => {
+        setSelectedImage(undefined);
+        setUploadedImage(image.path);
+      })
+      .catch(err => {
+        if (err.message !== 'User cancelled image selection') {
+          throw err;
+        }
+      });
   }
 
   let imageButton: React.ReactNode;
@@ -49,18 +54,22 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         style={ChoosePhotoStyle.uploadButton}
         size={154}
         image={DefaultCatsImages[defaultCats[selectedImage]]}
+        onPress={onUploadCatPress}
       />
     );
   } else if (uploadedImage) {
     imageButton = (
-      <View>
+      <>
         <CatPhotoButton
           style={ChoosePhotoStyle.uploadButton}
           size={154}
           image={{ uri: uploadedImage }}
           onPress={onUploadCatPress}
         />
-      </View>
+        <View style={ChoosePhotoStyle.uploadedCheckMark}>
+          <SelectedCheckmark size={45} />
+        </View>
+      </>
     );
   } else {
     imageButton = (
@@ -80,7 +89,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         <MfcText size="large" style={CommonStyle.grayText}>
           或使用預設圖片
         </MfcText>
-        {imageButton}
+        <View style={ChoosePhotoStyle.uploadButtonContainer}>{imageButton}</View>
       </View>
       <ScrollView
         horizontal={true}
