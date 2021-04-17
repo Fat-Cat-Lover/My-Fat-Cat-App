@@ -24,6 +24,10 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
     props.navigation.pop();
   }
 
+  function navToAddBasicProfile() {
+    props.navigation.navigate('AddCat', { screen: 'AddBasicProfile' });
+  }
+
   function onDefaultCatSelect(index: number) {
     setSelectedImage(index);
     setUploadedImage(undefined);
@@ -116,7 +120,9 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         <MfcButton color="white" style={ChoosePhotoStyle.BottomButton} onPress={navBack}>
           取消
         </MfcButton>
-        <MfcButton style={ChoosePhotoStyle.BottomButton}>繼續</MfcButton>
+        <MfcButton style={ChoosePhotoStyle.BottomButton} onPress={navToAddBasicProfile}>
+          繼續
+        </MfcButton>
       </View>
     </View>
   );

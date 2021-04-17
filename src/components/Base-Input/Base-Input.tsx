@@ -7,7 +7,12 @@ import { BaseInputStyle } from './Base-Input.style';
 export const BaseInput: React.FC<BaseInputProps> = props => {
   return (
     <View style={BaseInputStyle.constainer}>
-      {props.label && <MfcText style={BaseInputStyle.label}>{props.label}</MfcText>}
+      {props.label && (
+        <MfcText style={BaseInputStyle.label}>
+          {props.label}
+          {props.required ? ' *' : undefined}
+        </MfcText>
+      )}
       {props.children}
     </View>
   );

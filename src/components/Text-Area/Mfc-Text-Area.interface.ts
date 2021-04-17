@@ -5,7 +5,7 @@ export interface MfcTextAreaProps {
   value: string;
   onBlur?: () => void;
   onFocus?: () => void;
-  onTextChange: (text: string) => void;
+  onChange: (text: string) => void;
   numberOfLines?: number;
   maxLength?: number;
   emptyInputStyle?: TextStyle;

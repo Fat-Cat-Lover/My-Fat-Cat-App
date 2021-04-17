@@ -56,7 +56,7 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
   }
 
   onChangeText(text: string) {
-    this.props.onTextChange(text);
+    this.props.onChange(text);
   }
 
   render() {

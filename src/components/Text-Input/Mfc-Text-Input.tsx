@@ -57,7 +57,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
   }
 
   onChangeText(text: string) {
-    this.props.onTextChange(text);
+    this.props.onChange(text);
   }
 
   render() {
