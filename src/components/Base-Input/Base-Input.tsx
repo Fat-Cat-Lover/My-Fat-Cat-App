@@ -6,7 +6,7 @@ import { BaseInputStyle } from './Base-Input.style';
 
 export const BaseInput: React.FC<BaseInputProps> = props => {
   return (
-    <View style={BaseInputStyle.constainer}>
+    <View style={[BaseInputStyle.constainer, props.style]}>
       {props.label && (
         <MfcText style={BaseInputStyle.label}>
           {props.label}
