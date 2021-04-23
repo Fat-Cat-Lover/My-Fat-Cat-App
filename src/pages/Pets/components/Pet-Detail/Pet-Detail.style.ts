@@ -36,11 +36,6 @@ export const PetDetailStyle = StyleSheet.create({
     marginTop: spacings.spacing7,
     paddingHorizontal: spacings.spacing4,
   },
-  sexIcon: {
-    height: 18,
-    width: 18,
-    borderRadius: 18 / 2,
-  },
   ageText: {
     marginLeft: spacings.spacing1,
     color: colors.mainGray,

@@ -62,7 +62,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
 
   render() {
     return (
-      <BaseInput label={this.props.label}>
+      <BaseInput label={this.props.label} style={this.props.containerStyle} required={this.props.required}>
         <TextInput
           keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
           placeholder={this.props.placeholder}

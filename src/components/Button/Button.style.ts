@@ -16,6 +16,9 @@ export const ButtonMainStyle = StyleSheet.create({
     padding: Spacings.spacing4,
     borderRadius: 8,
   },
+  disabled: {
+    opacity: 0.6,
+  },
 });
 
 const primary = StyleSheet.create<ButtonStyle>({

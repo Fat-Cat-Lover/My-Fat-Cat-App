@@ -1,4 +1,4 @@
-import { KeyboardTypeOptions } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, ViewStyle } from 'react-native';
 
 export interface MfcTextInputProps {
   label?: string;
@@ -10,4 +10,5 @@ export interface MfcTextInputProps {
   onChange: (text: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  containerStyle?: StyleProp<ViewStyle>;
 }

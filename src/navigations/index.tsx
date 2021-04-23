@@ -7,11 +7,12 @@ import { AddCatStack } from 'navigations/Stacks/Add-Cat';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AddCatNavParams } from './Stacks/Add-Cat';
 
-export type RootNavParams = TabNavParams & {
+export type RootNavParams = {
+  TabBar: NavigatorScreenParams<TabNavParams>;
   AddCat: NavigatorScreenParams<AddCatNavParams>;
 };
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootNavParams>();
 
 export const MfcNavigation = () => (
   <NavigationContainer

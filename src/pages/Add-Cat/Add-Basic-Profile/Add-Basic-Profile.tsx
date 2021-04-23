@@ -1,91 +1,136 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { Controller, useForm } from 'react-hook-form';
 import { BaseInput } from 'components/Base-Input/Base-Input';
 import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { SexIcon } from 'components/Sex-Icon/Sex-Icon';
 import { AddBasicProfileStyle } from './Add-Basic-Profile.style';
+import { MfcButton } from 'components/Button/Button';
+import { AddCatProgressBar } from '../components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
+import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
+import { AddBasicProfileProps } from './Add-Basic-Profile.interface';
+import { DefaultCatsImages } from 'common/default-cat-images';
+import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 
-export const AddBasicProfile: React.FC = props => {
+export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   const { control } = useForm();
 
+  let image: ImageSourcePropType;
+  if (props.route.params) {
+    const { photo, useDefault } = props.route.params;
+    if (photo) {
+      image = { uri: photo };
+    } else if (useDefault) {
+      image = DefaultCatsImages[useDefault];
+    } else {
+      throw new Error('No image select');
+    }
+  } else {
+    throw new Error('No image select');
+  }
+
+  function navBack() {
+    props.navigation.goBack();
+  }
+
   return (
-    <View>
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <MfcTextInput
-            label="寵物名稱"
-            placeholder="16 字內的寵物名稱"
-            value={field.value}
-            onChange={field.onChange}
-            required={true}
+    <View style={AddBasicProfileStyle.container}>
+      <AddCatProgressBar currnetStep={2} totalStep={3} />
+      <View style={AddBasicProfileStyle.contentContainer}>
+        <ScrollView contentContainerStyle={AddBasicProfileStyle.formContent}>
+          <CatPhotoButton image={image} disabled={true} />
+          <MfcHeaderText size="large" type="medium" style={AddBasicProfileStyle.title}>
+            輸入貓咪基本資料
+          </MfcHeaderText>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <MfcTextInput
+                label="寵物名稱"
+                placeholder="16 字內的寵物名稱"
+                value={field.value}
+                onChange={field.onChange}
+                required={true}
+                containerStyle={AddBasicProfileStyle.formField}
+              />
+            )}
+            defaultValue=""
           />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        name="age"
-        control={control}
-        render={({ field }) => (
-          <MfcTextInput
-            label="年齡"
-            placeholder="現在幾歲"
-            value={field.value}
-            onChange={field.onChange}
-            required={true}
+          <Controller
+            name="age"
+            control={control}
+            render={({ field }) => (
+              <MfcTextInput
+                label="年齡"
+                placeholder="現在幾歲"
+                value={field.value}
+                onChange={field.onChange}
+                required={true}
+                containerStyle={AddBasicProfileStyle.formField}
+              />
+            )}
+            defaultValue=""
           />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        name="sex"
-        control={control}
-        render={({ field }) => (
-          <BaseInput required={true}>
-            <>
-              <RoundImageButton onPress={() => field.onChange('male')}>
-                <SexIcon sex="male" style={AddBasicProfileStyle.sexButton} />
-              </RoundImageButton>
-            </>
-            <>
-              <RoundImageButton onPress={() => field.onChange('female')}>
-                <SexIcon sex="female" style={AddBasicProfileStyle.sexButton} />
-              </RoundImageButton>
-            </>
-          </BaseInput>
-        )}
-        defaultValue=""
-      />
-      <Controller
-        name="currentWeight"
-        control={control}
-        render={({ field }) => (
-          <MfcTextInput
-            label="現在體重(kg)"
-            placeholder="現在體重幾公斤"
-            value={field.value}
-            onChange={field.onChange}
-            required={true}
+          <Controller
+            name="sex"
+            control={control}
+            render={({ field }) => (
+              <BaseInput required={true} style={AddBasicProfileStyle.formField} label="性別">
+                <View style={AddBasicProfileStyle.sexButtonContainer}>
+                  <RoundImageButton size={45} onPress={() => field.onChange('male')}>
+                    <SexIcon size={45} sex="male" style={AddBasicProfileStyle.sexButton} />
+                  </RoundImageButton>
+                  <View style={AddBasicProfileStyle.sexButtonSpace} />
+                  <RoundImageButton size={45} onPress={() => field.onChange('female')}>
+                    <SexIcon size={45} sex="female" style={AddBasicProfileStyle.sexButton} />
+                  </RoundImageButton>
+                </View>
+              </BaseInput>
+            )}
+            defaultValue=""
           />
-        )}
-        defaultValue=""
-      />
-      <Controller
-        name="targetWeight"
-        control={control}
-        render={({ field }) => (
-          <MfcTextInput
-            label="目標公斤數(kg)"
-            placeholder="希望可以達到的目標體重幾公斤"
-            value={field.value}
-            onChange={field.onChange}
-            required={true}
+          <Controller
+            name="currentWeight"
+            control={control}
+            render={({ field }) => (
+              <MfcTextInput
+                label="現在體重(kg)"
+                placeholder="現在體重幾公斤"
+                value={field.value}
+                onChange={field.onChange}
+                required={true}
+                containerStyle={AddBasicProfileStyle.formField}
+              />
+            )}
+            defaultValue=""
           />
-        )}
-      />
+          <Controller
+            name="targetWeight"
+            control={control}
+            render={({ field }) => (
+              <MfcTextInput
+                label="目標公斤數(kg)"
+                placeholder="希望可以達到的目標體重幾公斤"
+                value={field.value}
+                onChange={field.onChange}
+                required={true}
+                containerStyle={AddBasicProfileStyle.formField}
+              />
+            )}
+          />
+        </ScrollView>
+        <View style={AddBasicProfileStyle.buttonContainer}>
+          <MfcButton color="white" onPress={navBack} style={AddBasicProfileStyle.button}>
+            取消
+          </MfcButton>
+          <View style={AddBasicProfileStyle.buttonSpace} />
+          <MfcButton color="primary" style={AddBasicProfileStyle.button}>
+            繼續
+          </MfcButton>
+        </View>
+      </View>
     </View>
   );
 };

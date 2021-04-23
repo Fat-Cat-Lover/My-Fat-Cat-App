@@ -16,7 +16,7 @@ import { ChoosePhotoProps } from './Choose-Photo.interface';
 import { SelectedCheckmark } from 'components/Selected-Checkmark/Selected-Checkmark';
 
 export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
-  const [selectedImage, setSelectedImage] = React.useState<number>();
+  const [selectedImage, setSelectedImage] = React.useState<string>();
   const [uploadedImage, setUploadedImage] = React.useState<string>();
   const defaultCats = Object.keys(DefaultCatsImages);
 
@@ -25,11 +25,14 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   }
 
   function navToAddBasicProfile() {
-    props.navigation.navigate('AddCat', { screen: 'AddBasicProfile' });
+    props.navigation.navigate('AddBasicProfile', {
+      photo: uploadedImage,
+      useDefault: selectedImage ? selectedImage : undefined,
+    });
   }
 
-  function onDefaultCatSelect(index: number) {
-    setSelectedImage(index);
+  function onDefaultCatSelect(catType: string) {
+    setSelectedImage(catType);
     setUploadedImage(undefined);
   }
 
@@ -52,12 +55,12 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   }
 
   let imageButton: React.ReactNode;
-  if (selectedImage !== undefined) {
+  if (selectedImage) {
     imageButton = (
       <CatPhotoButton
         style={ChoosePhotoStyle.uploadButton}
         size={154}
-        image={DefaultCatsImages[defaultCats[selectedImage]]}
+        image={DefaultCatsImages[selectedImage]}
         onPress={onUploadCatPress}
       />
     );
@@ -108,8 +111,8 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
                 index === 0 ? { marginLeft: spacings.spacing6 } : undefined,
                 index === defaultCats.length - 1 ? { marginRight: spacings.spacing6 } : undefined,
               ]}>
-              <CatPhotoButton image={DefaultCatsImages[cat]} onPress={() => onDefaultCatSelect(index)} />
-              {selectedImage === index ? (
+              <CatPhotoButton image={DefaultCatsImages[cat]} onPress={() => onDefaultCatSelect(cat)} />
+              {selectedImage && defaultCats.indexOf(selectedImage) === index ? (
                 <SelectedCheckmark style={ChoosePhotoStyle.selectedCheckmark} size={45} />
               ) : undefined}
             </View>
@@ -120,7 +123,10 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         <MfcButton color="white" style={ChoosePhotoStyle.BottomButton} onPress={navBack}>
           取消
         </MfcButton>
-        <MfcButton style={ChoosePhotoStyle.BottomButton} onPress={navToAddBasicProfile}>
+        <MfcButton
+          style={ChoosePhotoStyle.BottomButton}
+          onPress={navToAddBasicProfile}
+          disabled={!selectedImage && !uploadedImage}>
           繼續
         </MfcButton>
       </View>

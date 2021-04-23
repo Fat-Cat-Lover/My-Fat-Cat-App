@@ -3,10 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ChoosePhoto } from 'pages/Add-Cat/Choose-Photo/Choose-Photo';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { AddBasicProfile } from 'pages/Add-Cat/Add-Basic-Profile/Add-Basic-Profile';
+import { DefaultCatsImages } from 'common/default-cat-images';
 
 export type AddCatNavParams = {
   ChoosePhoto: undefined;
-  AddBasicProfile: undefined;
+  AddBasicProfile: { photo?: string; useDefault?: keyof typeof DefaultCatsImages } | undefined;
 };
 
 const Stack = createStackNavigator<AddCatNavParams>();

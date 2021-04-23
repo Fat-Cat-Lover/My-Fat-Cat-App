@@ -46,5 +46,5 @@ export const DiaryStyle = StyleSheet.create({
   },
   bottomButton: {
     flex: 1,
-  }
+  },
 });

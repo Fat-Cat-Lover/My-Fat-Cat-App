@@ -3,16 +3,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootNavParams } from 'navigations';
 import { AddCatNavParams } from 'navigations/Stacks/Add-Cat';
 
+// type NavProps = StackScreenProps<RootNavParams, 'AddCat'>;
+
 type NavigatorProps = CompositeNavigationProp<
-  StackNavigationProp<AddCatNavParams, 'ChoosePhoto'>,
+  StackNavigationProp<AddCatNavParams, 'AddBasicProfile'>,
   StackNavigationProp<RootNavParams>
 >;
 
-type RouteProps = RouteProp<AddCatNavParams, 'ChoosePhoto'>;
+type RouteProps = RouteProp<AddCatNavParams, 'AddBasicProfile'>;
 
 interface NavProps {
   navigation: NavigatorProps;
   route: RouteProps;
 }
 
-export interface ChoosePhotoProps extends NavProps {}
+export interface AddBasicProfileProps extends NavProps {}

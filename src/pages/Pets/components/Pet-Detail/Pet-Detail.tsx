@@ -34,7 +34,7 @@ export const PetDetail: React.FC<PetDetailProps> = props => {
         <View style={PetDetailStyle.leftBlock}>
           <Image style={PetDetailStyle.catImage} source={imageSource} />
           <View style={PetDetailStyle.sexAgeContainer}>
-            <SexIcon sex={cat.sex} style={PetDetailStyle.sexIcon} />
+            <SexIcon size={18} sex={cat.sex} />
             <MfcText style={PetDetailStyle.ageText}>{cat.age}</MfcText>
           </View>
         </View>
