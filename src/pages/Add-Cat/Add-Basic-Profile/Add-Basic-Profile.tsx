@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { BaseInput } from 'components/Base-Input/Base-Input';
 import { AddBasicProfileStyle } from './Add-Basic-Profile.style';
 import { MfcButton } from 'components/Button/Button';
@@ -14,7 +14,11 @@ import { SexSelector } from 'components/Sex-Selector/Sex-Selector';
 import { CommonStyle } from 'styles/common-style';
 
 export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
-  const { control } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm({ mode: 'onChange' });
 
   let image: ImageSourcePropType;
   if (props.route.params) {
@@ -32,6 +36,10 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
 
   function navBack() {
     props.navigation.goBack();
+  }
+
+  function onSubmit(datas: FieldValues) {
+    console.log(datas);
   }
 
   return (
@@ -60,6 +68,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
+            rules={{ required: true }}
           />
           <Controller
             name="age"
@@ -75,6 +84,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
+            rules={{ required: true }}
           />
           <Controller
             name="sex"
@@ -85,6 +95,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               </BaseInput>
             )}
             defaultValue=""
+            rules={{ required: true }}
           />
           <Controller
             name="currentWeight"
@@ -100,6 +111,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
+            rules={{ required: true }}
           />
           <Controller
             name="targetWeight"
@@ -114,6 +126,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 containerStyle={AddBasicProfileStyle.formField}
               />
             )}
+            rules={{ required: true }}
           />
         </ScrollView>
         <View style={AddBasicProfileStyle.buttonContainer}>
@@ -121,7 +134,11 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             取消
           </MfcButton>
           <View style={AddBasicProfileStyle.buttonSpace} />
-          <MfcButton color="primary" style={AddBasicProfileStyle.button}>
+          <MfcButton
+            color="primary"
+            style={AddBasicProfileStyle.button}
+            onPress={handleSubmit(onSubmit)}
+            disabled={!isValid}>
             繼續
           </MfcButton>
         </View>
