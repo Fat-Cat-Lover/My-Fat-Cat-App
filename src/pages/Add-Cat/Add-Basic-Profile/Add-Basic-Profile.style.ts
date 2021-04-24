@@ -22,17 +22,6 @@ export const AddBasicProfileStyle = StyleSheet.create({
     width: '100%',
     marginBottom: 18,
   },
-  sexButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  sexButton: {
-    borderWidth: 5,
-    borderColor: colors.lightWhite,
-  },
-  sexButtonSpace: {
-    width: 60,
-  },
   buttonContainer: {
     marginTop: spacings.spacing5,
     flexDirection: 'row',

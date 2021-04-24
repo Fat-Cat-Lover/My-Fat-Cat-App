@@ -3,8 +3,6 @@ import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { Controller, useForm } from 'react-hook-form';
 import { BaseInput } from 'components/Base-Input/Base-Input';
-import { RoundImageButton } from 'components/Round-Button/Round-Button';
-import { SexIcon } from 'components/Sex-Icon/Sex-Icon';
 import { AddBasicProfileStyle } from './Add-Basic-Profile.style';
 import { MfcButton } from 'components/Button/Button';
 import { AddCatProgressBar } from '../components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
@@ -12,6 +10,8 @@ import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
 import { AddBasicProfileProps } from './Add-Basic-Profile.interface';
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
+import { SexSelector } from 'components/Sex-Selector/Sex-Selector';
+import { CommonStyle } from 'styles/common-style';
 
 export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   const { control } = useForm();
@@ -38,9 +38,12 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
     <View style={AddBasicProfileStyle.container}>
       <AddCatProgressBar currnetStep={2} totalStep={3} />
       <View style={AddBasicProfileStyle.contentContainer}>
-        <ScrollView contentContainerStyle={AddBasicProfileStyle.formContent}>
+        <ScrollView
+          contentContainerStyle={AddBasicProfileStyle.formContent}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
           <CatPhotoButton image={image} disabled={true} />
-          <MfcHeaderText size="large" type="medium" style={AddBasicProfileStyle.title}>
+          <MfcHeaderText size="large" type="medium" style={[AddBasicProfileStyle.title, CommonStyle.grayText]}>
             輸入貓咪基本資料
           </MfcHeaderText>
           <Controller
@@ -78,15 +81,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             control={control}
             render={({ field }) => (
               <BaseInput required={true} style={AddBasicProfileStyle.formField} label="性別">
-                <View style={AddBasicProfileStyle.sexButtonContainer}>
-                  <RoundImageButton size={45} onPress={() => field.onChange('male')}>
-                    <SexIcon size={45} sex="male" style={AddBasicProfileStyle.sexButton} />
-                  </RoundImageButton>
-                  <View style={AddBasicProfileStyle.sexButtonSpace} />
-                  <RoundImageButton size={45} onPress={() => field.onChange('female')}>
-                    <SexIcon size={45} sex="female" style={AddBasicProfileStyle.sexButton} />
-                  </RoundImageButton>
-                </View>
+                <SexSelector onPress={field.onChange} value={field.value} />
               </BaseInput>
             )}
             defaultValue=""
