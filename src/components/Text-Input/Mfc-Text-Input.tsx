@@ -79,11 +79,13 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
           textAlignVertical="center"
           value={this.props.value}
         />
-        {this.props.errorMessage && (
+        {this.props.errorMessage ? (
           <View style={MfcTextInputStyle.errorMessageContainer}>
-            <MfcText style={MfcTextInputStyle.errorMessage}>{this.props.errorMessage}</MfcText>
+            <MfcText size="small" type="medium" style={MfcTextInputStyle.errorMessage}>
+              {this.props.errorMessage}
+            </MfcText>
           </View>
-        )}
+        ) : undefined}
       </BaseInput>
     );
   }

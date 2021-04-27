@@ -17,8 +17,8 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   const {
     control,
     handleSubmit,
-    formState: { isValid },
-  } = useForm({ mode: 'onChange' });
+    formState: { isValid, errors },
+  } = useForm({ mode: 'onBlur' });
 
   let image: ImageSourcePropType;
   if (props.route.params) {
@@ -63,12 +63,14 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 placeholder="16 字內的寵物名稱"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
+                errorMessage={errors.name && errors.name.message}
               />
             )}
             defaultValue=""
-            rules={{ required: true }}
+            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
           />
           <Controller
             name="age"
@@ -79,12 +81,14 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 placeholder="現在幾歲"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
+                errorMessage={errors.age && errors.age.message}
               />
             )}
             defaultValue=""
-            rules={{ required: true }}
+            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
           />
           <Controller
             name="sex"
@@ -95,7 +99,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               </BaseInput>
             )}
             defaultValue=""
-            rules={{ required: true }}
+            rules={{ required: '必填' }}
           />
           <Controller
             name="currentWeight"
@@ -106,12 +110,14 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 placeholder="現在體重幾公斤"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
+                errorMessage={errors.currentWeight && errors.currentWeight.message}
               />
             )}
             defaultValue=""
-            rules={{ required: true }}
+            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
           />
           <Controller
             name="targetWeight"
@@ -122,11 +128,13 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 placeholder="希望可以達到的目標體重幾公斤"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
+                errorMessage={errors.targetWeight && errors.targetWeight.message}
               />
             )}
-            rules={{ required: true }}
+            rules={{ required: '必填', pattern: /^[0-9]+$/ }}
           />
         </ScrollView>
         <View style={AddBasicProfileStyle.buttonContainer}>
