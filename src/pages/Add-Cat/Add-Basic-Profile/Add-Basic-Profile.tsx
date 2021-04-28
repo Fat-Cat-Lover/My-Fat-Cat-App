@@ -18,6 +18,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
     control,
     handleSubmit,
     formState: { isValid, errors },
+    trigger,
   } = useForm({ mode: 'onBlur' });
 
   let image: ImageSourcePropType;
@@ -70,7 +71,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
-            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
+            rules={{ required: '必填' }}
           />
           <Controller
             name="age"
@@ -95,7 +96,13 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             control={control}
             render={({ field }) => (
               <BaseInput required={true} style={AddBasicProfileStyle.formField} label="性別">
-                <SexSelector onPress={field.onChange} value={field.value} />
+                <SexSelector
+                  onPress={sex => {
+                    field.onChange(sex);
+                    trigger('sex');
+                  }}
+                  value={field.value}
+                />
               </BaseInput>
             )}
             defaultValue=""
@@ -117,7 +124,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
-            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
+            rules={{ required: '必填', pattern: { value: /^[0-9]+(\.\d+)?$/, message: '需為數字' } }}
           />
           <Controller
             name="targetWeight"
@@ -134,7 +141,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 errorMessage={errors.targetWeight && errors.targetWeight.message}
               />
             )}
-            rules={{ required: '必填', pattern: /^[0-9]+$/ }}
+            rules={{ required: '必填', pattern: /^[0-9]+(\.\d+)?$/ }}
           />
         </ScrollView>
         <View style={AddBasicProfileStyle.buttonContainer}>
