@@ -17,7 +17,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   const {
     control,
     handleSubmit,
-    formState: { isValid, errors },
+    formState: { isValid },
     trigger,
   } = useForm({ mode: 'onBlur' });
 
@@ -58,7 +58,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
           <Controller
             name="name"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="寵物名稱"
                 placeholder="16 字內的寵物名稱"
@@ -67,7 +67,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
-                errorMessage={errors.name && errors.name.message}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
             defaultValue=""
@@ -76,16 +76,17 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
           <Controller
             name="age"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="年齡"
                 placeholder="現在幾歲"
-                value={field.value}
-                onChange={field.onChange}
+                value={field.value && field.value.toString()}
+                onChange={v => field.onChange(parseInt(v, 10))}
                 onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
-                errorMessage={errors.age && errors.age.message}
+                errorMessage={fieldState.error && fieldState.error.message}
+                keyboardType="number-pad"
               />
             )}
             defaultValue=""
@@ -111,16 +112,17 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
           <Controller
             name="currentWeight"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="現在體重(kg)"
                 placeholder="現在體重幾公斤"
-                value={field.value}
-                onChange={field.onChange}
+                value={field.value && field.value.toString()}
+                onChange={v => field.onChange(parseFloat(v))}
                 onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
-                errorMessage={errors.currentWeight && errors.currentWeight.message}
+                errorMessage={fieldState.error && fieldState.error.message}
+                keyboardType="number-pad"
               />
             )}
             defaultValue=""
@@ -129,16 +131,17 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
           <Controller
             name="targetWeight"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="目標公斤數(kg)"
                 placeholder="希望可以達到的目標體重幾公斤"
-                value={field.value}
-                onChange={field.onChange}
+                value={field.value && field.value.toString()}
+                onChange={v => field.onChange(parseFloat(v))}
                 onBlur={field.onBlur}
                 required={true}
                 containerStyle={AddBasicProfileStyle.formField}
-                errorMessage={errors.targetWeight && errors.targetWeight.message}
+                errorMessage={fieldState.error && fieldState.error.message}
+                keyboardType="number-pad"
               />
             )}
             rules={{ required: '必填', pattern: /^[0-9]+(\.\d+)?$/ }}
