@@ -1,5 +1,7 @@
 import React from 'react';
 import { ImageSourcePropType, ScrollView, View } from 'react-native';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { BaseInput } from 'components/Base-Input/Base-Input';
@@ -13,13 +15,29 @@ import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { SexSelector } from 'components/Sex-Selector/Sex-Selector';
 import { CommonStyle } from 'styles/common-style';
 
+interface ProfileForm {
+  name: string;
+  age: number;
+  sex: 'male' | 'female';
+  currentWeight: number;
+  targetWeight: number;
+}
+
+const schema = yup.object().shape({
+  name: yup.string().required('必填'),
+  age: yup.number().typeError('需為數字').integer().positive().required('必填'),
+  sex: yup.string().required('必填'),
+  currentWeight: yup.number().typeError('需為數字').positive().required('必填'),
+  targetWeight: yup.number().typeError('需為數字').positive().required('必填'),
+});
+
 export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   const {
     control,
     handleSubmit,
     formState: { isValid },
     trigger,
-  } = useForm({ mode: 'onBlur' });
+  } = useForm<ProfileForm>({ mode: 'onBlur', resolver: yupResolver(schema) });
 
   let image: ImageSourcePropType;
   if (props.route.params) {
@@ -71,7 +89,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
-            rules={{ required: '必填' }}
           />
           <Controller
             name="age"
@@ -80,7 +97,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               <MfcTextInput
                 label="年齡"
                 placeholder="現在幾歲"
-                value={field.value && field.value.toString()}
+                value={field.value ? field.value.toString() : ''}
                 onChange={v => field.onChange(parseInt(v, 10))}
                 onBlur={field.onBlur}
                 required={true}
@@ -90,7 +107,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
-            rules={{ required: '必填', pattern: { value: /^[0-9]+$/, message: '需為數字' } }}
           />
           <Controller
             name="sex"
@@ -107,7 +123,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               </BaseInput>
             )}
             defaultValue=""
-            rules={{ required: '必填' }}
           />
           <Controller
             name="currentWeight"
@@ -116,7 +131,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               <MfcTextInput
                 label="現在體重(kg)"
                 placeholder="現在體重幾公斤"
-                value={field.value && field.value.toString()}
+                value={field.value ? field.value.toString() : ''}
                 onChange={v => field.onChange(parseFloat(v))}
                 onBlur={field.onBlur}
                 required={true}
@@ -126,7 +141,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             )}
             defaultValue=""
-            rules={{ required: '必填', pattern: { value: /^[0-9]+(\.\d+)?$/, message: '需為數字' } }}
           />
           <Controller
             name="targetWeight"
@@ -135,7 +149,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               <MfcTextInput
                 label="目標公斤數(kg)"
                 placeholder="希望可以達到的目標體重幾公斤"
-                value={field.value && field.value.toString()}
+                value={field.value ? field.value.toString() : ''}
                 onChange={v => field.onChange(parseFloat(v))}
                 onBlur={field.onBlur}
                 required={true}
@@ -144,7 +158,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                 keyboardType="number-pad"
               />
             )}
-            rules={{ required: '必填', pattern: /^[0-9]+(\.\d+)?$/ }}
           />
         </ScrollView>
         <View style={AddBasicProfileStyle.buttonContainer}>
