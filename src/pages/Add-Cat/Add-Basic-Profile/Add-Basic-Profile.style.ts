@@ -23,12 +23,5 @@ export const AddBasicProfileStyle = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: spacings.spacing5,
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-  },
-  buttonSpace: {
-    width: spacings.spacing5,
   },
 });

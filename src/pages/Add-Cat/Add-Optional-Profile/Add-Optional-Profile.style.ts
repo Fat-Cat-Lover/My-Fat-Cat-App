@@ -25,10 +25,4 @@ export const AddOptionalProfileStyle = StyleSheet.create({
     marginTop: spacings.spacing5,
     flexDirection: 'row',
   },
-  button: {
-    flex: 1,
-  },
-  buttonSpace: {
-    width: spacings.spacing5,
-  },
 });

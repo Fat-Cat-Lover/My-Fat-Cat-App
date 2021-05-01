@@ -8,9 +8,10 @@ export const CheckboxStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: spacings.spacing5,
+    paddingVertical: spacings.spacing5,
     borderColor: colors.lightGray,
     borderWidth: 1,
+    borderRadius: 8,
   },
   unchecked: {
     backgroundColor: 'transparent',

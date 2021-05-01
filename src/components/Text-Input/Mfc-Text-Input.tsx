@@ -4,7 +4,7 @@ import { Keyboard, TextInput, TextStyle, View } from 'react-native';
 import { MfcTextInputProps } from './Mfc-Text-Input.interface';
 import { MfcTextInputStyle } from './Mfc-Text-Input.style';
 import colors from 'styles/colors';
-import { BaseInput } from 'components/Base-Input/Base-Input';
+import { InputLabel } from 'components/Input-Label/Input-Label';
 
 export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyle: TextStyle }> {
   ref: React.RefObject<TextInput>;
@@ -62,7 +62,8 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
 
   render() {
     return (
-      <BaseInput label={this.props.label} style={this.props.containerStyle} required={this.props.required}>
+      <View style={this.props.containerStyle}>
+        {this.props.label && <InputLabel label={this.props.label} required={this.props.required} />}
         <TextInput
           keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
           placeholder={this.props.placeholder}
@@ -86,7 +87,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
             </MfcText>
           </View>
         ) : undefined}
-      </BaseInput>
+      </View>
     );
   }
 }

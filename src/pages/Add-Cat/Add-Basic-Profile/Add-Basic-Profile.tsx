@@ -4,7 +4,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { Controller, useForm } from 'react-hook-form';
-import { BaseInput } from 'components/Base-Input/Base-Input';
 import { AddBasicProfileStyle } from './Add-Basic-Profile.style';
 import { MfcButton } from 'components/Button/Button';
 import { AddCatProgressBar } from '../components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
@@ -14,6 +13,8 @@ import { DefaultCatsImages } from 'common/default-cat-images';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { SexSelector } from 'components/Sex-Selector/Sex-Selector';
 import { CommonStyle } from 'styles/common-style';
+import { InputLabel } from 'components/Input-Label/Input-Label';
+import { ButtonList } from 'components/Button-List/Button-List';
 
 interface ProfileForm {
   name: string;
@@ -108,7 +109,8 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             name="sex"
             control={control}
             render={({ field }) => (
-              <BaseInput required={true} style={AddBasicProfileStyle.formField} label="性別">
+              <View style={AddBasicProfileStyle.formField}>
+                <InputLabel label="性別" required={true} />
                 <SexSelector
                   onPress={sex => {
                     field.onChange(sex);
@@ -116,7 +118,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
                   }}
                   value={field.value}
                 />
-              </BaseInput>
+              </View>
             )}
             defaultValue=""
           />
@@ -156,19 +158,14 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             )}
           />
         </ScrollView>
-        <View style={AddBasicProfileStyle.buttonContainer}>
-          <MfcButton color="white" onPress={props.navigation.goBack} style={AddBasicProfileStyle.button}>
+        <ButtonList style={AddBasicProfileStyle.buttonContainer}>
+          <MfcButton color="white" onPress={props.navigation.goBack}>
             取消
           </MfcButton>
-          <View style={AddBasicProfileStyle.buttonSpace} />
-          <MfcButton
-            color="primary"
-            style={AddBasicProfileStyle.button}
-            onPress={handleSubmit(onSubmit)}
-            disabled={!isValid}>
+          <MfcButton color="primary" onPress={handleSubmit(onSubmit)} disabled={!isValid}>
             繼續
           </MfcButton>
-        </View>
+        </ButtonList>
       </View>
     </View>
   );
