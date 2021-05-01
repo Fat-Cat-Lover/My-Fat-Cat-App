@@ -4,15 +4,15 @@ import { RootNavParams } from 'navigations';
 import { AddCatNavParams } from 'navigations/Stacks/Add-Cat';
 
 type NavigatorProps = CompositeNavigationProp<
-  StackNavigationProp<AddCatNavParams, 'AddBasicProfile'>,
+  StackNavigationProp<AddCatNavParams, 'AddOptionalProfile'>,
   StackNavigationProp<RootNavParams>
 >;
 
-type RouteProps = RouteProp<AddCatNavParams, 'AddBasicProfile'>;
+type RouteProps = RouteProp<AddCatNavParams, 'AddOptionalProfile'>;
 
 interface NavProps {
   navigation: NavigatorProps;
   route: RouteProps;
 }
 
-export interface AddBasicProfileProps extends NavProps {}
+export interface AddOptionalProfileProps extends NavProps {}

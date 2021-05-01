@@ -1,4 +1,4 @@
-import { TextStyle } from 'react-native';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 export interface MfcTextAreaProps {
   label?: string;
@@ -8,7 +8,8 @@ export interface MfcTextAreaProps {
   onChange: (text: string) => void;
   numberOfLines?: number;
   maxLength?: number;
-  emptyInputStyle?: TextStyle;
-  filledInputStyle?: TextStyle;
+  emptyInputStyle?: StyleProp<TextStyle>;
+  filledInputStyle?: StyleProp<TextStyle>;
   placeholder?: string;
+  containerStyle: StyleProp<ViewStyle>;
 }

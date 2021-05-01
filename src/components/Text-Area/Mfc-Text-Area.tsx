@@ -61,7 +61,7 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
 
   render() {
     return (
-      <BaseInput label={this.props.label}>
+      <BaseInput label={this.props.label} style={this.props.containerStyle}>
         <TextInput
           keyboardType="default"
           placeholder={this.props.placeholder}

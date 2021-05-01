@@ -3,7 +3,7 @@ import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { BaseInput } from 'components/Base-Input/Base-Input';
 import { AddBasicProfileStyle } from './Add-Basic-Profile.style';
 import { MfcButton } from 'components/Button/Button';
@@ -53,12 +53,8 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
     throw new Error('No image select');
   }
 
-  function navBack() {
-    props.navigation.goBack();
-  }
-
-  function onSubmit(datas: FieldValues) {
-    console.log(datas);
+  function onSubmit(datas: ProfileForm) {
+    props.navigation.navigate('AddOptionalProfile', datas);
   }
 
   return (
@@ -161,7 +157,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
           />
         </ScrollView>
         <View style={AddBasicProfileStyle.buttonContainer}>
-          <MfcButton color="white" onPress={navBack} style={AddBasicProfileStyle.button}>
+          <MfcButton color="white" onPress={props.navigation.goBack} style={AddBasicProfileStyle.button}>
             取消
           </MfcButton>
           <View style={AddBasicProfileStyle.buttonSpace} />

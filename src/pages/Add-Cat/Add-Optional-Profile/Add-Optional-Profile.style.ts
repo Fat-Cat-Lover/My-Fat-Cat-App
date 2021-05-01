@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import spacings from 'styles/spacings';
 
-export const AddBasicProfileStyle = StyleSheet.create({
+export const AddOptionalProfileStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -11,15 +11,15 @@ export const AddBasicProfileStyle = StyleSheet.create({
     paddingTop: spacings.spacing7,
     paddingBottom: spacings.spacing5,
   },
-  title: {
-    marginVertical: spacings.spacing6,
-  },
   formContent: {
     alignItems: 'center',
   },
   formField: {
     width: '100%',
     marginBottom: 18,
+  },
+  checkBoxContainer: {
+    flexDirection: 'row',
   },
   buttonContainer: {
     marginTop: spacings.spacing5,
