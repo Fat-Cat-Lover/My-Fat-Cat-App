@@ -1,12 +1,12 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcText } from 'components/Text/Text';
 import spacings from 'styles/spacings';
-import { AddCatProgressBar } from '../components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
 import { ChoosePhotoStyle } from './Choose-Photo.style';
 import { MfcButton } from 'components/Button/Button';
 import { CommonStyle } from 'styles/common-style';
@@ -19,10 +19,6 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   const [selectedImage, setSelectedImage] = React.useState<string>();
   const [uploadedImage, setUploadedImage] = React.useState<string>();
   const defaultCats = Object.keys(DefaultCatsImages);
-
-  function navBack() {
-    props.navigation.pop();
-  }
 
   function navToAddBasicProfile() {
     props.navigation.navigate('AddBasicProfile', {
@@ -88,7 +84,6 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
 
   return (
     <View style={ChoosePhotoStyle.container}>
-      <AddCatProgressBar currnetStep={1} totalStep={3} />
       <View style={ChoosePhotoStyle.uploadContainer}>
         <MfcHeaderText size="large" type="medium" style={CommonStyle.grayText}>
           點擊上傳貓咪照片
@@ -120,7 +115,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         })}
       </ScrollView>
       <View style={ChoosePhotoStyle.BottomButtonsContainer}>
-        <MfcButton color="white" style={ChoosePhotoStyle.BottomButton} onPress={navBack}>
+        <MfcButton color="white" style={ChoosePhotoStyle.BottomButton} onPress={props.navigation.goBack}>
           取消
         </MfcButton>
         <MfcButton
