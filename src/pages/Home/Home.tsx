@@ -9,7 +9,7 @@ import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { HomeStyles } from './Home.style';
 import { setCats } from 'redux/cats/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
-import { getCats } from 'services/cat';
+import { CatService, getCats } from 'services/cat';
 import { getDiary } from 'services/diary';
 import { setCurrentDiary } from 'redux/diary/slice';
 import { selectDiary } from 'redux/diary/selector';
@@ -26,6 +26,7 @@ export const Home: React.FC<HomeProps> = props => {
   const currentCat = cats[selectedCat];
 
   useEffect(() => {
+    new CatService().getCats().then(d => console.log(d));
     getCats().then(_cats => {
       dispatch(setCats(_cats));
       if (_cats) {
