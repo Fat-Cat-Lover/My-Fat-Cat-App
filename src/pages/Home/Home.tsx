@@ -24,34 +24,14 @@ export const Home: React.FC<HomeProps> = props => {
   const currentCat = cats[selectedCat];
 
   useEffect(() => {
-    // getCats().then(_cats => {
-    //   dispatch(setCats(_cats));
-    //   if (_cats) {
-    //     return getCatDiary(_cats[selectedCat].id, currentDate);
-    //   }
-    // });
     dispatch(getCats());
   }, [dispatch]);
 
   useEffect(() => {
     if (cats) {
-      dispatch(getCurrentDiary({ catID: selectedCat, date: new Date(currentDate) }));
+      dispatch(getCurrentDiary({ catID: cats[selectedCat].id, date: new Date(currentDate) }));
     }
-  }, [dispatch, cats, selectedCat, currentDate]);
-
-  // function getCatDiary(selectCatId: number, date: string) {
-  //   return getDiary(selectCatId, date).then(_diary => {
-  //     dispatch(setCurrentDiary(_diary));
-  //   });
-  // }
-
-  // function onDateChange(newDate: Date) {
-  //   getCatDiary(cats[selectedCat].id, newDate.toISOString());
-  // }
-
-  // function onCatSelect(index: number) {
-  //   getCatDiary(cats[index].id, currentDate);
-  // }
+  }, [dispatch, cats, currentDate, selectedCat]);
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });

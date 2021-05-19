@@ -1,4 +1,3 @@
-import { plainToClass } from 'class-transformer';
 import { MockCats } from 'mocks/cats';
 import { Cat } from 'models/cat';
 import SQLite from 'common/database/database';
@@ -17,7 +16,7 @@ export class CatService {
 }
 
 export function getCats(): Promise<Cat[]> {
-  return Promise.resolve(plainToClass<Cat, Cat[]>(Cat, MockCats));
+  return Promise.resolve(MockCats);
 }
 
 export function addCat(cat: Cat): Promise<Cat> {
