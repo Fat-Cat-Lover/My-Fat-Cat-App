@@ -8,7 +8,7 @@ import { AddOptionalProfile } from 'pages/Add-Cat/Add-Optional-Profile/Add-Optio
 import { AddCatProgressBar } from 'pages/Add-Cat/components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
 
 export type AddCatNavParams = {
-  ChoosePhoto: { currentStep?: number };
+  ChoosePhoto: { currentStep?: number } | undefined;
   AddBasicProfile: { photo?: string; useDefault?: keyof typeof DefaultCatsImages; currentStep?: number } | undefined;
   AddOptionalProfile: {
     name: string;

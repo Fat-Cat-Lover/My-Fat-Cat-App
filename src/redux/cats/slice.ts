@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Cat } from 'models/cat';
+import { getCats as _getCats } from 'services/cat';
 
 interface CatsState {
-  cats: Record<keyof Cat, any>[];
+  cats: Cat[];
   selectedCat: number;
 }
 
@@ -12,23 +12,25 @@ const initState: CatsState = {
   selectedCat: 0,
 };
 
+export const getCats = createAsyncThunk('cats/getCats', async () => {
+  const cats = await _getCats();
+  return cats;
+});
+
 const catsSlice = createSlice({
   name: 'cats',
   initialState: initState,
   reducers: {
-    setCats: {
-      reducer: (state, action: PayloadAction<Record<keyof Cat, any>[]>) => {
-        state.cats = action.payload;
-      },
-      prepare: (cats: Cat[]) => {
-        return { payload: cats.map(cat => classToPlain(cat)) };
-      },
-    },
     setSelectedCat: (state, action) => {
       state.selectedCat = action.payload;
     },
   },
+  extraReducers: builder => {
+    builder.addCase(getCats.fulfilled, (state, action) => {
+      state.cats = action.payload;
+    });
+  },
 });
 
-export const { setCats, setSelectedCat } = catsSlice.actions;
+export const { setSelectedCat } = catsSlice.actions;
 export const catsReducer = catsSlice.reducer;

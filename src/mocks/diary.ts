@@ -51,7 +51,7 @@ export class MockEatingRecord extends EatingRecord {
   }
 }
 
-export const mockDiarys = {
+const _mockDiarys = {
   [`1/${today.format('YYYYMMDD')}`]: new MockDiary(
     [new MockEatingRecord(today.hour(7).toDate(), 50, '生食', '野起來吃雞肉', 50, 1, 1)],
     10
@@ -90,3 +90,5 @@ export const mockDiarys = {
     30
   ),
 };
+
+export const mockDiarys = JSON.parse(JSON.stringify(_mockDiarys));

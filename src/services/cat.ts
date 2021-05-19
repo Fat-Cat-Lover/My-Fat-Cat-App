@@ -14,12 +14,15 @@ export class CatService {
       return cats;
     });
   }
-
-  // addCat() {
-  //   return SQLite.db.transaction(tx => tx.executeSql(``))
-  // }
 }
 
 export function getCats(): Promise<Cat[]> {
-  return Promise.resolve(plainToClass(Cat, MockCats));
+  return Promise.resolve(plainToClass<Cat, Cat[]>(Cat, MockCats));
+}
+
+export function addCat(cat: Cat): Promise<Cat> {
+  const id = MockCats.length + 1;
+  cat.id = id;
+  MockCats.push(cat);
+  return Promise.resolve(cat);
 }

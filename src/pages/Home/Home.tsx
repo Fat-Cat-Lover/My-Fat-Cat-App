@@ -7,47 +7,51 @@ import { ProgressButton } from 'pages/Home/components/Progress-Button/Progress-B
 import { MfcText } from 'components/Text/Text';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { HomeStyles } from './Home.style';
-import { setCats } from 'redux/cats/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
-import { CatService, getCats } from 'services/cat';
-import { getDiary } from 'services/diary';
-import { setCurrentDiary } from 'redux/diary/slice';
+import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiary } from 'redux/diary/selector';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { selectCats } from 'redux/cats/selector';
+import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
+import { getCats } from 'redux/cats/slice';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
   const cats = useRootSelector(selectCats);
-  const selectedCat = useRootSelector(state => state.cats.selectedCat);
+  const selectedCat = useRootSelector(getSelectedCat);
   const diary = useRootSelector(selectDiary);
   const dispatch = useRootDispatch();
   const currentCat = cats[selectedCat];
 
   useEffect(() => {
-    new CatService().getCats().then(d => console.log(d));
-    getCats().then(_cats => {
-      dispatch(setCats(_cats));
-      if (_cats) {
-        return getCatDiary(_cats[selectedCat].id, currentDate);
-      }
-    });
-  }, []);
+    // getCats().then(_cats => {
+    //   dispatch(setCats(_cats));
+    //   if (_cats) {
+    //     return getCatDiary(_cats[selectedCat].id, currentDate);
+    //   }
+    // });
+    dispatch(getCats());
+  }, [dispatch]);
 
-  function getCatDiary(selectCatId: number, date: string) {
-    return getDiary(selectCatId, date).then(_diary => {
-      dispatch(setCurrentDiary(_diary));
-    });
-  }
+  useEffect(() => {
+    if (cats) {
+      dispatch(getCurrentDiary({ catID: selectedCat, date: new Date(currentDate) }));
+    }
+  }, [dispatch, cats, selectedCat, currentDate]);
 
-  function onDateChange(newDate: Date) {
-    getCatDiary(cats[selectedCat].id, newDate.toISOString());
-  }
+  // function getCatDiary(selectCatId: number, date: string) {
+  //   return getDiary(selectCatId, date).then(_diary => {
+  //     dispatch(setCurrentDiary(_diary));
+  //   });
+  // }
 
-  function onCatSelect(index: number) {
-    getCatDiary(cats[index].id, currentDate);
-  }
+  // function onDateChange(newDate: Date) {
+  //   getCatDiary(cats[selectedCat].id, newDate.toISOString());
+  // }
+
+  // function onCatSelect(index: number) {
+  //   getCatDiary(cats[index].id, currentDate);
+  // }
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
@@ -72,7 +76,7 @@ export const Home: React.FC<HomeProps> = props => {
     mainContent = (
       <CatDiary
         cats={cats}
-        onCatSelect={onCatSelect}
+        // onCatSelect={onCatSelect}
         DiaryHeaderRight={
           currentCat.currentWeight > currentCat.targetWeight ? (
             <MfcText>距離目標：{currentCat.currentWeight} kg</MfcText>
@@ -112,7 +116,7 @@ export const Home: React.FC<HomeProps> = props => {
   return (
     <View style={HomeStyles.container}>
       <HeaderBar>
-        <DatePicker onDateChange={onDateChange} />
+        <DatePicker />
       </HeaderBar>
       {mainContent}
     </View>

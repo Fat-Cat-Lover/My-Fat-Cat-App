@@ -1,28 +1,28 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { classToPlain } from 'class-transformer';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Diary } from 'models/diary';
+import { getDiary } from 'services/diary';
 
 interface CurrentDiary {
-  currentDiary: Record<keyof Diary, any> | null;
+  currentDiary: Diary | null;
 }
 const initState: CurrentDiary = {
   currentDiary: null,
 };
 
+export const getCurrentDiary = createAsyncThunk<Diary, { catID: number; date: Date }>(
+  'diary/getCurrentDiary',
+  async args => await getDiary(args.catID, args.date)
+);
+
 const DiarySlice = createSlice({
   name: 'diary',
   initialState: initState,
-  reducers: {
-    setCurrentDiary: {
-      reducer: (state, action: PayloadAction<Record<keyof Diary, any>>) => {
-        state.currentDiary = action.payload;
-      },
-      prepare: diary => {
-        return { payload: classToPlain(diary) };
-      },
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getCurrentDiary.fulfilled, (state, action) => {
+      state.currentDiary = action.payload;
+    });
   },
 });
 
-export const { setCurrentDiary } = DiarySlice.actions;
 export const diaryReducer = DiarySlice.reducer;

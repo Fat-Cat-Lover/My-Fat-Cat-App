@@ -1,6 +1,6 @@
 import { Cat } from 'models/cat';
 
-export const MockCats: Cat[] = [
+const _mockCats: Cat[] = [
   {
     id: 1,
     name: 'Kiwi',
@@ -31,3 +31,5 @@ export const MockCats: Cat[] = [
     targetWeight: 5,
   },
 ];
+
+export const MockCats = JSON.parse(JSON.stringify(_mockCats));
