@@ -28,7 +28,7 @@ export const Home: React.FC<HomeProps> = props => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (cats) {
+    if (cats.length) {
       dispatch(getCurrentDiary({ catID: cats[selectedCat].id, date: new Date(currentDate) }));
     }
   }, [dispatch, cats, currentDate, selectedCat]);

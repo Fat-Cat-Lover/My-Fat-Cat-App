@@ -38,7 +38,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
     handleSubmit,
     formState: { isValid },
     trigger,
-  } = useForm<ProfileForm>({ mode: 'onBlur', resolver: yupResolver(schema) });
+  } = useForm<ProfileForm>({ mode: 'onTouched', resolver: yupResolver(schema) });
 
   let image: ImageSourcePropType;
   if (props.route.params) {

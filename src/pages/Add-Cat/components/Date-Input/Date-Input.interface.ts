@@ -1,6 +1,6 @@
 export interface DateInputProps {
   label?: string;
-  value: Date;
+  value?: Date;
   placeholder?: string;
   onChange: (date: Date) => void;
 }

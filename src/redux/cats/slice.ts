@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Cat } from 'models/cat';
-import { getCats as _getCats } from 'services/cat';
+import { getCats as _getCats, addCat as _addCat } from 'services/cat';
 
 interface CatsState {
   cats: Cat[];
@@ -17,6 +17,8 @@ export const getCats = createAsyncThunk('cats/getCats', async () => {
   return cats;
 });
 
+export const addCat = createAsyncThunk<Cat, Partial<Cat>>('cats/addCat', async cat => await _addCat(cat));
+
 const catsSlice = createSlice({
   name: 'cats',
   initialState: initState,
@@ -28,6 +30,9 @@ const catsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getCats.fulfilled, (state, action) => {
       state.cats = action.payload;
+    });
+    builder.addCase(addCat.fulfilled, (state, action) => {
+      state.cats.push(action.payload);
     });
   },
 });

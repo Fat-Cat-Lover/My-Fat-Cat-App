@@ -19,9 +19,8 @@ export function getCats(): Promise<Cat[]> {
   return Promise.resolve(MockCats);
 }
 
-export function addCat(cat: Cat): Promise<Cat> {
-  const id = MockCats.length + 1;
+export function addCat(cat: Partial<Cat>): Promise<Cat> {
+  const id = Math.random() * (10 - 3) + 3;
   cat.id = id;
-  MockCats.push(cat);
-  return Promise.resolve(cat);
+  return Promise.resolve(JSON.parse(JSON.stringify(cat)) as Cat);
 }
