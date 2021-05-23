@@ -66,8 +66,8 @@ export const Home: React.FC<HomeProps> = props => {
         cats={cats}
         onCatSelect={onCatSelect}
         DiaryHeaderRight={
-          currentCat.currentWeight > currentCat.targetWeight ? (
-            <MfcText>距離目標：{currentCat.currentWeight} kg</MfcText>
+          currentCat.currentWeight !== currentCat.targetWeight ? (
+            <MfcText>距離目標：{(currentCat.currentWeight - currentCat.targetWeight).toFixed(2)} kg</MfcText>
           ) : undefined
         }
         addButtonOnPress={navToAddCat}>
