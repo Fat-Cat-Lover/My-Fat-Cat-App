@@ -14,4 +14,6 @@ export const ICONS = {
   female: require('./images/female.png'),
   create: require('./images/create.png'),
   expandMore: require('./images/expand_more.png'),
+  perm_media: require('./images/perm_media.png'),
+  done: require('./images/done.png'),
 };

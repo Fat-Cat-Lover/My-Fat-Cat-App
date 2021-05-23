@@ -8,7 +8,6 @@ type Option = {
 export interface SelectInputProps {
   label?: string;
   options: Option[];
-  selectedIndex: number;
   onChange: (value: ItemValue, index: number) => void;
   placeholder?: string;
 }

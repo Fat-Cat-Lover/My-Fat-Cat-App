@@ -1,12 +1,14 @@
-import { KeyboardTypeOptions } from 'react-native';
+import { KeyboardTypeOptions, StyleProp, ViewStyle } from 'react-native';
 
 export interface MfcTextInputProps {
   label?: string;
+  required?: boolean;
   placeholder?: string;
   value: string;
   keyboardType?: KeyboardTypeOptions;
   errorMessage?: string;
-  onTextChange: (text: string) => void;
+  onChange: (text: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  containerStyle?: StyleProp<ViewStyle>;
 }

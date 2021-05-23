@@ -3,9 +3,6 @@ import colors from 'styles/colors';
 
 export const SexIconStyle = StyleSheet.create({
   container: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
     justifyContent: 'center',
     alignItems: 'center',
   },

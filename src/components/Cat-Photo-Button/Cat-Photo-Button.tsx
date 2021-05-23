@@ -11,7 +11,7 @@ export const CatPhotoButton: React.FC<CatPhotoButtonProps> = props => {
     borderRadius: size / 2,
   };
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
       <Image source={props.image} style={[styleStyle, CatPhotoButtonStyle.image, props.style]} />
     </TouchableOpacity>
   );

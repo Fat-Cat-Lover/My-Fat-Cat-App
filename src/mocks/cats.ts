@@ -1,6 +1,6 @@
 import { Cat } from 'models/cat';
 
-export const MockCats: Cat[] = [
+const _mockCats: Cat[] = [
   {
     id: 1,
     name: 'Kiwi',
@@ -18,11 +18,10 @@ export const MockCats: Cat[] = [
   },
   {
     id: 2,
-    name: '橘',
-    image:
-      'https://instagram.ftpe4-1.fna.fbcdn.net/v/t51.2885-15/e35/s1080x1080/118070062_333898481070553_6211537845720984350_n.jpg?tp=1&_nc_ht=instagram.ftpe4-1.fna.fbcdn.net&_nc_cat=101&_nc_ohc=fWHRijXEBhAAX83VbjD&oh=a73cdbb23b57c2d29971bf81d1af78ba&oe=60660DED',
-    description: '毛澎',
-    age: 6,
+    name: '嵐',
+    image: 'https://pbs.twimg.com/media/D8jcyGkUEAA7EjP?format=jpg&name=large',
+    description: '不動',
+    age: 3,
     sex: 'female',
     isNeuter: true,
     active: 'nonactive',
@@ -31,3 +30,5 @@ export const MockCats: Cat[] = [
     targetWeight: 5,
   },
 ];
+
+export const MockCats = JSON.parse(JSON.stringify(_mockCats));

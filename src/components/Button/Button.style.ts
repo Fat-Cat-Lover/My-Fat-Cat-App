@@ -13,8 +13,11 @@ export const ButtonMainStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: Spacings.spacing5,
+    padding: Spacings.spacing4,
     borderRadius: 8,
+  },
+  disabled: {
+    opacity: 0.6,
   },
 });
 

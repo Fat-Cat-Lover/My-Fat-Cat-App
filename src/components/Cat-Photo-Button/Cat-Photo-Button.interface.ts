@@ -5,4 +5,5 @@ export interface CatPhotoButtonProps {
   size?: number;
   style?: StyleProp<ImageStyle>;
   onPress?: () => any;
+  disabled?: boolean;
 }

@@ -5,7 +5,7 @@ export class Cat {
   name: string;
   image?: string;
   useDefault?: string;
-  description: string;
+  description?: string;
   age: number;
   sex: 'male' | 'female';
   isNeuter: boolean;

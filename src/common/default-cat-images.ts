@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from 'react-native';
 
-export const DefaultCatsImages: { [key: string]: ImageSourcePropType } = {
+export const DefaultCatsImages: Record<string, ImageSourcePropType> = {
   orange: require('assets/images/default-cats-images/orange.png'),
   white: require('assets/images/default-cats-images/white.png'),
   black: require('assets/images/default-cats-images/black.png'),

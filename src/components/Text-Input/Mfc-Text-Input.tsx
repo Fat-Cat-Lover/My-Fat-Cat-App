@@ -4,7 +4,7 @@ import { Keyboard, TextInput, TextStyle, View } from 'react-native';
 import { MfcTextInputProps } from './Mfc-Text-Input.interface';
 import { MfcTextInputStyle } from './Mfc-Text-Input.style';
 import colors from 'styles/colors';
-import { BaseInput } from 'components/Base-Input/Base-Input';
+import { InputLabel } from 'components/Input-Label/Input-Label';
 
 export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyle: TextStyle }> {
   ref: React.RefObject<TextInput>;
@@ -57,12 +57,13 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
   }
 
   onChangeText(text: string) {
-    this.props.onTextChange(text);
+    this.props.onChange(text);
   }
 
   render() {
     return (
-      <BaseInput label={this.props.label}>
+      <View style={this.props.containerStyle}>
+        {this.props.label && <InputLabel label={this.props.label} required={this.props.required} />}
         <TextInput
           keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
           placeholder={this.props.placeholder}
@@ -79,12 +80,14 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
           textAlignVertical="center"
           value={this.props.value}
         />
-        {this.props.errorMessage && (
+        {this.props.errorMessage ? (
           <View style={MfcTextInputStyle.errorMessageContainer}>
-            <MfcText style={MfcTextInputStyle.errorMessage}>{this.props.errorMessage}</MfcText>
+            <MfcText size="small" type="medium" style={MfcTextInputStyle.errorMessage}>
+              {this.props.errorMessage}
+            </MfcText>
           </View>
-        )}
-      </BaseInput>
+        ) : undefined}
+      </View>
     );
   }
 }

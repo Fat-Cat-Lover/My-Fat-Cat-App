@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.4.0",
     "@react-native-community/datetimepicker": "^3.0.9",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-picker/picker": "^1.12.0",
@@ -21,14 +22,18 @@
     "class-transformer": "^0.4.0",
     "dayjs": "^1.10.4",
     "react": "17.0.1",
+    "react-hook-form": "^7.0.5",
     "react-native": "0.64.0",
     "react-native-gesture-handler": "^1.9.0",
+    "react-native-image-crop-picker": "^0.36.0",
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.16.1",
+    "react-native-sqlite-storage": "^5.0.0",
     "react-redux": "^7.2.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -37,6 +42,7 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/jest": "^25.2.3",
     "@types/react-native": "^0.63.2",
+    "@types/react-native-sqlite-storage": "^5.0.0",
     "@types/react-redux": "^7.1.16",
     "@types/react-test-renderer": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
