@@ -1,13 +1,10 @@
 import React from 'react';
 import { Image, View } from 'react-native';
-import { selectDiaryDate } from 'redux/diary-date/selector';
 import { selectDiary } from 'redux/diary/selector';
-import { setCurrentDiary } from 'redux/diary/slice';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { CatDiary } from 'components/Cat-Diary-Panel/Cat-Diary-Panel';
 import { DatePicker } from 'components/Date-Picker/Date-Picker';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
-import { getDiary } from 'services/diary';
 import { EatingRecord } from 'pages/Diary/components/Eating-Record/Eating-Record';
 import { MfcText } from 'components/Text/Text';
 import { DiaryStyle } from './Diary.style';
@@ -15,26 +12,22 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CommonStyle } from 'styles/common-style';
 import { NutritionBlock } from './components/Nutrition-Block/Nutrition-Block';
 import { MfcButton } from 'components/Button/Button';
+import { getCurrentDiary } from 'redux/diary/slice';
+import { selectDiaryDate } from 'redux/diary-date/selector';
 
 export const Diary: React.FC = () => {
-  const currentDate = useRootSelector(selectDiaryDate);
   const cats = useRootSelector(state => state.cats.cats);
+  const currentDate = useRootSelector(selectDiaryDate);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
   const diary = useRootSelector(selectDiary);
   const dispatch = useRootDispatch();
 
-  function getCatDiary(selectCatId: number, date: string) {
-    return getDiary(selectCatId, date).then(_diary => {
-      dispatch(setCurrentDiary(_diary));
-    });
-  }
-
-  function onDateChange(newDate: Date) {
-    getCatDiary(cats[selectedCat].id, newDate.toISOString());
+  function onDateChange(date: Date) {
+    dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
   }
 
   function onCatSelect(index: number) {
-    getCatDiary(cats[index].id, currentDate);
+    dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
   }
 
   let content: React.ReactNode;
@@ -97,7 +90,7 @@ export const Diary: React.FC = () => {
       <HeaderBar>
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
-      <CatDiary cats={cats} onCatSelect={onCatSelect} DiaryHeaderRight={caloriesSummary}>
+      <CatDiary cats={cats} DiaryHeaderRight={caloriesSummary} onCatSelect={onCatSelect}>
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
           <MfcButton color="green" style={DiaryStyle.bottomButton}>

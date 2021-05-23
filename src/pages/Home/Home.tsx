@@ -14,6 +14,7 @@ import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
 import { getCats } from 'redux/cats/slice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -24,17 +25,24 @@ export const Home: React.FC<HomeProps> = props => {
   const currentCat = cats[selectedCat];
 
   useEffect(() => {
-    dispatch(getCats());
+    dispatch(getCats()).then(result => {
+      const _cats = unwrapResult(result);
+      if (_cats.length) {
+        dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
+      }
+    });
   }, [dispatch]);
-
-  useEffect(() => {
-    if (cats.length) {
-      dispatch(getCurrentDiary({ catID: cats[selectedCat].id, date: new Date(currentDate) }));
-    }
-  }, [dispatch, cats, currentDate, selectedCat]);
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
+  }
+
+  function onDateChange(date: Date) {
+    dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
+  }
+
+  function onCatSelect(index: number) {
+    dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
   }
 
   let mainContent: React.ReactNode;
@@ -56,7 +64,7 @@ export const Home: React.FC<HomeProps> = props => {
     mainContent = (
       <CatDiary
         cats={cats}
-        // onCatSelect={onCatSelect}
+        onCatSelect={onCatSelect}
         DiaryHeaderRight={
           currentCat.currentWeight > currentCat.targetWeight ? (
             <MfcText>距離目標：{currentCat.currentWeight} kg</MfcText>
@@ -80,7 +88,7 @@ export const Home: React.FC<HomeProps> = props => {
             <View style={HomeStyles.SummarySpacing} />
             <ProgressButton
               icon="food"
-              progress={(diary?.caloriesEatenToday || 0) / (currentCat.dailyCalories || 0)}
+              progress={(diary?.caloriesEatenToday || 0) / (currentCat.dailyCalories || 0) || 0}
               progressText={`${diary?.caloriesEatenToday || 0}/${currentCat.dailyCalories || 0} Cal`}
               progressBarColor="#FF9F1C"
               buttonText="餵食"
@@ -96,7 +104,7 @@ export const Home: React.FC<HomeProps> = props => {
   return (
     <View style={HomeStyles.container}>
       <HeaderBar>
-        <DatePicker />
+        <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
       {mainContent}
     </View>

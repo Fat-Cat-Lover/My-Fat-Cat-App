@@ -3,15 +3,18 @@ import { Diary } from 'models/diary';
 import { getDiary } from 'services/diary';
 
 interface CurrentDiary {
+  status: 'idle' | 'loading' | 'success' | 'failed';
   currentDiary: Diary | null;
 }
+
 const initState: CurrentDiary = {
+  status: 'idle',
   currentDiary: null,
 };
 
-export const getCurrentDiary = createAsyncThunk<Diary, { catID: number; date: Date }>(
+export const getCurrentDiary = createAsyncThunk<Diary, { catId: number; date: Date }>(
   'diary/getCurrentDiary',
-  async args => await getDiary(args.catID, args.date)
+  async args => await getDiary(args.catId, args.date)
 );
 
 const DiarySlice = createSlice({
@@ -19,8 +22,12 @@ const DiarySlice = createSlice({
   initialState: initState,
   reducers: {},
   extraReducers: builder => {
+    builder.addCase(getCurrentDiary.pending, (state, action) => {
+      state.status = 'loading';
+    });
     builder.addCase(getCurrentDiary.fulfilled, (state, action) => {
       state.currentDiary = action.payload;
+      state.status = 'success';
     });
   },
 });
