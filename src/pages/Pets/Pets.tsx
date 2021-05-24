@@ -10,8 +10,13 @@ import { MfcButton } from 'components/Button/Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { MfcText } from 'components/Text/Text';
 import { CommonStyle } from 'styles/common-style';
+import { PetsPageProps } from './Pets.interface';
 
-export const Pets: React.FC = props => {
+export const Pets: React.FC<PetsPageProps> = props => {
+  function navToDetail(catId: number) {
+    props.navigation.navigate('EditCat', { catId });
+  }
+
   const cats = useRootSelector(selectCats);
   return (
     <View style={PetsStyle.container}>
@@ -19,7 +24,14 @@ export const Pets: React.FC = props => {
       <ScrollView contentContainerStyle={PetsStyle.petsDetailContent}>
         {cats.length > 0
           ? cats.map(cat => {
-              return <PetDetail cat={cat} key={cat.id} style={PetsStyle.elementVerticalSpacing} />;
+              return (
+                <PetDetail
+                  cat={cat}
+                  key={cat.id}
+                  style={PetsStyle.elementVerticalSpacing}
+                  editButtonPress={navToDetail}
+                />
+              );
             })
           : undefined}
         <MfcButton style={PetsStyle.elementVerticalSpacing} color="gray">

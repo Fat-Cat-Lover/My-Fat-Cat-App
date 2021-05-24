@@ -16,7 +16,7 @@ export const PetsStyle = StyleSheet.create({
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   addButtonIcon: {
     marginRight: spacings.spacing5,

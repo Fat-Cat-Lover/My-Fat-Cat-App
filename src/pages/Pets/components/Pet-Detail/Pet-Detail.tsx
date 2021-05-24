@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { PetTag } from '../Pet-Tag/Pet-Tag';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { CommonStyle } from 'styles/common-style';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const PetDetail: React.FC<PetDetailProps> = props => {
   const cat = props.cat;
@@ -58,7 +59,9 @@ export const PetDetail: React.FC<PetDetailProps> = props => {
           </View>
         </View>
         <View>
-          <MfcIcon name="create" />
+          <TouchableOpacity onPress={() => props.editButtonPress && props.editButtonPress(cat.id)}>
+            <MfcIcon name="create" />
+          </TouchableOpacity>
         </View>
       </View>
       {cat.description ? (
