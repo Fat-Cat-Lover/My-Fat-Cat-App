@@ -4,8 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ScrollView, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Checkbox } from '../components/Checkbox/Checkbox';
-import { DateInput } from '../components/Date-Input/Date-Input';
+import { Checkbox } from '../../../components/Checkbox/Checkbox';
+import { DateInput } from 'components/Date-Input/Date-Input';
 import { MfcTextArea } from 'components/Text-Area/Mfc-Text-Area';
 import { AddOptionalProfileStyle } from './Add-Optional-Profile.style';
 import { MfcButton } from 'components/Button/Button';

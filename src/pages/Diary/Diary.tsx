@@ -14,8 +14,9 @@ import { NutritionBlock } from './components/Nutrition-Block/Nutrition-Block';
 import { MfcButton } from 'components/Button/Button';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
+import { DiaryProps } from './Diary.interface';
 
-export const Diary: React.FC = () => {
+export const Diary: React.FC<DiaryProps> = props => {
   const cats = useRootSelector(state => state.cats.cats);
   const currentDate = useRootSelector(selectDiaryDate);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
@@ -90,7 +91,11 @@ export const Diary: React.FC = () => {
       <HeaderBar>
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
-      <CatDiary cats={cats} DiaryHeaderRight={caloriesSummary} onCatSelect={onCatSelect}>
+      <CatDiary
+        cats={cats}
+        DiaryHeaderRight={caloriesSummary}
+        onCatSelect={onCatSelect}
+        addButtonOnPress={() => props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' })}>
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
           <MfcButton color="green" style={DiaryStyle.bottomButton}>

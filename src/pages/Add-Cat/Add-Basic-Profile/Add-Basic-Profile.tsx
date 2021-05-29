@@ -44,7 +44,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   if (props.route.params) {
     const { photo, useDefault } = props.route.params;
     if (photo) {
-      image = { uri: photo };
+      image = { uri: photo.path };
     } else if (useDefault) {
       image = DefaultCatsImages[useDefault];
     } else {
@@ -55,7 +55,9 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
   }
 
   function onSubmit(datas: ProfileForm) {
-    props.navigation.navigate('AddOptionalProfile', datas);
+    const { photo, useDefault } = props.route.params!;
+    const cat = { ...datas, photo, useDefault };
+    props.navigation.navigate('AddOptionalProfile', cat);
   }
 
   return (

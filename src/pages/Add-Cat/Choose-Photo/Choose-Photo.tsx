@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
@@ -14,10 +13,12 @@ import { RoundImageButton } from 'components/Round-Button/Round-Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { ChoosePhotoProps } from './Choose-Photo.interface';
 import { SelectedCheckmark } from 'components/Selected-Checkmark/Selected-Checkmark';
+import { openImagePicker } from 'services/image-picker';
+import { ImageOrVideo } from 'react-native-image-crop-picker';
 
 export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   const [selectedImage, setSelectedImage] = React.useState<string>();
-  const [uploadedImage, setUploadedImage] = React.useState<string>();
+  const [uploadedImage, setUploadedImage] = React.useState<ImageOrVideo | undefined>();
   const defaultCats = Object.keys(DefaultCatsImages);
 
   function navToAddBasicProfile() {
@@ -33,21 +34,12 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   }
 
   function onUploadCatPress() {
-    ImagePicker.openPicker({
-      width: 400,
-      height: 400,
-      cropping: true,
-      cropperCircleOverlay: true,
-    })
-      .then(image => {
+    openImagePicker().then(image => {
+      if (image) {
         setSelectedImage(undefined);
-        setUploadedImage(image.path);
-      })
-      .catch(err => {
-        if (err.message !== 'User cancelled image selection') {
-          throw err;
-        }
-      });
+        setUploadedImage(image);
+      }
+    });
   }
 
   let imageButton: React.ReactNode;
@@ -66,7 +58,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         <CatPhotoButton
           style={ChoosePhotoStyle.uploadButton}
           size={154}
-          image={{ uri: uploadedImage }}
+          image={{ uri: uploadedImage.path }}
           onPress={onUploadCatPress}
         />
         <View style={ChoosePhotoStyle.uploadedCheckMark}>

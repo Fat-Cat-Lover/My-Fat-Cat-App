@@ -24,3 +24,8 @@ export function addCat(cat: Partial<Cat>): Promise<Cat> {
   cat.id = id;
   return Promise.resolve(JSON.parse(JSON.stringify(cat)) as Cat);
 }
+
+export function editCat(data: Partial<Cat>): Promise<Cat> {
+  const cat = (MockCats as Cat[]).find(_cat => _cat.id === data.id)!;
+  return Promise.resolve({ ...cat, ...data });
+}
