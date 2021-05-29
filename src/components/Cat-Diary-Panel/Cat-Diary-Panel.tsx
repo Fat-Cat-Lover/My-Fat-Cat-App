@@ -31,7 +31,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
             if (cat.image) {
               image = { uri: cat.image };
             } else {
-              image = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
+              image = DefaultCatsImages[cat.useDefault!];
             }
             const isSelected = selectedCat === index;
             return (

@@ -34,7 +34,10 @@ export const Pets: React.FC<PetsPageProps> = props => {
               );
             })
           : undefined}
-        <MfcButton style={PetsStyle.elementVerticalSpacing} color="gray">
+        <MfcButton
+          style={PetsStyle.elementVerticalSpacing}
+          color="gray"
+          onPress={() => props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' })}>
           <View style={PetsStyle.addButton}>
             <MfcIcon style={PetsStyle.addButtonIcon} name="add" />
             <MfcText size="large" type="medium" style={CommonStyle.grayText}>

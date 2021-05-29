@@ -1,14 +1,16 @@
 import React from 'react';
-import { BaseInput } from 'components/Base-Input/Base-Input';
-import { SelectInputProps } from './Select-Input.interface';
+import { View } from 'react-native';
 import Picker from 'react-native-picker-select';
+import { SelectInputProps } from './Select-Input.interface';
 import { SelectInputStyle } from './Select-Input.style';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import colors from 'styles/colors';
+import { InputLabel } from 'components/Input-Label/Input-Label';
 
 export const SelectInput: React.FC<SelectInputProps> = props => {
   return (
-    <BaseInput label={props.label}>
+    <View>
+      {props.label ? <InputLabel label={props.label} /> : undefined}
       <Picker
         style={{
           inputAndroid: SelectInputStyle.input,
@@ -26,6 +28,6 @@ export const SelectInput: React.FC<SelectInputProps> = props => {
           color: colors.mainGray,
         }}
       />
-    </BaseInput>
+    </View>
   );
 };

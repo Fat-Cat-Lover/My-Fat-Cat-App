@@ -8,10 +8,6 @@ export const selectCats = createSelector<RootState, Cat[], Cat[]>(
   cats => plainToClass(Cat, cats)
 );
 
-// export function selectCats(state: RootState) {
-//   return plainToClass(Cat, state.cats.cats);
-// }
-
 export function getSelectedCat(state: RootState) {
   return state.cats.selectedCat;
 }

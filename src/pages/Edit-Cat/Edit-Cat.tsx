@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImageSourcePropType, View, ScrollView } from 'react-native';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { useSelector } from 'react-redux';
 
 import { ButtonList } from 'components/Button-List/Button-List';
 import { InputLabel } from 'components/Input-Label/Input-Label';
@@ -12,7 +15,6 @@ import { DateInput } from 'components/Date-Input/Date-Input';
 import { EditCatStyle } from './Edit-Cat.style';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
 import { EditCatProps } from './Edit-Cat.interface';
-import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { Cat } from 'models/cat';
@@ -20,24 +22,54 @@ import { MfcButton } from 'components/Button/Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { MfcText } from 'components/Text/Text';
 import { CommonStyle } from 'styles/common-style';
+import { useRootDispatch } from 'redux/hooks';
+import { editCat } from 'redux/cats/slice';
+import { ImageSourceSelect } from 'components/Image-Source-Select/Image-Source-Select';
 
 export const EditCatPage: React.FC<EditCatProps> = props => {
   const catId = props.route.params.catId;
   const cat = useSelector<RootState, Cat>(state => state.cats.cats.find(_cat => _cat.id === catId)!);
-  const { control } = useForm();
+  const [newImage, setNewImage] = useState<ImageOrVideo | undefined>(undefined);
+  const [showSelect, toggleShowSelect] = useState<boolean>(false);
+  const { control, handleSubmit } = useForm();
+  const dispacth = useRootDispatch();
 
   let catImage: ImageSourcePropType;
-  if (cat.image) {
-    catImage = { uri: cat.image };
+  if (newImage) {
+    catImage = { uri: newImage.path };
   } else {
-    catImage = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
+    if (cat.image) {
+      catImage = { uri: cat.image };
+    } else {
+      catImage = DefaultCatsImages[cat.useDefault ? cat.useDefault : 'orange'];
+    }
   }
+
+  async function onSubmit(newCat: Partial<Cat>) {
+    try {
+      newCat.id = catId;
+      if (newImage) {
+        newCat.image = newImage.path;
+      }
+      const result = await dispacth(editCat(newCat));
+      unwrapResult(result);
+      props.navigation.goBack();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <View style={EditCatStyle.container}>
+      <ImageSourceSelect
+        visable={showSelect}
+        onImageSelect={image => setNewImage(image)}
+        onClose={() => toggleShowSelect(false)}
+      />
       <ScrollView style={EditCatStyle.form}>
         <View style={EditCatStyle.changePhotoBlock}>
           <CatPhotoButton size={55} image={catImage} />
-          <MfcButton color="gray" style={EditCatStyle.changePhotoButton}>
+          <MfcButton color="gray" style={EditCatStyle.changePhotoButton} onPress={() => toggleShowSelect(true)}>
             <View style={EditCatStyle.changePhotoButtonContent}>
               <MfcIcon style={EditCatStyle.changeButtonIcon} name="perm_media" />
               <MfcText type="medium" size="large" style={CommonStyle.grayText}>
@@ -148,7 +180,9 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
         <MfcButton color="white" onPress={props.navigation.goBack}>
           取消
         </MfcButton>
-        <MfcButton color="primary">完成</MfcButton>
+        <MfcButton color="primary" onPress={handleSubmit(onSubmit)}>
+          完成
+        </MfcButton>
       </ButtonList>
     </View>
   );
