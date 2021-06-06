@@ -34,7 +34,11 @@ export const DateInput: React.FC<DateInputProps> = props => {
         </MfcText>
       </TouchableOpacity>
       {showDatePicker && (
-        <DateTimePicker value={new Date()} mode="date" onChange={(event, date) => onDateChange(event, date)} />
+        <DateTimePicker
+          value={props.value ? props.value : new Date()}
+          mode="date"
+          onChange={(event, date) => onDateChange(event, date)}
+        />
       )}
     </View>
   );

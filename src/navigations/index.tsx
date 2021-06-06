@@ -8,11 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AddCatNavParams } from './Stacks/Add-Cat';
 import { EditCatPage } from 'pages/Edit-Cat/Edit-Cat';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
+import { AddEatingRecordNavParams, AddEatingRecordStack } from './Stacks/Add-Eating-Record';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
   AddCat: NavigatorScreenParams<AddCatNavParams>;
   EditCat: { catId: number };
+  AddEatingRecord: NavigatorScreenParams<AddEatingRecordNavParams>;
 };
 
 const Stack = createStackNavigator<RootNavParams>();
@@ -38,6 +40,7 @@ export const MfcNavigation = () => (
         component={EditCatPage}
         options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
       />
+      <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );
