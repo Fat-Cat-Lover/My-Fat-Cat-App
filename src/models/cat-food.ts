@@ -1,17 +1,17 @@
-export interface Cateory {
+export interface FoodType {
   id: number;
-  cateory: string;
+  type: string;
 }
 
 export interface Brand {
   id: number;
   name: string;
-  cateoryIds: number[];
+  foodTypeIds: number[];
 }
 
 export interface CatFood {
   id: number;
-  categoryId: number;
+  foodTypeId: number;
   brandId: number;
   name: string;
   calories: number;

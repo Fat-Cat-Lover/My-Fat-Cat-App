@@ -24,7 +24,7 @@ export const DateInput: React.FC<DateInputProps> = props => {
   }
 
   return (
-    <View>
+    <View style={props.style}>
       {props.label && <InputLabel label={props.label} />}
       <TouchableOpacity
         onPress={openDatePicker}

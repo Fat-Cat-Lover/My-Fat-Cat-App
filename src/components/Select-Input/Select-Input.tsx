@@ -9,7 +9,7 @@ import { InputLabel } from 'components/Input-Label/Input-Label';
 
 export const SelectInput: React.FC<SelectInputProps> = props => {
   return (
-    <View>
+    <View style={props.style}>
       {props.label ? <InputLabel label={props.label} /> : undefined}
       <Picker
         style={{

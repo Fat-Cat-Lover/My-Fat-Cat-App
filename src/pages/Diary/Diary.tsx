@@ -102,7 +102,19 @@ export const Diary: React.FC<DiaryProps> = props => {
             體重記錄
           </MfcButton>
           <View style={DiaryStyle.bottomButtonSpacing} />
-          <MfcButton color="lightOrange" style={DiaryStyle.bottomButton}>
+          <MfcButton
+            color="lightOrange"
+            style={DiaryStyle.bottomButton}
+            onPress={() =>
+              props.navigation.navigate('AddEatingRecord', {
+                screen: 'addEatingRecord',
+                params: {
+                  date: currentDate,
+                  catId: cats[selectedCat].id,
+                  remainCalroies: cats[selectedCat].dailyCalories - diary!.caloriesEatenToday,
+                },
+              })
+            }>
             餵食
           </MfcButton>
         </View>

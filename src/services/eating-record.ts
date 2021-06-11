@@ -4,12 +4,12 @@ export function getCategories() {
   return Promise.resolve(mockCateories);
 }
 
-export function getBrands(categoryId: number) {
-  return Promise.resolve(mockBrands.filter(brand => brand.cateoryIds.some(id => id === categoryId)));
+export function getBrands(foodTypeId: number) {
+  return Promise.resolve(mockBrands.filter(brand => brand.foodTypeIds.some(id => id === foodTypeId)));
 }
 
-export function getCatFoods(categoryId: number, brandId: number) {
+export function getCatFoods(foodTypeId: number, brandId: number) {
   return Promise.resolve(
-    mockCatFoods.filter(catFood => catFood.categoryId === categoryId && catFood.brandId === brandId)
+    mockCatFoods.filter(catFood => catFood.foodTypeId === foodTypeId && catFood.brandId === brandId)
   );
 }
