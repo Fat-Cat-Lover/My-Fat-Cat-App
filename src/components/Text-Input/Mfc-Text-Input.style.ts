@@ -20,6 +20,9 @@ export const MfcTextInputStyle = StyleSheet.create({
     backgroundColor: colors.lightWhite,
     color: colors.black,
   },
+  disabled: {
+    backgroundColor: colors.lightGray,
+  },
   errorBorder: {
     borderColor: colors.darkOrange,
   },

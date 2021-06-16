@@ -17,6 +17,7 @@ export const SelectInput: React.FC<SelectInputProps> = props => {
           placeholder: SelectInputStyle.placeholder,
           iconContainer: SelectInputStyle.iconContainer,
         }}
+        value={props.value}
         onValueChange={props.onChange}
         items={props.options}
         useNativeAndroidPickerStyle={false}

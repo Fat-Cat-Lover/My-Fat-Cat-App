@@ -1,6 +1,7 @@
 import { mockBrands, mockCateories, mockCatFoods } from 'mocks/cat-food';
+import { MockEatingRecord, mockEatingRecords } from 'mocks/diary';
 
-export function getCategories() {
+export function getFoodTypes() {
   return Promise.resolve(mockCateories);
 }
 
@@ -12,4 +13,10 @@ export function getCatFoods(foodTypeId: number, brandId: number) {
   return Promise.resolve(
     mockCatFoods.filter(catFood => catFood.foodTypeId === foodTypeId && catFood.brandId === brandId)
   );
+}
+
+export function addRecord(catId: number, foodId: number, weight: number, time: Date) {
+  const record = new MockEatingRecord(catId, foodId, weight, time);
+  mockEatingRecords.push(record);
+  return record;
 }

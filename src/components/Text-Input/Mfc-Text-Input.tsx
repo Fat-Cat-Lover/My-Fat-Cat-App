@@ -71,6 +71,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
           style={[
             MfcTextInputStyle.textInput,
             this.state.inputStyle,
+            this.props.disabled ? MfcTextInputStyle.disabled : undefined,
             this.props.errorMessage ? MfcTextInputStyle.errorBorder : undefined,
           ]}
           onFocus={this.onFocus}
@@ -79,6 +80,7 @@ export class MfcTextInput extends React.Component<MfcTextInputProps, { inputStyl
           ref={this.ref}
           textAlignVertical="center"
           value={this.props.value}
+          editable={!this.props.disabled}
         />
         {this.props.errorMessage ? (
           <View style={MfcTextInputStyle.errorMessageContainer}>

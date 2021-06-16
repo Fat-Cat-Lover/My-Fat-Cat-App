@@ -11,7 +11,7 @@ export const mockBrands: Brand[] = [
   { id: 1, name: '好味小姐', foodTypeIds: [2] },
   { id: 2, name: '野起來吃', foodTypeIds: [1, 2] },
   { id: 3, name: '汪喵星球', foodTypeIds: [1, 2, 3] },
-  { id: 4, name: '希爾斯', foodTypeIds: [1, 2, 3, 4] },
+  { id: 4, name: '希爾斯', foodTypeIds: [4] },
 ];
 
 export const mockCatFoods: CatFood[] = [

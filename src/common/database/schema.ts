@@ -26,7 +26,7 @@ export const Tables: Record<string, Record<string, Column>> = {
   EatingRecords: {
     id: { type: 'INTEGER', primary_key: false, default_value: null },
     catId: { type: 'INTEGER', primary_key: false, default_value: null },
-    created_time: { type: 'TEXT', primary_key: false, default_value: null },
+    createdTime: { type: 'TEXT', primary_key: false, default_value: null },
     weight: { type: 'REAL', primary_key: false, default_value: null },
     foodType: { type: 'TEXT', primary_key: false, default_value: null },
     foodName: { type: 'TEXT', primary_key: false, default_value: null },
