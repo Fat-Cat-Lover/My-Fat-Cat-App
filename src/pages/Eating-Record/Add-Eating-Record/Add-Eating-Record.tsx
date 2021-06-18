@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ImageSourcePropType, ScrollView, View } from 'react-native';
+import { Alert, ImageSourcePropType, ScrollView, View } from 'react-native';
 import { AddEatingRecordProps } from './Add-Eating-Record.interface';
 import { DateInput } from 'components/Date-Input/Date-Input';
 import { TimeInput } from 'components/Time-Input/Time-Input';
@@ -19,6 +19,9 @@ import { ButtonList } from 'components/Button-List/Button-List';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { selectCats } from 'redux/cats/selector';
 import { addEatingRecord } from 'redux/diary/slice';
+import { getDiary } from 'services/diary';
+import { plainToClass } from 'class-transformer';
+import { Diary } from 'models/diary';
 
 interface AddEatingRecordForm {
   foodType: number;
@@ -34,15 +37,18 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     control,
     getValues,
     watch,
-    reset,
+    setValue,
     formState: { isValid },
     handleSubmit,
-  } = useForm<AddEatingRecordForm>();
-  const [dateTime, setDateTime] = useState<Date>(new Date(props.route.params.date));
+  } = useForm<AddEatingRecordForm>({ mode: 'onChange' });
+  const currentDate = new Date(props.route.params.date);
+  currentDate.setHours(new Date().getHours());
+  currentDate.setMinutes(new Date().getMinutes());
+  const [dateTime, setDateTime] = useState<Date>(currentDate);
   const [foodTypes, setFoodTypes] = useState<FoodType[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [catFoods, setCatFoods] = useState<CatFood[]>([]);
-  const [catFoodWeight, setCatFoodWeight] = useState<string>('0.0');
+  const [remainCalories, setRemainCalories] = useState<string>(props.route.params.remainCalroies.toFixed(2));
   const dispatch = useRootDispatch();
 
   useEffect(() => {
@@ -64,22 +70,32 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   async function getCatFoods(brandId: number) {
     const foodTypeId = getValues('foodType');
     const catFood = await _getCatFoods(foodTypeId, brandId);
+    if (catFood.length < 1) {
+      //TODO: Change to custom alert
+      Alert.alert('此品牌目前沒有該類別的食物喔');
+    }
     setCatFoods(catFood);
   }
 
-  function calcWeight(calories: number) {
-    const catFoodId = getValues('catFood');
-    if (catFoodId) {
-      const catFood = catFoods.find(_catFood => _catFood.id === catFoodId);
-      return (calories / catFood!.calories).toFixed(1);
-    } else {
-      return '0.0';
+  function calcWeight(calories: number): number {
+    if (calories) {
+      const catFoodId = getValues('catFood');
+      if (catFoodId) {
+        const catFood = catFoods.find(_catFood => _catFood.id === catFoodId);
+        return parseFloat(((calories / catFood!.calories) * 100).toFixed(1));
+      }
     }
+    return 0;
   }
 
   async function onSubmit(data: AddEatingRecordForm) {
     await dispatch(
-      addEatingRecord({ catId: cat.id, foodId: data.catFood!, weight: parseFloat(catFoodWeight), time: dateTime })
+      addEatingRecord({
+        catId: cat.id,
+        foodId: data.catFood!,
+        weight: calcWeight(data.calory),
+        time: dateTime,
+      })
     );
     props.navigation.goBack();
   }
@@ -101,11 +117,13 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
         <DateInput
           label="日期"
           value={dateTime}
-          onChange={date =>
+          onChange={async date => {
             setDateTime(
               new Date(date.getFullYear(), date.getMonth(), date.getDate(), dateTime.getHours(), dateTime.getMinutes())
-            )
-          }
+            );
+            const diary = plainToClass(Diary, await getDiary(cat.id, date));
+            setRemainCalories((cat.dailyCalories - diary.caloriesEatenToday).toFixed(2));
+          }}
           style={AddEatingRecordStyle.formField}
         />
         <TimeInput
@@ -132,16 +150,15 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               label="種類"
               options={foodTypes.map(type => ({ label: type.type, value: type.id }))}
               onChange={value => {
-                getBrands(value as number);
-                if (getValues('brand')) {
-                  reset({
-                    brand: null,
-                    catFood: null,
-                    calory: 0,
-                  });
+                if (value && field.value !== value) {
+                  field.onChange(value);
+                  getBrands(value as number);
+                  if (getValues('brand')) {
+                    setValue('brand', null);
+                    setValue('catFood', null);
+                    setValue('calory', 0);
+                  }
                 }
-                setCatFoodWeight('0.0');
-                field.onChange(value);
               }}
               value={field.value}
               placeholder="選擇種類"
@@ -158,14 +175,14 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               label="品牌"
               options={brands.map(brand => ({ label: brand.name, value: brand.id }))}
               onChange={value => {
-                getCatFoods(value as number);
-                if (getValues('catFood')) {
-                  reset({
-                    catFood: null,
-                    calory: 0,
-                  });
+                if (value && field.value !== value) {
+                  field.onChange(value);
+                  getCatFoods(value as number);
+                  if (getValues('catFood')) {
+                    setValue('catFood', null);
+                    setValue('calory', 0);
+                  }
                 }
-                field.onChange(value);
               }}
               value={field.value}
               placeholder="選擇品牌"
@@ -182,10 +199,10 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               label="食物內容"
               options={catFoods.map(catFood => ({ label: catFood.name, value: catFood.id }))}
               onChange={value => {
-                reset({
-                  calory: 0,
-                });
-                field.onChange(value);
+                if (value && field.value !== value) {
+                  setValue('calory', 0);
+                  field.onChange(value);
+                }
               }}
               value={field.value}
               placeholder="選擇食物"
@@ -203,16 +220,12 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
                 label="卡路里"
                 keyboardType="number-pad"
                 value={field.value ? field.value.toString() : ''}
-                onChange={value => {
-                  const calories = value ? parseInt(value, 10) : 0;
-                  field.onChange(calories);
-                }}
+                onChange={value => field.onChange(parseInt(value, 10))}
                 containerStyle={AddEatingRecordStyle.caloryInput}
                 disabled={!watch('catFood')}
               />
             )}
-            rules={{ required: true }}
-            defaultValue=""
+            rules={{ required: true, validate: { positive: v => parseInt(v, 10) > 0 || '此欄需大於0' } }}
           />
           <View style={AddEatingRecordStyle.weight}>
             <MfcText size="large" type="medium">
@@ -221,7 +234,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           </View>
         </View>
         <MfcText style={[AddEatingRecordStyle.formField, CommonStyle.grayText]}>
-          今日尚未進食: {props.route.params.remainCalroies} cal
+          今日尚未進食: {remainCalories} cal
         </MfcText>
       </ScrollView>
       <ButtonList>

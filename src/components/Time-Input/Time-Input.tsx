@@ -33,9 +33,7 @@ export const TimeInput: React.FC<TimeInputProps> = props => {
           {props.value ? dayjs(props.value).format('HH:mm') : props.placeholder}
         </MfcText>
       </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker value={new Date()} mode="time" onChange={(event, date) => onTimeChange(event, date)} />
-      )}
+      {showDatePicker && <DateTimePicker value={new Date()} mode="time" onChange={onTimeChange} />}
     </View>
   );
 };

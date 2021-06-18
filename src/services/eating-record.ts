@@ -18,5 +18,5 @@ export function getCatFoods(foodTypeId: number, brandId: number) {
 export function addRecord(catId: number, foodId: number, weight: number, time: Date) {
   const record = new MockEatingRecord(catId, foodId, weight, time);
   mockEatingRecords.push(record);
-  return record;
+  return JSON.parse(JSON.stringify(record));
 }

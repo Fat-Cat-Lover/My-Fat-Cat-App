@@ -35,11 +35,13 @@ export const Diary: React.FC<DiaryProps> = props => {
   if (diary && diary.records.length > 0) {
     content = (
       <ScrollView style={DiaryStyle.diaryContainer} contentContainerStyle={DiaryStyle.diaryContent}>
-        {diary.records.map(record => (
-          <View key={record.id} style={DiaryStyle.eatingRecord}>
-            <EatingRecord record={record} />
-          </View>
-        ))}
+        {diary.records
+          .sort((a, b) => a.createdTime.getTime() - b.createdTime.getTime())
+          .map(record => (
+            <View key={record.id} style={DiaryStyle.eatingRecord}>
+              <EatingRecord record={record} />
+            </View>
+          ))}
         <View style={DiaryStyle.nutritionCotainer}>
           <View style={DiaryStyle.nutritionBlock}>
             <NutritionBlock

@@ -6,6 +6,7 @@ export class EatingRecord {
   @Transform(({ value }) => value.toISOString(), {
     toPlainOnly: true,
   })
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
   createdTime: Date;
   weight: number;
   foodType: string;
