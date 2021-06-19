@@ -13,12 +13,13 @@ export const SelectInputStyle = StyleSheet.create({
     fontFamily: 'NotoSansTC-Medium',
     fontSize: 16,
     lineHeight: 23.17,
+    color: colors.black,
   },
   iconContainer: {
     padding: spacings.spacing4,
     paddingVertical: spacings.spacing5,
   },
   placeholder: {
-    color: colors.black,
+    color: colors.mainGray,
   },
 });

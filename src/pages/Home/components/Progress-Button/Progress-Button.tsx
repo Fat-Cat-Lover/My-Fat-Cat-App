@@ -23,7 +23,9 @@ export const ProgressButton: React.FC<ProgressButtonProps> = props => {
           barStyle={ProgressButtonStyle.progressBar}
         />
       </View>
-      <MfcButton color={props.buttonColor}>{props.buttonText}</MfcButton>
+      <MfcButton color={props.buttonColor} onPress={props.onPress}>
+        {props.buttonText}
+      </MfcButton>
     </TouchableOpacity>
   );
 };

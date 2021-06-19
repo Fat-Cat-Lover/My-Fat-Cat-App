@@ -13,7 +13,7 @@ const eatingRecordIcon = {
 };
 
 export const EatingRecord: React.FC<EatingRecordProps> = props => {
-  const recordTime = dayjs(props.record.created_time);
+  const recordTime = dayjs(props.record.createdTime);
   const currentHour = recordTime.hour();
   let icon: ImageSourcePropType;
   if (currentHour >= 6 && currentHour < 12) {

@@ -93,6 +93,16 @@ export const Home: React.FC<HomeProps> = props => {
               progressBarColor="#FF9F1C"
               buttonText="餵食"
               buttonColor="primary"
+              onPress={() =>
+                props.navigation.navigate('AddEatingRecord', {
+                  screen: 'addEatingRecord',
+                  params: {
+                    date: currentDate,
+                    catId: cats[selectedCat].id,
+                    remainCalroies: currentCat.dailyCalories - diary!.caloriesEatenToday,
+                  },
+                })
+              }
             />
           </View>
         </View>

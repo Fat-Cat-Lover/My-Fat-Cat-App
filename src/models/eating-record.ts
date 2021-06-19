@@ -6,21 +6,21 @@ export class EatingRecord {
   @Transform(({ value }) => value.toISOString(), {
     toPlainOnly: true,
   })
-  created_time: Date;
-  constructor(
-    public weight: number,
-    public foodType: string,
-    public foodName: string,
-    public calories: number,
-    public crudeProtein: number,
-    public crudeFat: number,
-    public crudeFiber?: number,
-    public carbohydrate?: number,
-    public ash?: number,
-    public calcium?: number,
-    public phosphorus?: number,
-    public sodium?: number,
-    public magnesium?: number,
-    public moisture?: number
-  ) {}
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  createdTime: Date;
+  weight: number;
+  foodType: string;
+  brand: string;
+  foodName: string;
+  calories: number;
+  crudeProtein: number;
+  crudeFat: number;
+  crudeFiber?: number;
+  carbohydrate?: number;
+  ash?: number;
+  calcium?: number;
+  phosphorus?: number;
+  sodium?: number;
+  magnesium?: number;
+  moisture?: number;
 }

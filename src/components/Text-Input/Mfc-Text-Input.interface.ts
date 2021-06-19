@@ -11,4 +11,5 @@ export interface MfcTextInputProps {
   onBlur?: () => void;
   onFocus?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
+  disabled?: boolean;
 }
