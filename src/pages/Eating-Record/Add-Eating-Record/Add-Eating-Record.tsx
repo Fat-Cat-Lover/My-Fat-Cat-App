@@ -6,7 +6,7 @@ import { DateInput } from 'components/Date-Input/Date-Input';
 import { TimeInput } from 'components/Time-Input/Time-Input';
 import { SelectInput } from 'components/Select-Input/Select-Input';
 import { Brand, FoodType, CatFood } from 'models/cat-food';
-import { getFoodTypes, getBrands as _getBrands, getCatFoods as _getCatFoods } from 'services/eating-record';
+import { getFoodTypes, getBrands as _getBrands, getCatFoods as _getCatFoods } from 'services/cat-food';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { AddEatingRecordStyle } from './Add-Eating-Record.style';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';

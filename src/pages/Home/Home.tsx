@@ -8,13 +8,15 @@ import { MfcText } from 'components/Text/Text';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { HomeStyles } from './Home.style';
 import { selectDiaryDate } from 'redux/diary-date/selector';
-import { getCurrentDiary } from 'redux/diary/slice';
+import { addExerciseTime, getCurrentDiary } from 'redux/diary/slice';
 import { selectDiary } from 'redux/diary/selector';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
 import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useState } from 'react';
+import { ExerciseModal } from 'components/Exercise-Modal/Exercise-Modal';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -23,6 +25,7 @@ export const Home: React.FC<HomeProps> = props => {
   const diary = useRootSelector(selectDiary);
   const dispatch = useRootDispatch();
   const currentCat = cats[selectedCat];
+  const [showExerciseModal, toggleShowExerciseModal] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getCats()).then(result => {
@@ -43,6 +46,11 @@ export const Home: React.FC<HomeProps> = props => {
 
   function onCatSelect(index: number) {
     dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
+  }
+
+  function addExercise(time: number) {
+    dispatch(addExerciseTime({ catId: cats[selectedCat].id, createdTime: new Date(currentDate), exerciseTime: time }));
+    toggleShowExerciseModal(false);
   }
 
   let mainContent: React.ReactNode;
@@ -84,6 +92,7 @@ export const Home: React.FC<HomeProps> = props => {
               progressBarColor="#2EC4B6"
               buttonText="運動"
               buttonColor="green"
+              onPress={() => toggleShowExerciseModal(true)}
             />
             <View style={HomeStyles.SummarySpacing} />
             <ProgressButton
@@ -106,7 +115,11 @@ export const Home: React.FC<HomeProps> = props => {
             />
           </View>
         </View>
-        <View />
+        <ExerciseModal
+          visable={showExerciseModal}
+          onClose={() => toggleShowExerciseModal(false)}
+          addExerciseTime={addExercise}
+        />
       </CatDiary>
     );
   }

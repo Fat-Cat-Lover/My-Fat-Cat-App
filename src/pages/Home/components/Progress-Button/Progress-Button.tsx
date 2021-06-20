@@ -18,7 +18,7 @@ export const ProgressButton: React.FC<ProgressButtonProps> = props => {
           <MfcText size="large">{props.progressText}</MfcText>
         </View>
         <ProgressBar
-          progress={props.progress}
+          progress={props.progress <= 1 ? props.progress : 1}
           barColor={props.progressBarColor}
           barStyle={ProgressButtonStyle.progressBar}
         />

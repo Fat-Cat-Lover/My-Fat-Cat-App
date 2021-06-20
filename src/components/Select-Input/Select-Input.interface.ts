@@ -12,5 +12,5 @@ export interface SelectInputProps {
   onChange: (value: ItemValue, index: number) => void;
   placeholder?: string;
   style?: StyleProp<ViewStyle>;
-  value: ItemValue | null;
+  value?: ItemValue | null;
 }
