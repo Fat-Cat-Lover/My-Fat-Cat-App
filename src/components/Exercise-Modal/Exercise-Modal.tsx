@@ -23,34 +23,38 @@ export const ExerciseModal: React.FC<ExerciseModalProps> = props => {
       isVisible={props.visable}
       onBackButtonPress={props.onClose}
       onBackdropPress={props.onClose}>
-      <View style={ExerciseModalStyle.container}>
-        <View style={ExerciseModalStyle.content}>
-          <MfcText size="large" style={[ExerciseModalStyle.title, CommonStyle.grayText]}>
-            今天運動多久？
-          </MfcText>
-          <Image source={require('./image/play.png')} style={ExerciseModalStyle.image} />
-          <SelectInput
-            options={options.map(option => ({ label: `${option} min`, value: option }))}
-            onChange={v => {
-              if (v) {
-                setExerciseTime(v as number);
-              }
-            }}
-            value={exerciseTime}
-            style={ExerciseModalStyle.select}
-            placeholder="運動多久？"
-          />
+      {props.visable ? (
+        <View style={ExerciseModalStyle.container}>
+          <View style={ExerciseModalStyle.content}>
+            <MfcText size="large" style={[ExerciseModalStyle.title, CommonStyle.grayText]}>
+              今天運動多久？
+            </MfcText>
+            <Image source={require('./image/play.png')} style={ExerciseModalStyle.image} />
+            <SelectInput
+              options={options.map(option => ({ label: `${option} min`, value: option }))}
+              onChange={v => {
+                if (v) {
+                  setExerciseTime(v as number);
+                }
+              }}
+              value={exerciseTime}
+              style={ExerciseModalStyle.select}
+              placeholder="運動多久？"
+            />
+          </View>
+          <View style={ExerciseModalStyle.buttonContainer}>
+            <TouchableOpacity onPress={props.onClose} style={ExerciseModalStyle.button}>
+              <MfcText>沒有</MfcText>
+            </TouchableOpacity>
+            <View style={ExerciseModalStyle.buttonDivider} />
+            <TouchableOpacity style={ExerciseModalStyle.button} onPress={() => props.addExerciseTime(exerciseTime)}>
+              <MfcText>有運動</MfcText>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={ExerciseModalStyle.buttonContainer}>
-          <TouchableOpacity onPress={props.onClose} style={ExerciseModalStyle.button}>
-            <MfcText>沒有</MfcText>
-          </TouchableOpacity>
-          <View style={ExerciseModalStyle.buttonDivider} />
-          <TouchableOpacity style={ExerciseModalStyle.button} onPress={() => props.addExerciseTime(exerciseTime)}>
-            <MfcText>有運動</MfcText>
-          </TouchableOpacity>
-        </View>
-      </View>
+      ) : (
+        <View />
+      )}
     </Modal>
   );
 };
