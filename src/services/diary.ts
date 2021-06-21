@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { MockDiary, mockEatingRecords, mockExcerciseTime } from 'mocks/diary';
+import { MockDiary, MockEatingRecord, mockEatingRecords, MockExcerciseTime, mockExcerciseTime } from 'mocks/diary';
 import { Diary } from 'models/diary';
 
 export function getDiary(catId: number, date: Date): Promise<Diary> {
@@ -11,4 +11,16 @@ export function getDiary(catId: number, date: Date): Promise<Diary> {
     .filter(time => time.catId === catId && dayjs(date).isSame(time.createdTime, 'day'))
     .reduce((p, c) => p + c.time, 0);
   return Promise.resolve(JSON.parse(JSON.stringify(new MockDiary(records, excerciseTime))));
+}
+
+export function addRecord(catId: number, foodId: number, weight: number, time: Date) {
+  const record = new MockEatingRecord(catId, foodId, weight, time);
+  mockEatingRecords.push(record);
+  return Promise.resolve(JSON.parse(JSON.stringify(record)));
+}
+
+export function addExerciseTime(catId: number, createdTime: Date, exerciseTime: number) {
+  const record = new MockExcerciseTime(catId, exerciseTime, createdTime);
+  mockExcerciseTime.push(record);
+  return Promise.resolve(JSON.parse(JSON.stringify(record)));
 }

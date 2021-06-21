@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-import { Diary } from 'models/diary';
-import { EatingRecord } from 'models/eating-record';
+import { Diary, EatingRecord } from 'models/diary';
 import { mockBrands, mockCateories, mockCatFoods } from './cat-food';
 
 const today = dayjs();

@@ -1,4 +1,4 @@
-import { EatingRecord } from 'models/eating-record';
+import { EatingRecord } from 'models/diary';
 
 export interface EatingRecordProps {
   record: EatingRecord;
