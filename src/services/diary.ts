@@ -1,5 +1,12 @@
 import dayjs from 'dayjs';
-import { MockDiary, MockEatingRecord, mockEatingRecords, MockExcerciseTime, mockExcerciseTime } from 'mocks/diary';
+import {
+  MockDiary,
+  MockEatingRecord,
+  mockEatingRecords,
+  MockExcerciseTime,
+  mockExcerciseTime,
+  mockWeightRecord,
+} from 'mocks/diary';
 import { Diary } from 'models/diary';
 
 export function getDiary(catId: number, date: Date): Promise<Diary> {
@@ -23,4 +30,13 @@ export function addExerciseTime(catId: number, createdTime: Date, exerciseTime: 
   const record = new MockExcerciseTime(catId, exerciseTime, createdTime);
   mockExcerciseTime.push(record);
   return Promise.resolve(JSON.parse(JSON.stringify(record)));
+}
+
+export function getWeightRecord(catId: number, filter: number) {
+  return Promise.resolve(mockWeightRecord.filter(record => record.catId === catId).slice(-filter));
+}
+
+export function addWeightRecord(catId: number, createdTime: Date, weight: number) {
+  mockWeightRecord.push({ catId, createdTime, weight });
+  return Promise.resolve({ catId, createdTime, weight });
 }

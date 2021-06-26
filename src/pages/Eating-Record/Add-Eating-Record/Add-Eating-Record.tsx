@@ -163,6 +163,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               value={field.value}
               placeholder="選擇種類"
               style={AddEatingRecordStyle.formField}
+              icon="expandMore"
             />
           )}
           rules={{ required: true }}
@@ -184,6 +185,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
                   }
                 }
               }}
+              icon="expandMore"
               value={field.value}
               placeholder="選擇品牌"
               style={AddEatingRecordStyle.formField}
@@ -207,6 +209,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               value={field.value}
               placeholder="選擇食物"
               style={AddEatingRecordStyle.formField}
+              icon="expandMore"
             />
           )}
           rules={{ required: true }}

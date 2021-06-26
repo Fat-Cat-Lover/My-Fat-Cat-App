@@ -4,7 +4,7 @@ export interface MfcTextInputProps {
   label?: string;
   required?: boolean;
   placeholder?: string;
-  value: string;
+  value?: string;
   keyboardType?: KeyboardTypeOptions;
   errorMessage?: string;
   onChange: (text: string) => void;

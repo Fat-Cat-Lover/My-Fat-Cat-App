@@ -16,4 +16,5 @@ export const ICONS = {
   expandMore: require('./images/expand_more.png'),
   perm_media: require('./images/perm_media.png'),
   done: require('./images/done.png'),
+  transfer: require('./images/transfer.png'),
 };

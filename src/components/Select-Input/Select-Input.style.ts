@@ -16,7 +16,7 @@ export const SelectInputStyle = StyleSheet.create({
     color: colors.black,
   },
   iconContainer: {
-    padding: spacings.spacing4,
+    paddingHorizontal: spacings.spacing4,
     paddingVertical: spacings.spacing5,
   },
   placeholder: {

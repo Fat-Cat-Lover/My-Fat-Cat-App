@@ -8,7 +8,7 @@ export const MfcTextInputStyle = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.lightGray,
     paddingHorizontal: spacings.spacing5,
-    paddingVertical: spacings.spacing4,
+    paddingVertical: spacings.spacing3,
     // fontFamily: 'NotoSansTC-Medium',
     fontSize: 16,
     lineHeight: 23.17,

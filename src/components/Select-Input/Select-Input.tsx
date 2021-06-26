@@ -21,7 +21,7 @@ export const SelectInput: React.FC<SelectInputProps> = props => {
         onValueChange={props.onChange}
         items={props.options}
         useNativeAndroidPickerStyle={false}
-        Icon={() => <MfcIcon name="expandMore" />}
+        Icon={props.icon ? () => <MfcIcon name={props.icon!} /> : undefined}
         fixAndroidTouchableBug={true}
         placeholder={{
           label: props.placeholder,

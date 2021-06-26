@@ -61,3 +61,9 @@ export const mockExcerciseTime = [
   new MockExcerciseTime(2, 13, tomorrow.hour(17).toDate()),
   new MockExcerciseTime(2, 17, tomorrow.hour(23).toDate()),
 ];
+
+export const mockWeightRecord: { catId: number; createdTime: Date; weight: number }[] = [
+  { catId: 1, createdTime: new Date(2021, 2, 3), weight: 7.8 },
+  { catId: 1, createdTime: new Date(2021, 3, 2), weight: 7.8 },
+ 
+];
