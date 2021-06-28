@@ -1,4 +1,5 @@
 import { ItemValue } from '@react-native-picker/picker/typings/Picker';
+import { ICONS } from 'components/MFC-Icon/icons';
 import { StyleProp, ViewStyle } from 'react-native';
 
 type Option = {
@@ -13,4 +14,5 @@ export interface SelectInputProps {
   placeholder?: string;
   style?: StyleProp<ViewStyle>;
   value?: ItemValue | null;
+  icon?: keyof typeof ICONS;
 }

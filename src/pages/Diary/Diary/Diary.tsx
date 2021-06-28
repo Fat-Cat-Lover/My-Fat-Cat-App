@@ -10,7 +10,7 @@ import { MfcText } from 'components/Text/Text';
 import { DiaryStyle } from './Diary.style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CommonStyle } from 'styles/common-style';
-import { NutritionBlock } from './components/Nutrition-Block/Nutrition-Block';
+import { NutritionBlock } from '../components/Nutrition-Block/Nutrition-Block';
 import { MfcButton } from 'components/Button/Button';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
@@ -100,7 +100,10 @@ export const Diary: React.FC<DiaryProps> = props => {
         addButtonOnPress={() => props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' })}>
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
-          <MfcButton color="green" style={DiaryStyle.bottomButton}>
+          <MfcButton
+            color="green"
+            style={DiaryStyle.bottomButton}
+            onPress={() => props.navigation.navigate('WeightRecord', { catId: cats[selectedCat].id })}>
             體重記錄
           </MfcButton>
           <View style={DiaryStyle.bottomButtonSpacing} />

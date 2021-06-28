@@ -9,7 +9,7 @@ import { MfcText } from 'components/Text/Text';
 import { Home } from 'pages/Home/Home';
 import { Pets } from 'pages/Pets/Pets';
 import { Setting } from 'pages/Setting/Setting';
-import { Diary } from 'pages/Diary/Diary';
+import { DiaryStack } from 'pages/Diary/navigation';
 
 export type TabNavParams = {
   Home: undefined;
@@ -56,7 +56,7 @@ export const TabBar = () => {
       />
       <Tab.Screen
         name="Diary"
-        component={Diary}
+        component={DiaryStack}
         options={{
           tabBarLabel: props => createTabLabel(props, '日記'),
           tabBarIcon: props => createTabIcon(props, 'bookmark'),

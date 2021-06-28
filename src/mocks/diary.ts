@@ -61,3 +61,18 @@ export const mockExcerciseTime = [
   new MockExcerciseTime(2, 13, tomorrow.hour(17).toDate()),
   new MockExcerciseTime(2, 17, tomorrow.hour(23).toDate()),
 ];
+
+export const mockWeightRecord: { catId: number; createdTime: Date; weight: number }[] = [
+  { catId: 1, createdTime: new Date(2020, 2, 3), weight: 5 },
+  { catId: 1, createdTime: new Date(2020, 3, 2), weight: 6 },
+  { catId: 1, createdTime: new Date(2020, 5, 15), weight: 6.4 },
+  { catId: 1, createdTime: new Date(2020, 6, 5), weight: 6.5 },
+  { catId: 1, createdTime: new Date(2020, 7, 10), weight: 6.7 },
+  { catId: 1, createdTime: new Date(2020, 9, 18), weight: 6.3 },
+  { catId: 1, createdTime: new Date(2020, 10, 20), weight: 6.8 },
+  { catId: 1, createdTime: new Date(2021, 11, 22), weight: 7 },
+  { catId: 1, createdTime: new Date(2021, 0, 6), weight: 7.1 },
+  { catId: 1, createdTime: new Date(2021, 1, 3), weight: 6.7 },
+  { catId: 1, createdTime: new Date(2021, 2, 10), weight: 6.6 },
+  { catId: 1, createdTime: new Date(2021, 4, 19), weight: 6.8 },
+];
