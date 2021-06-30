@@ -46,7 +46,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   if (selectedImage) {
     imageButton = (
       <CatPhotoButton
-        style={ChoosePhotoStyle.uploadButton}
+        style={{ borderWidth: 0 }}
         size={154}
         image={DefaultCatsImages[selectedImage]}
         onPress={onUploadCatPress}
