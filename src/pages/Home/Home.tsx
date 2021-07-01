@@ -17,6 +17,7 @@ import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useState } from 'react';
 import { ExerciseModal } from 'components/Exercise-Modal/Exercise-Modal';
+import RNBootSplash from 'react-native-bootsplash';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -29,6 +30,7 @@ export const Home: React.FC<HomeProps> = props => {
 
   useEffect(() => {
     dispatch(getCats()).then(result => {
+      RNBootSplash.hide({ fade: true });
       const _cats = unwrapResult(result);
       if (_cats.length) {
         dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
