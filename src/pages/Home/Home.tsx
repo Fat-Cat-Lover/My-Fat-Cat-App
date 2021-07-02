@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { CatDiary } from 'components/Cat-Diary-Panel/Cat-Diary-Panel';
 import { DatePicker } from 'components/Date-Picker/Date-Picker';
@@ -13,11 +13,8 @@ import { selectDiary } from 'redux/diary/selector';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
-import { getCats } from 'redux/cats/slice';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { useState } from 'react';
 import { ExerciseModal } from 'components/Exercise-Modal/Exercise-Modal';
-import RNBootSplash from 'react-native-bootsplash';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -27,16 +24,6 @@ export const Home: React.FC<HomeProps> = props => {
   const dispatch = useRootDispatch();
   const currentCat = cats[selectedCat];
   const [showExerciseModal, toggleShowExerciseModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    dispatch(getCats()).then(result => {
-      RNBootSplash.hide({ fade: true });
-      const _cats = unwrapResult(result);
-      if (_cats.length) {
-        dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
-      }
-    });
-  }, [dispatch]);
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
