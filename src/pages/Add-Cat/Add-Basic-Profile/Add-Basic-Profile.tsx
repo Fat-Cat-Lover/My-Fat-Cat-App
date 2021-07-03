@@ -20,16 +20,22 @@ interface ProfileForm {
   name: string;
   age: number;
   sex: 'male' | 'female';
-  currentWeight: number;
-  targetWeight: number;
+  currentWeight: string;
+  targetWeight: string;
 }
 
 const schema = yup.object().shape({
   name: yup.string().required('必填'),
   age: yup.number().typeError('需為數字').integer().positive().required('必填'),
   sex: yup.string().required('必填'),
-  currentWeight: yup.number().typeError('需為數字').positive().required('必填'),
-  targetWeight: yup.number().typeError('需為數字').positive().required('必填'),
+  currentWeight: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+  targetWeight: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
 });
 
 export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
@@ -56,7 +62,13 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
 
   function onSubmit(datas: ProfileForm) {
     const { photo, useDefault } = props.route.params!;
-    const cat = { ...datas, photo, useDefault };
+    const cat = {
+      ...datas,
+      currentWeight: parseFloat(datas.currentWeight),
+      targetWeight: parseFloat(datas.targetWeight),
+      photo,
+      useDefault,
+    };
     props.navigation.navigate('AddOptionalProfile', cat);
   }
 
@@ -129,8 +141,8 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             <MfcTextInput
               label="現在體重(kg)"
               placeholder="現在體重幾公斤"
-              value={field.value ? field.value.toString() : ''}
-              onChange={v => field.onChange(parseFloat(v))}
+              value={field.value}
+              onChange={v => field.onChange(v)}
               onBlur={field.onBlur}
               required={true}
               containerStyle={AddBasicProfileStyle.formField}
@@ -147,8 +159,8 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
             <MfcTextInput
               label="目標公斤數(kg)"
               placeholder="希望可以達到的目標體重幾公斤"
-              value={field.value ? field.value.toString() : ''}
-              onChange={v => field.onChange(parseFloat(v))}
+              value={field.value}
+              onChange={v => field.onChange(v)}
               onBlur={field.onBlur}
               required={true}
               containerStyle={AddBasicProfileStyle.formField}

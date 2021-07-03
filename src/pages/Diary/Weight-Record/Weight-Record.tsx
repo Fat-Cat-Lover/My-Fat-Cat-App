@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ImageSourcePropType, View } from 'react-native';
+import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { selectCats } from 'redux/cats/selector';
 import { useRootSelector } from 'redux/hooks';
 import { WeightRecordProps } from './Weight-Record.interface';
@@ -16,14 +16,13 @@ import { Defs, LinearGradient, Stop, Svg, Rect } from 'react-native-svg';
 import { MfcButton } from 'components/Button/Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export const WeightRecord: React.FC<WeightRecordProps> = props => {
   const cats = useRootSelector(selectCats);
   const cat = cats.find(_cat => _cat.id === props.route.params.catId)!;
   const [filter, setFilter] = useState<number>(7);
   const [chartData, setChartData] = useState<{ x: string; y: number }[]>([]);
-  const [newWeight, setNewWeight] = useState<number>();
+  const [newWeight, setNewWeight] = useState<string>();
   const [axisRange, setAxisRange] = useState<number[]>();
 
   let catImage: ImageSourcePropType;
@@ -75,7 +74,7 @@ export const WeightRecord: React.FC<WeightRecordProps> = props => {
   };
 
   return (
-    <View style={WeightRecordStyle.container}>
+    <ScrollView contentContainerStyle={WeightRecordStyle.container} showsVerticalScrollIndicator={false}>
       <View style={WeightRecordStyle.catBlock}>
         <CatPhotoButton size={55} image={catImage} style={WeightRecordStyle.catImage} />
         <MfcHeaderText size="large">{cat.name}</MfcHeaderText>
@@ -139,15 +138,16 @@ export const WeightRecord: React.FC<WeightRecordProps> = props => {
           label="更新目前體重"
           keyboardType="numeric"
           containerStyle={WeightRecordStyle.newWeightInput}
-          value={newWeight ? newWeight.toString() : ''}
-          onChange={v => (v ? setNewWeight(parseFloat(v)) : setNewWeight(undefined))}
+          value={newWeight}
+          onChange={v => setNewWeight(v)}
+          errorMessage={newWeight && !/^\d+(\.\d+)?$/.test(newWeight) ? '請填數字' : ''}
         />
         <MfcButton
-          disabled={!newWeight}
+          disabled={!newWeight || !parseFloat(newWeight)}
           style={WeightRecordStyle.newWeightButton}
           onPress={async () => {
             if (newWeight) {
-              await addWeightRecord(cat.id, new Date(), newWeight);
+              await addWeightRecord(cat.id, new Date(), parseFloat(newWeight));
               getRecord();
             }
           }}
@@ -155,6 +155,6 @@ export const WeightRecord: React.FC<WeightRecordProps> = props => {
           確定更新
         </MfcButton>
       </View>
-    </View>
+    </ScrollView>
   );
 };
