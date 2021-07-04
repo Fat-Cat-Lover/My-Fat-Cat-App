@@ -13,8 +13,9 @@ import { OnBoardStack } from 'pages/On-Boarding/navigation';
 import RNBootSplash from 'react-native-bootsplash';
 import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { useRootDispatch } from 'redux/hooks';
+import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { getCurrentDiary } from 'redux/diary/slice';
+import { checkOnboard } from 'redux/on-board/slice';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -28,16 +29,22 @@ const Stack = createStackNavigator<RootNavParams>();
 
 export const MfcNavigation = () => {
   const dispatch = useRootDispatch();
+  const onBoard = useRootSelector(state => state.onBoard.finish);
 
   useEffect(() => {
     dispatch(getCats()).then(result => {
-      RNBootSplash.hide({ fade: true });
       const _cats = unwrapResult(result);
       if (_cats.length) {
         dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
       }
     });
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(checkOnboard()).then(() => {
+      RNBootSplash.hide({ fade: true });
+    });
+  }, []);
 
   return (
     <NavigationContainer
@@ -53,15 +60,20 @@ export const MfcNavigation = () => {
         },
       }}>
       <Stack.Navigator>
-        <Stack.Screen name="TabBar" component={TabBar} options={{ headerShown: false }} />
-        <Stack.Screen name="onBoard" component={OnBoardStack} options={{ headerShown: false }} />
-        <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
-        <Stack.Screen
-          name="EditCat"
-          component={EditCatPage}
-          options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
-        />
-        <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
+        {onBoard !== undefined && onBoard ? (
+          <>
+            <Stack.Screen name="TabBar" component={TabBar} options={{ headerShown: false }} />
+            <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="EditCat"
+              component={EditCatPage}
+              options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
+            />
+            <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
+          </>
+        ) : (
+          <Stack.Screen name="onBoard" component={OnBoardStack} options={{ headerShown: false }} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
