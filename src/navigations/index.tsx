@@ -9,7 +9,6 @@ import { AddCatNavParams } from './Stacks/Add-Cat';
 import { EditCatPage } from 'pages/Edit-Cat/Edit-Cat';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { AddEatingRecordNavParams, AddEatingRecordStack } from './Stacks/Add-Eating-Record';
-import { OnBoardStack } from 'pages/On-Boarding/navigation';
 import RNBootSplash from 'react-native-bootsplash';
 import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -17,6 +16,7 @@ import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { checkOnboard } from 'redux/on-board/slice';
 import { selectCats } from 'redux/cats/selector';
+import { OnBoarding } from 'pages/On-Boarding/pages/On-Boarding';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -66,7 +66,7 @@ export const MfcNavigation = () => {
   } else {
     initRoute = (
       <>
-        <Stack.Screen name="onBoard" component={OnBoardStack} options={{ headerShown: false }} />
+        <Stack.Screen name="onBoard" component={OnBoarding} options={{ headerShown: false }} />
         <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
       </>
     );

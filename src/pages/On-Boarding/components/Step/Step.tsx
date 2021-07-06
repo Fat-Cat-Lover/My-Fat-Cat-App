@@ -15,7 +15,10 @@ export const Step: React.FC<{ step: number }> = props => {
   return (
     <View style={{ flexDirection: 'row' }}>
       <Image source={image} style={imageStyle} />
-      <Image source={image} style={[imageStyle, props.step < 2 ? { tintColor: colors.lightOrange } : undefined]} />
+      <Image
+        source={image}
+        style={[imageStyle, props.step < 2 ? { tintColor: colors.lightOrange } : { tintColor: colors.darkOrange }]}
+      />
       <Image source={image} style={[imageStyle, { tintColor: colors.lightOrange }]} />
     </View>
   );
