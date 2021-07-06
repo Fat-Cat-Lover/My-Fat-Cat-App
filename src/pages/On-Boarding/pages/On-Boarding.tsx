@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { MfcButton } from 'components/Button/Button';
 import { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Image } from 'react-native';
+import { Directions, FlingGestureHandler, State } from 'react-native-gesture-handler';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { MfcText } from 'components/Text/Text';
 import { CommonStyle } from 'styles/common-style';
@@ -29,21 +29,28 @@ const steps = [
   },
 ];
 
-type OnBoardProps = StackScreenProps<{ addCat: undefined }>;
+type OnBoardProps = StackScreenProps<{ AddCat: undefined }>;
 
 export const OnBoarding: React.FC<OnBoardProps> = props => {
   const [step, setStep] = useState<number>(0);
+  const [startX, setStartX] = useState<number>();
 
   return (
-    <View style={OnBoardingStyle.container}>
-      <Swipeable
-        onSwipeableRightOpen={() => {
-          console.log('swipe right')
-          if (step > 0) setStep(step - 1);
-        }}
-        onSwipeableLeftOpen={() => {
-          if (step < 2) setStep(step + 1);
-        }}>
+    <FlingGestureHandler
+      direction={Directions.RIGHT | Directions.LEFT}
+      onHandlerStateChange={({ nativeEvent }) => {
+        if (nativeEvent.state === State.BEGAN) {
+          setStartX(nativeEvent.absoluteX);
+        }
+        if (nativeEvent.state === State.ACTIVE) {
+          if (typeof startX !== 'undefined' && nativeEvent.absoluteX - startX > 0) {
+            if (step > 0) setStep(step - 1);
+          } else {
+            if (step < 2) setStep(step + 1);
+          }
+        }
+      }}>
+      <View style={OnBoardingStyle.container}>
         <View>
           <Image source={steps[step].image} />
         </View>
@@ -65,13 +72,13 @@ export const OnBoarding: React.FC<OnBoardProps> = props => {
             </View>
           ) : (
             <View>
-              <MfcButton style={OnBoardingStyle.finishButton} onPress={() => props.navigation.navigate('addCat')}>
+              <MfcButton style={OnBoardingStyle.finishButton} onPress={() => props.navigation.navigate('AddCat')}>
                 開始記錄
               </MfcButton>
             </View>
           )}
         </View>
-      </Swipeable>
-    </View>
+      </View>
+    </FlingGestureHandler>
   );
 };
