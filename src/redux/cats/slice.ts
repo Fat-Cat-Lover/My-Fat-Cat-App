@@ -35,6 +35,7 @@ const catsSlice = createSlice({
     });
     builder.addCase(addCat.fulfilled, (state, action) => {
       state.cats.push(action.payload);
+      state.selectedCat = state.cats.length - 1;
     });
     builder.addCase(editCat.fulfilled, (state, action) => {
       const index = state.cats.findIndex(_cat => _cat.id === action.payload.id);

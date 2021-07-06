@@ -20,7 +20,7 @@ export const Step3: React.FC<Step3Props> = props => {
           <MfcButton
             style={{ width: '100%' }}
             onPress={async () => {
-              await dispatch(finishOnboard());
+              // await dispatch(finishOnboard());
               props.navigation.navigate('AddCat');
             }}>
             開始記錄

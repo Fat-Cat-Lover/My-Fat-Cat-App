@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 
 import Colors from 'styles/colors';
@@ -16,6 +16,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { checkOnboard } from 'redux/on-board/slice';
+import { selectCats } from 'redux/cats/selector';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -29,22 +30,47 @@ const Stack = createStackNavigator<RootNavParams>();
 
 export const MfcNavigation = () => {
   const dispatch = useRootDispatch();
-  const onBoard = useRootSelector(state => state.onBoard.finish);
+  // const onBoard = useRootSelector(state => state.onBoard.finish);
+  const cats = useRootSelector(selectCats);
 
-  useEffect(() => {
-    dispatch(getCats()).then(result => {
+  const init = useCallback(async () => {
+    // await dispatch(checkOnboard());
+    await dispatch(getCats()).then(result => {
       const _cats = unwrapResult(result);
       if (_cats.length) {
         dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
       }
     });
+    RNBootSplash.hide({ fade: true });
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(checkOnboard()).then(() => {
-      RNBootSplash.hide({ fade: true });
-    });
+    init();
   }, []);
+
+  let initRoute: React.ReactNode;
+
+  if (cats && cats.length > 0) {
+    initRoute = (
+      <>
+        <Stack.Screen name="TabBar" component={TabBar} options={{ headerShown: false }} />
+        <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="EditCat"
+          component={EditCatPage}
+          options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
+        />
+        <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
+      </>
+    );
+  } else {
+    initRoute = (
+      <>
+        <Stack.Screen name="onBoard" component={OnBoardStack} options={{ headerShown: false }} />
+        <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
+      </>
+    );
+  }
 
   return (
     <NavigationContainer
@@ -59,22 +85,7 @@ export const MfcNavigation = () => {
           notification: Colors.darkOrange,
         },
       }}>
-      <Stack.Navigator>
-        {onBoard !== undefined && onBoard ? (
-          <>
-            <Stack.Screen name="TabBar" component={TabBar} options={{ headerShown: false }} />
-            <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
-            <Stack.Screen
-              name="EditCat"
-              component={EditCatPage}
-              options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
-            />
-            <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
-          </>
-        ) : (
-          <Stack.Screen name="onBoard" component={OnBoardStack} options={{ headerShown: false }} />
-        )}
-      </Stack.Navigator>
+      <Stack.Navigator>{initRoute}</Stack.Navigator>
     </NavigationContainer>
   );
 };
