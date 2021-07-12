@@ -29,6 +29,6 @@ export class DailyCaloriesCalculator {
       der = DER.old;
     }
 
-    return this.calcRER(targetWeight) * der;
+    return parseFloat((this.calcRER(targetWeight) * der).toFixed(1));
   }
 }

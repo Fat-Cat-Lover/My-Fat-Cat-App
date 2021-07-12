@@ -2,7 +2,6 @@ import { MockCats } from 'mocks/cats';
 import { Cat } from 'models/cat';
 import SQLite from 'common/database/database';
 import { Database } from 'database/sqlite-manager';
-import { plainToClass } from 'class-transformer';
 import { DailyCaloriesCalculator } from './daliy-calories-calculator';
 import CameraRoll from '@react-native-community/cameraroll';
 import { Image } from 'react-native-image-crop-picker';
@@ -30,7 +29,7 @@ export async function getCats(): Promise<Cat[]> {
   const [result] = await db.executeSql('SELECT * FROM Cats');
   if (result) {
     for (let i = 0; i < result.rows.length; i++) {
-      cats.push(plainToClass(Cat, result.rows.item(i)));
+      cats.push(result.rows.item(i));
     }
     return cats;
   } else {

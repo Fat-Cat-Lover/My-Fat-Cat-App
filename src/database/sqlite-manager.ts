@@ -38,7 +38,7 @@ class SQLiteManager {
         image TEXT,
         useDefault TEXT,
         description TEXT,
-        BIRTHDAY INTEGER NOT NULL,
+        birthday INTEGER NOT NULL,
         sex INTEGER NOT NULL,
         isNeuter INTEGER NOT NULL,
         active INTEGER NOT NULL,

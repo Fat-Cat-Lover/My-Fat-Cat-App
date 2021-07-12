@@ -66,7 +66,7 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
       ...datas,
       currentWeight: parseFloat(datas.currentWeight),
       targetWeight: parseFloat(datas.targetWeight),
-      photo: photo?.data ? photo.data : undefined,
+      photo,
       useDefault,
     };
     props.navigation.navigate('AddOptionalProfile', cat);
