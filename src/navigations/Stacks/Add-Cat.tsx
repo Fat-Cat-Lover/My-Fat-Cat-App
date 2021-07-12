@@ -6,13 +6,11 @@ import { AddBasicProfile } from 'pages/Add-Cat/Add-Basic-Profile/Add-Basic-Profi
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { AddOptionalProfile } from 'pages/Add-Cat/Add-Optional-Profile/Add-Optional-Profile';
 import { AddCatProgressBar } from 'pages/Add-Cat/components/Add-Cat-Progress-Bar/Add-Cat-Progress-Bar';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { Image } from 'react-native-image-crop-picker';
 
 export type AddCatNavParams = {
   ChoosePhoto: { currentStep?: number } | undefined;
-  AddBasicProfile:
-    | { photo?: ImageOrVideo; useDefault?: keyof typeof DefaultCatsImages; currentStep?: number }
-    | undefined;
+  AddBasicProfile: { photo?: Image; useDefault?: keyof typeof DefaultCatsImages; currentStep?: number } | undefined;
   AddOptionalProfile: {
     name: string;
     age: number;
@@ -20,6 +18,8 @@ export type AddCatNavParams = {
     currentWeight: number;
     targetWeight: number;
     currentStep?: number;
+    photo?: Image;
+    useDefault?: string;
   };
 };
 

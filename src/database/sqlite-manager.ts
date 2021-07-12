@@ -31,6 +31,32 @@ class SQLiteManager {
         onBoard INTEGER
       );
     `);
+    transaction.executeSql(`
+      CREATE TABLE IF NOT EXISTS Cats(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        image TEXT,
+        useDefault TEXT,
+        description TEXT,
+        BIRTHDAY INTEGER NOT NULL,
+        sex INTEGER NOT NULL,
+        isNeuter INTEGER NOT NULL,
+        active INTEGER NOT NULL,
+        dailyCalories REAL NOT NULL,
+        currentWeight REAL NOT NULL,
+        targetWeight REAL NOT NULL,
+        preWeight REAL,
+        latestHealthCheck TEXT
+      );
+    `);
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS WeightRecord(
+          catId TEXT NOT NULL,
+          weight REAL NOT NULL,
+          FOREIGN KEY (catId)
+            REFERENCES Cats (id)
+        );
+    `);
   }
 }
 
