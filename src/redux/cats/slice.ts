@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Cat } from 'models/cat';
-import { getCats as _getCats, addCat as _addCat, editCat as _editCat, IAddCat } from 'services/cat';
+import { getCats as _getCats, addCat as _addCat, editCat as _editCat, IAddCat, IEditCat } from 'services/cat';
 
 interface CatsState {
   cats: Cat[];
@@ -19,7 +19,7 @@ export const getCats = createAsyncThunk('cats/getCats', async () => {
 
 export const addCat = createAsyncThunk<Partial<Cat>, IAddCat>('cats/addCat', async cat => await _addCat(cat));
 
-export const editCat = createAsyncThunk<Cat, Partial<Cat>>('cats/editCat', async cat => await _editCat(cat));
+export const editCat = createAsyncThunk<Cat, IEditCat>('cats/editCat', async cat => await _editCat(cat));
 
 const catsSlice = createSlice({
   name: 'cats',

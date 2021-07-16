@@ -1,4 +1,3 @@
-import { MockCats } from 'mocks/cats';
 import { Cat } from 'models/cat';
 import SQLite from 'common/database/database';
 import { Database } from 'database/sqlite-manager';
@@ -55,7 +54,7 @@ export type IAddCat = {
   useDefault?: string;
   isNeuter: boolean;
   active: 'active' | 'normal' | 'nonactive';
-  latestHealthCheck?: Date;
+  latestHealthCheckDate?: string;
 };
 
 export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
@@ -118,7 +117,7 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
         dailyCaloriesCalculator.calcDailyCalories(cat.age!, cat.isNeuter!, cat.active!, cat.targetWeight!),
         cat.currentWeight,
         cat.targetWeight,
-        cat.latestHealthCheck ? cat.latestHealthCheck.toISOString() : null,
+        cat.latestHealthCheckDate,
       ]
     );
     tx.executeSql(
@@ -133,15 +132,65 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
   return result.rows.item(0);
 }
 
-export function editCat(data: Partial<Cat>): Promise<Cat> {
-  const cat = (MockCats as Cat[]).find(_cat => _cat.id === data.id)!;
-  return Promise.resolve({ ...cat, ...data });
-}
-
-// export function editCat(data: Partial<Cat>) {
-//   const db = await Database.getConnection();
-//   db.executeSql(`
-//     UPDATE Cats
-//     SET ${Object.keys(data).map(_key => `${key} = ${}`).join(',')}
-//   `)
+// export function editCat(data: Partial<Cat>): Promise<Cat> {
+//   const cat = (MockCats as Cat[]).find(_cat => _cat.id === data.id)!;
+//   return Promise.resolve({ ...cat, ...data });
 // }
+
+export type IEditCat = {
+  id: number;
+  age: number;
+  name: string;
+  image?: Image;
+  description: string;
+  isNeuter: boolean;
+  targetWeight: number;
+  active: 'active' | 'normal' | 'nonactive';
+  latestHealthCheckDate?: string;
+};
+
+export async function editCat(data: IEditCat): Promise<Cat> {
+  const db = await Database.getConnection();
+  let imagePath;
+  if (data.image) {
+    imagePath = await CameraRoll.save(data.image.path, { album: 'your_fat_cat' });
+  }
+
+  let active: number;
+  if (data.active === 'active') {
+    active = 2;
+  } else if (data.active === 'normal') {
+    active = 1;
+  } else {
+    active = 0;
+  }
+
+  const dailyCaloriesCalculator = new DailyCaloriesCalculator();
+
+  await db.executeSql(
+    `
+    UPDATE Cats SET
+       name = ?,
+      ${imagePath ? `image = "${imagePath}",` : ''}
+       description = ?,
+       isNeuter = ?,
+       active = ?,
+       dailyCalories = ?,
+       targetWeight = ?,
+       latestHealthCheck = ?
+    WHERE id = ?
+  `,
+    [
+      data.name,
+      data.description,
+      data.isNeuter ? 1 : 0,
+      active,
+      dailyCaloriesCalculator.calcDailyCalories(data.age, data.isNeuter, data.active, data.targetWeight),
+      data.targetWeight,
+      data.latestHealthCheckDate,
+      data.id,
+    ]
+  );
+  const [result] = await db.executeSql('SELECT * FROM Cats WHERE id=?', [data.id]);
+  return result.rows.item(0);
+}

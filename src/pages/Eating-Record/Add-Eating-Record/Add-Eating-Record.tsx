@@ -116,7 +116,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
         </View>
         <DateInput
           label="日期"
-          value={dateTime}
+          value={dateTime.toISOString()}
           onChange={async date => {
             setDateTime(
               new Date(date.getFullYear(), date.getMonth(), date.getDate(), dateTime.getHours(), dateTime.getMinutes())

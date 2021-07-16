@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImageSourcePropType, View, ScrollView } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { Image } from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 
 import { ButtonList } from 'components/Button-List/Button-List';
@@ -25,13 +25,23 @@ import { CommonStyle } from 'styles/common-style';
 import { useRootDispatch } from 'redux/hooks';
 import { editCat } from 'redux/cats/slice';
 import { ImageSourceSelect } from 'components/Image-Source-Select/Image-Source-Select';
+import { plainToClass } from 'class-transformer';
+
+interface EditCatForm {
+  name: string;
+  description: string;
+  isNeuter: boolean;
+  targetWeight: number;
+  active: 'active' | 'normal' | 'nonactive';
+  latestHealthCheckDate?: string;
+}
 
 export const EditCatPage: React.FC<EditCatProps> = props => {
   const catId = props.route.params.catId;
-  const cat = useSelector<RootState, Cat>(state => state.cats.cats.find(_cat => _cat.id === catId)!);
-  const [newImage, setNewImage] = useState<ImageOrVideo | undefined>(undefined);
+  const cat = useSelector<RootState, Cat>(state => plainToClass(Cat, state.cats.cats.find(_cat => _cat.id === catId)!));
+  const [newImage, setNewImage] = useState<Image | undefined>(undefined);
   const [showSelect, toggleShowSelect] = useState<boolean>(false);
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<EditCatForm>();
   const dispacth = useRootDispatch();
 
   let catImage: ImageSourcePropType;
@@ -45,13 +55,21 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
     }
   }
 
-  async function onSubmit(newCat: Partial<Cat>) {
+  async function onSubmit(newCat: EditCatForm) {
     try {
-      newCat.id = catId;
-      if (newImage) {
-        newCat.image = newImage.path;
-      }
-      const result = await dispacth(editCat(newCat));
+      const result = await dispacth(
+        editCat({
+          id: cat.id,
+          age: cat.age,
+          name: newCat.name,
+          image: newImage,
+          description: newCat.description,
+          isNeuter: newCat.isNeuter,
+          targetWeight: newCat.targetWeight,
+          active: newCat.active,
+          latestHealthCheckDate: newCat.latestHealthCheckDate,
+        })
+      );
       unwrapResult(result);
       props.navigation.goBack();
     } catch (err) {
@@ -153,7 +171,7 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
             <View style={EditCatStyle.formField}>
               <DateInput
                 label="上一次體檢日期（非必填）"
-                onChange={field.onChange}
+                onChange={newDate => field.onChange(newDate.toISOString())}
                 value={field.value}
                 placeholder="點我選日期"
               />
