@@ -33,7 +33,7 @@ interface EditCatForm {
   isNeuter: boolean;
   targetWeight: number;
   active: 'active' | 'normal' | 'nonactive';
-  latestHealthCheckDate?: string;
+  latestHealthCheckDate?: Date;
 }
 
 export const EditCatPage: React.FC<EditCatProps> = props => {
@@ -171,7 +171,7 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
             <View style={EditCatStyle.formField}>
               <DateInput
                 label="上一次體檢日期（非必填）"
-                onChange={newDate => field.onChange(newDate.toISOString())}
+                onChange={field.onChange}
                 value={field.value}
                 placeholder="點我選日期"
               />

@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-import { Diary, EatingRecord } from 'models/diary';
+import { CatFood } from 'models/cat-food';
+import { EatingRecord } from 'models/diary';
 import { addRecord, getDiary, addExerciseTime as _addExerciseTime } from 'services/diary';
 
 interface CurrentDiary {
   status: 'idle' | 'loading' | 'success' | 'failed';
-  currentDiary: Diary | null;
+  currentDiary: Record<string, any> | null;
 }
 
 const initState: CurrentDiary = {
@@ -13,15 +14,18 @@ const initState: CurrentDiary = {
   currentDiary: null,
 };
 
-export const getCurrentDiary = createAsyncThunk<Diary, { catId: number; date: Date }>(
-  'diary/getCurrentDiary',
-  async args => await getDiary(args.catId, args.date)
-);
+export const getCurrentDiary = createAsyncThunk<
+  { records: EatingRecord[]; excerciseTime: number },
+  { catId: number; date: Date }
+>('diary/getCurrentDiary', async args => await getDiary(args.catId, args.date));
 
 export const addEatingRecord = createAsyncThunk<
-  EatingRecord,
-  { catId: number; foodId: number; weight: number; time: Date }
->('diary/addEatingRecord', async args => await addRecord(args.catId, args.foodId, args.weight, args.time));
+  any,
+  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date }
+>(
+  'diary/addEatingRecord',
+  async args => await addRecord(args.catId, args.foodType, args.brand, args.food, args.weight, args.time)
+);
 
 export const addExerciseTime = createAsyncThunk<
   { createdTime: string; exerciseTime: number },

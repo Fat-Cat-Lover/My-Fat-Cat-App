@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 
 export class EatingRecord {
-  id: string;
+  id: number;
 
   @Transform(({ value }) => value.toISOString(), {
     toPlainOnly: true,
@@ -15,14 +15,14 @@ export class EatingRecord {
   calories: number;
   crudeProtein: number;
   crudeFat: number;
-  crudeFiber?: number;
-  carbohydrate?: number;
-  ash?: number;
-  calcium?: number;
-  phosphorus?: number;
-  sodium?: number;
-  magnesium?: number;
-  moisture?: number;
+  // crudeFiber?: number;
+  carbohydrate: number;
+  // ash?: number;
+  // calcium?: number;
+  // phosphorus?: number;
+  // sodium?: number;
+  // magnesium?: number;
+  moisture: number;
 }
 
 export class Diary {

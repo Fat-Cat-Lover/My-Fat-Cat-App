@@ -23,7 +23,7 @@ interface OptionalForm {
   [key: string]: any;
   isNeuter: boolean;
   active: 'active' | 'normal' | 'nonactive';
-  latestHealthCheckDate: string;
+  latestHealthCheckDate: Date;
   description: string;
 }
 
@@ -116,7 +116,7 @@ export const AddOptionalProfile: React.FC<AddOptionalProfileProps> = props => {
             <View style={AddOptionalProfileStyle.formField}>
               <DateInput
                 label="上一次體檢日期（非必填）"
-                onChange={newDate => field.onChange(newDate.toISOString())}
+                onChange={field.onChange}
                 value={field.value}
                 placeholder="點我選日期"
               />

@@ -1,22 +1,8 @@
 import { Cat } from 'models/cat';
-import SQLite from 'common/database/database';
 import { Database } from 'database/sqlite-manager';
 import { DailyCaloriesCalculator } from './daliy-calories-calculator';
 import CameraRoll from '@react-native-community/cameraroll';
 import { Image } from 'react-native-image-crop-picker';
-
-export class CatService {
-  getCats() {
-    return SQLite.executeSql(`SELECT * FROM Cats`).then(([result]) => {
-      const rows = result.rows;
-      const cats = [];
-      for (let i = 0; i < rows.length; i++) {
-        cats.push(rows.item(i));
-      }
-      return cats;
-    });
-  }
-}
 
 // export function getCats(): Promise<Cat[]> {
 //   return Promise.resolve(MockCats);
@@ -25,7 +11,7 @@ export class CatService {
 export async function getCats(): Promise<Cat[]> {
   const db = await Database.getConnection();
   let cats: Cat[] = [];
-  const [result] = await db.executeSql('SELECT * FROM Cats');
+  const [result] = await db.executeSql('SELECT * FROM Cat');
   if (result) {
     for (let i = 0; i < result.rows.length; i++) {
       cats.push(result.rows.item(i));
@@ -54,7 +40,7 @@ export type IAddCat = {
   useDefault?: string;
   isNeuter: boolean;
   active: 'active' | 'normal' | 'nonactive';
-  latestHealthCheckDate?: string;
+  latestHealthCheckDate?: Date;
 };
 
 export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
@@ -76,7 +62,7 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
   await db.transaction(tx => {
     tx.executeSql(
       `
-       INSERT INTO Cats(
+       INSERT INTO Cat (
          name,
          description,
          image,
@@ -90,7 +76,7 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
          targetWeight,
          latestHealthCheck
        )
-       VALUES(
+       VALUES (
          ?,
          ?,
          ?,
@@ -117,18 +103,18 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
         dailyCaloriesCalculator.calcDailyCalories(cat.age!, cat.isNeuter!, cat.active!, cat.targetWeight!),
         cat.currentWeight,
         cat.targetWeight,
-        cat.latestHealthCheckDate,
+        cat.latestHealthCheckDate?.toISOString(),
       ]
     );
     tx.executeSql(
       `
-       INSERT INTO WeightRecord(catId, weight)
-       VALUES((SELECT last_insert_rowid()), ?)
+       INSERT INTO WeightRecord(catId, weight, createdTime)
+       VALUES((SELECT last_insert_rowid()), ?, datetime('now'))
      `,
       [cat.currentWeight]
     );
   });
-  const [result] = await db.executeSql('SELECT * FROM Cats WHERE name=?', [cat.name]);
+  const [result] = await db.executeSql('SELECT * FROM Cat WHERE name=?', [cat.name]);
   return result.rows.item(0);
 }
 
@@ -146,7 +132,7 @@ export type IEditCat = {
   isNeuter: boolean;
   targetWeight: number;
   active: 'active' | 'normal' | 'nonactive';
-  latestHealthCheckDate?: string;
+  latestHealthCheckDate?: Date;
 };
 
 export async function editCat(data: IEditCat): Promise<Cat> {
@@ -169,7 +155,7 @@ export async function editCat(data: IEditCat): Promise<Cat> {
 
   await db.executeSql(
     `
-    UPDATE Cats SET
+    UPDATE Cat SET
        name = ?,
       ${imagePath ? `image = "${imagePath}",` : ''}
        description = ?,
@@ -187,10 +173,10 @@ export async function editCat(data: IEditCat): Promise<Cat> {
       active,
       dailyCaloriesCalculator.calcDailyCalories(data.age, data.isNeuter, data.active, data.targetWeight),
       data.targetWeight,
-      data.latestHealthCheckDate,
+      data.latestHealthCheckDate?.toISOString(),
       data.id,
     ]
   );
-  const [result] = await db.executeSql('SELECT * FROM Cats WHERE id=?', [data.id]);
+  const [result] = await db.executeSql('SELECT * FROM Cat WHERE id=?', [data.id]);
   return result.rows.item(0);
 }

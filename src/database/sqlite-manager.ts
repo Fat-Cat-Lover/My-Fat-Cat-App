@@ -32,7 +32,7 @@ class SQLiteManager {
       );
     `);
     transaction.executeSql(`
-      CREATE TABLE IF NOT EXISTS Cats(
+      CREATE TABLE IF NOT EXISTS Cat(
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
         image TEXT,
@@ -51,8 +51,38 @@ class SQLiteManager {
     `);
     transaction.executeSql(`
         CREATE TABLE IF NOT EXISTS WeightRecord(
+          id INTEGER PRIMARY KEY,
           catId TEXT NOT NULL,
           weight REAL NOT NULL,
+          createdTime TEXT NOT NULL,
+          FOREIGN KEY (catId)
+            REFERENCES Cats (id)
+        );
+    `);
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS EatingRecord(
+          id INTEGER PRIMARY KEY,
+          catId TEXT NOT NULL,
+          createdTime TEXT NOT NULL,
+          weight REAL NOT NULL,
+          foodType TEXT,
+          brand TEXT,
+          foodName TEXT,
+          calories REAL NOT NULL,
+          crudeProtein REAL NOT NULL,
+          crudeFat REAL NOT NULL,
+          carbohydrate REAL NOT NULL,
+          moisture REAL NOT NULL,
+          FOREIGN KEY (catId)
+            REFERENCES Cats (id)
+        );
+    `);
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS ExcerciseTime(
+          id INTEGER PRIMARY KEY,
+          catId TEXT NOT NULL,
+          createdTime TEXT NOT NULL,
+          time INTEGER NOT NULL,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
         );

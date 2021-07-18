@@ -17,12 +17,12 @@ export interface CatFood {
   calories: number;
   crudeProtein: number;
   crudeFat: number;
-  crudeFiber?: number;
-  carbohydrate?: number;
-  ash?: number;
-  calcium?: number;
-  phosphorus?: number;
-  sodium?: number;
-  magnesium?: number;
-  moisture?: number;
+  // crudeFiber?: number;
+  carbohydrate: number;
+  // ash?: number;
+  // calcium?: number;
+  // phosphorus?: number;
+  // sodium?: number;
+  // magnesium?: number;
+  moisture: number;
 }
