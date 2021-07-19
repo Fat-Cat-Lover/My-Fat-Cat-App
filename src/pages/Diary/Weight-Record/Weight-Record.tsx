@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { selectCats } from 'redux/cats/selector';
-import { useRootSelector } from 'redux/hooks';
+import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { WeightRecordProps } from './Weight-Record.interface';
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
@@ -16,10 +16,14 @@ import { Defs, LinearGradient, Stop, Svg, Rect } from 'react-native-svg';
 import { MfcButton } from 'components/Button/Button';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
+import { plainToClass } from 'class-transformer';
+import { WeightRecord } from 'models/diary';
+import { updateCatWeight } from 'redux/cats/slice';
 
-export const WeightRecord: React.FC<WeightRecordProps> = props => {
+export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
   const cats = useRootSelector(selectCats);
   const cat = cats.find(_cat => _cat.id === props.route.params.catId)!;
+  const dispatch = useRootDispatch();
   const [filter, setFilter] = useState<number>(7);
   const [chartData, setChartData] = useState<{ x: string; y: number }[]>([]);
   const [newWeight, setNewWeight] = useState<string>();
@@ -34,17 +38,18 @@ export const WeightRecord: React.FC<WeightRecordProps> = props => {
 
   const getRecord = useCallback(() => {
     getWeightRecord(cat.id, filter).then(data => {
-      const maxRange = Math.ceil(Math.max(...data.map(_data => _data.weight)));
-      const minRange = Math.floor(Math.min(...data.map(_data => _data.weight))) - 1;
+      const records = plainToClass(WeightRecord, data);
+      const maxRange = Math.ceil(Math.max(...records.map(record => record.weight)));
+      const minRange = Math.floor(Math.min(...records.map(record => record.weight))) - 1;
       setAxisRange([
         minRange,
         minRange + parseFloat(((maxRange - minRange) * (1 / 3)).toFixed(1)),
         minRange + parseFloat(((maxRange - minRange) * (2 / 3)).toFixed(1)),
         maxRange,
       ]);
-      const chart = data.map(_data => ({
-        x: `${_data.createdTime.getMonth() + 1}/${_data.createdTime.getDate()}`,
-        y: _data.weight,
+      const chart = records.map(record => ({
+        x: `${record.createdTime.getMonth() + 1}/${record.createdTime.getDate()}`,
+        y: record.weight,
       }));
       setChartData(chart);
     });
@@ -149,6 +154,7 @@ export const WeightRecord: React.FC<WeightRecordProps> = props => {
             if (newWeight) {
               await addWeightRecord(cat.id, new Date(), parseFloat(newWeight));
               getRecord();
+              dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
             }
           }}
           color="black">

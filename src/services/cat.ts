@@ -109,9 +109,9 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
     tx.executeSql(
       `
        INSERT INTO WeightRecord(catId, weight, createdTime)
-       VALUES((SELECT last_insert_rowid()), ?, datetime('now'))
+       VALUES((SELECT last_insert_rowid()), ?, ?)
      `,
-      [cat.currentWeight]
+      [cat.currentWeight, new Date().toISOString()]
     );
   });
   const [result] = await db.executeSql('SELECT * FROM Cat WHERE name=?', [cat.name]);

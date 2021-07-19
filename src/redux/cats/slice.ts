@@ -28,6 +28,9 @@ const catsSlice = createSlice({
     setSelectedCat: (state, action) => {
       state.selectedCat = action.payload;
     },
+    updateCatWeight: (state, action) => {
+      state.cats.find(cat => cat.id === action.payload.id)!.currentWeight = action.payload.weight;
+    },
   },
   extraReducers: builder => {
     builder.addCase(getCats.fulfilled, (state, action) => {
@@ -44,5 +47,5 @@ const catsSlice = createSlice({
   },
 });
 
-export const { setSelectedCat } = catsSlice.actions;
+export const { setSelectedCat, updateCatWeight } = catsSlice.actions;
 export const catsReducer = catsSlice.reducer;

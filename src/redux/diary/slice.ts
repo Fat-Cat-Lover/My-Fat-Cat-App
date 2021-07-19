@@ -6,7 +6,7 @@ import { addRecord, getDiary, addExerciseTime as _addExerciseTime } from 'servic
 
 interface CurrentDiary {
   status: 'idle' | 'loading' | 'success' | 'failed';
-  currentDiary: Record<string, any> | null;
+  currentDiary: { records: EatingRecord[]; excerciseTime: number; diaryDate: string } | null;
 }
 
 const initState: CurrentDiary = {
@@ -15,7 +15,7 @@ const initState: CurrentDiary = {
 };
 
 export const getCurrentDiary = createAsyncThunk<
-  { records: EatingRecord[]; excerciseTime: number },
+  { records: EatingRecord[]; excerciseTime: number; diaryDate: string },
   { catId: number; date: Date }
 >('diary/getCurrentDiary', async args => await getDiary(args.catId, args.date));
 
@@ -48,12 +48,12 @@ const DiarySlice = createSlice({
       state.status = 'success';
     });
     builder.addCase(addEatingRecord.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.records[0]?.createdTime).isSame(action.payload.createdTime, 'day')) {
+      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
         state.currentDiary?.records.push(action.payload);
       }
     });
     builder.addCase(addExerciseTime.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.records[0]?.createdTime).isSame(action.payload.createdTime, 'day')) {
+      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
         state.currentDiary!.excerciseTime += action.payload.exerciseTime;
       }
     });

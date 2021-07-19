@@ -12,7 +12,7 @@ export const NutritionBlock: React.FC<NutritionBlockProps> = props => {
         {props.title}
       </MfcText>
       <MfcText size="normal" type="medium" style={[CommonStyle.grayText, NutritionBlockStyle.weight]}>
-        {props.weight} g
+        {props.weight.toFixed(2)} g
       </MfcText>
     </View>
   );

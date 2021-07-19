@@ -1,15 +1,6 @@
 import { Database } from 'database/sqlite-manager';
-import { mockCatFoods } from 'mocks/cat-food';
-import {
-  MockDiary,
-  MockEatingRecord,
-  mockEatingRecords,
-  MockExcerciseTime,
-  mockExcerciseTime,
-  mockWeightRecord,
-} from 'mocks/diary';
 import { CatFood } from 'models/cat-food';
-import { Diary, EatingRecord } from 'models/diary';
+import { EatingRecord } from 'models/diary';
 
 // export function getDiary(catId: number, date: Date): Promise<Diary> {
 //   const records = mockEatingRecords.filter(
@@ -50,7 +41,7 @@ export async function getDiary(catId: number, date: Date) {
     }
   }
   const excerciseTime = excerciseTimeResult ? excerciseTimeResult.rows.item(0)['SUM(time)'] : 0;
-  return { records, excerciseTime };
+  return { records, excerciseTime, diaryDate: date.toISOString() };
 }
 
 // export function addRecord(catId: number, foodId: number, weight: number, time: Date) {
@@ -150,7 +141,7 @@ export async function getWeightRecord(catId: number, filter: number) {
     `
     SELECT * FROM WeightRecord
     WHERE catId = ?
-    ORDER BY datetime(createdTime) DESC
+    ORDER BY datetime(createdTime) ASC
     LIMIT ?;
   `,
     [catId, filter]
@@ -160,7 +151,7 @@ export async function getWeightRecord(catId: number, filter: number) {
     for (let i = 0; i < result.rows.length; i++) {
       records.push(result.rows.item(i));
     }
-    return result;
+    return records;
   } else {
     return [];
   }
@@ -173,12 +164,22 @@ export async function getWeightRecord(catId: number, filter: number) {
 
 export async function addWeightRecord(catId: number, createdTime: Date, weight: number) {
   const db = await Database.getConnection();
-  const [result] = await db.executeSql(
-    `
+  await db.transaction(tx => {
+    tx.executeSql(
+      `
     INSERT INTO WeightRecord (catId, weight, createdTime)
     VALUES (?, ?, ?);
   `,
-    [catId, weight, createdTime.toISOString()]
-  );
-  return { id: result.insertId, catId, createdTime: createdTime.toISOString(), weight };
+      [catId, weight, createdTime.toISOString()]
+    );
+    tx.executeSql(
+      `
+      UPDATE Cat Set
+        currentWeight =?
+      WHERE id = ?;
+    `,
+      [weight, catId]
+    );
+  });
+  return { catId, createdTime: createdTime.toISOString(), weight };
 }
