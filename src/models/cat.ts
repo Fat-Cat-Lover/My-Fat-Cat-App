@@ -6,9 +6,23 @@ export class Cat {
   image?: string;
   useDefault?: string;
   description?: string;
-  age: number;
+  birthday: number;
+
+  @Transform(({ value }) => (value === 0 ? 'female' : 'male'))
   sex: 'male' | 'female';
+
+  @Transform(({ value }) => (value === 0 ? false : true))
   isNeuter: boolean;
+
+  @Transform(({ value }) => {
+    if (value === 0) {
+      return 'nonactive';
+    } else if (value === 1) {
+      return 'normal';
+    } else {
+      return 'active';
+    }
+  })
   active: 'active' | 'normal' | 'nonactive';
   dailyCalories: number;
   currentWeight: number;
@@ -19,4 +33,8 @@ export class Cat {
     toPlainOnly: true,
   })
   latestHealthCheck?: Date;
+
+  get age() {
+    return new Date().getFullYear() - this.birthday;
+  }
 }

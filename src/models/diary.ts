@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 
 export class EatingRecord {
-  id: string;
+  id: number;
 
   @Transform(({ value }) => value.toISOString(), {
     toPlainOnly: true,
@@ -15,14 +15,14 @@ export class EatingRecord {
   calories: number;
   crudeProtein: number;
   crudeFat: number;
-  crudeFiber?: number;
-  carbohydrate?: number;
-  ash?: number;
-  calcium?: number;
-  phosphorus?: number;
-  sodium?: number;
-  magnesium?: number;
-  moisture?: number;
+  // crudeFiber?: number;
+  carbohydrate: number;
+  // ash?: number;
+  // calcium?: number;
+  // phosphorus?: number;
+  // sodium?: number;
+  // magnesium?: number;
+  moisture: number;
 }
 
 export class Diary {
@@ -30,7 +30,19 @@ export class Diary {
   records: EatingRecord[];
   excerciseTime: number;
 
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  diaryDate: Date;
+
   get caloriesEatenToday(): number {
     return this.records.reduce((pre, cur) => pre + (cur.calories || 0), 0);
   }
+}
+
+export class WeightRecord {
+  id: string;
+  catId: string;
+  weight: number;
+
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  createdTime: Date;
 }

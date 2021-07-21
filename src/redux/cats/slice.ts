@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Cat } from 'models/cat';
-import { getCats as _getCats, addCat as _addCat, editCat as _editCat } from 'services/cat';
+import { getCats as _getCats, addCat as _addCat, editCat as _editCat, IAddCat, IEditCat } from 'services/cat';
 
 interface CatsState {
   cats: Cat[];
@@ -17,9 +17,9 @@ export const getCats = createAsyncThunk('cats/getCats', async () => {
   return cats;
 });
 
-export const addCat = createAsyncThunk<Cat, Partial<Cat>>('cats/addCat', async cat => await _addCat(cat));
+export const addCat = createAsyncThunk<Partial<Cat>, IAddCat>('cats/addCat', async cat => await _addCat(cat));
 
-export const editCat = createAsyncThunk<Cat, Partial<Cat>>('cats/editCat', async cat => await _editCat(cat));
+export const editCat = createAsyncThunk<Cat, IEditCat>('cats/editCat', async cat => await _editCat(cat));
 
 const catsSlice = createSlice({
   name: 'cats',
@@ -28,13 +28,17 @@ const catsSlice = createSlice({
     setSelectedCat: (state, action) => {
       state.selectedCat = action.payload;
     },
+    updateCatWeight: (state, action) => {
+      state.cats.find(cat => cat.id === action.payload.id)!.currentWeight = action.payload.weight;
+    },
   },
   extraReducers: builder => {
     builder.addCase(getCats.fulfilled, (state, action) => {
       state.cats = action.payload;
     });
     builder.addCase(addCat.fulfilled, (state, action) => {
-      state.cats.push(action.payload);
+      state.cats.push(action.payload as Cat);
+      state.selectedCat = state.cats.length - 1;
     });
     builder.addCase(editCat.fulfilled, (state, action) => {
       const index = state.cats.findIndex(_cat => _cat.id === action.payload.id);
@@ -43,5 +47,5 @@ const catsSlice = createSlice({
   },
 });
 
-export const { setSelectedCat } = catsSlice.actions;
+export const { setSelectedCat, updateCatWeight } = catsSlice.actions;
 export const catsReducer = catsSlice.reducer;

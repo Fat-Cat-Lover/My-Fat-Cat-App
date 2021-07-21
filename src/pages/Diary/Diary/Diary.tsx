@@ -79,10 +79,14 @@ export const Diary: React.FC<DiaryProps> = props => {
   if (cats.length > 0 && diary) {
     if (diary.caloriesEatenToday > cats[selectedCat].dailyCalories) {
       caloriesSummary = (
-        <MfcText type="medium">超量進食：{diary.caloriesEatenToday - cats[selectedCat].dailyCalories} cal</MfcText>
+        <MfcText type="medium">
+          超量進食：{(diary.caloriesEatenToday - cats[selectedCat].dailyCalories).toFixed(2)} cal
+        </MfcText>
       );
     } else if (diary.caloriesEatenToday < cats[selectedCat].dailyCalories) {
-      caloriesSummary = <MfcText>尚未進食：{cats[selectedCat].dailyCalories - diary.caloriesEatenToday} cal</MfcText>;
+      caloriesSummary = (
+        <MfcText>尚未進食：{(cats[selectedCat].dailyCalories - diary.caloriesEatenToday).toFixed(2)} cal</MfcText>
+      );
     } else {
       caloriesSummary = <MfcText>吃飽啦！</MfcText>;
     }
@@ -116,7 +120,7 @@ export const Diary: React.FC<DiaryProps> = props => {
                 params: {
                   date: currentDate,
                   catId: cats[selectedCat].id,
-                  remainCalroies: cats[selectedCat].dailyCalories - diary!.caloriesEatenToday,
+                  remainCalroies: cats[selectedCat].dailyCalories - (diary?.caloriesEatenToday || 0),
                 },
               })
             }>

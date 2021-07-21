@@ -17,6 +17,7 @@ import { CommonStyle } from 'styles/common-style';
 import { addCat } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useRootDispatch } from 'redux/hooks';
+import { CommonActions } from '@react-navigation/native';
 
 interface OptionalForm {
   [key: string]: any;
@@ -56,8 +57,13 @@ export const AddOptionalProfile: React.FC<AddOptionalProfileProps> = props => {
     try {
       const result = await dispatch(addCat(cat));
       unwrapResult(result);
-      props.navigation.popToTop();
-      props.navigation.goBack();
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'TabBar' }],
+        })
+      );
+      // props.navigation.navigate('TabBar', { screen: 'Home' })
     } catch (err) {
       console.error(err);
     }

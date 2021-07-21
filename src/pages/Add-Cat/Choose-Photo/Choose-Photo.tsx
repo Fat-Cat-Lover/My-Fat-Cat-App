@@ -14,11 +14,11 @@ import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { ChoosePhotoProps } from './Choose-Photo.interface';
 import { SelectedCheckmark } from 'components/Selected-Checkmark/Selected-Checkmark';
 import { openImagePicker } from 'services/image-picker';
-import { ImageOrVideo } from 'react-native-image-crop-picker';
+import { Image } from 'react-native-image-crop-picker';
 
 export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   const [selectedImage, setSelectedImage] = React.useState<string>();
-  const [uploadedImage, setUploadedImage] = React.useState<ImageOrVideo | undefined>();
+  const [uploadedImage, setUploadedImage] = React.useState<Image | undefined>();
   const defaultCats = Object.keys(DefaultCatsImages);
 
   function navToAddBasicProfile() {
@@ -46,7 +46,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
   if (selectedImage) {
     imageButton = (
       <CatPhotoButton
-        style={ChoosePhotoStyle.uploadButton}
+        style={{ borderWidth: 0 }}
         size={154}
         image={DefaultCatsImages[selectedImage]}
         onPress={onUploadCatPress}

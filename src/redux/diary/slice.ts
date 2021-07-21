@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-import { Diary, EatingRecord } from 'models/diary';
+import { CatFood } from 'models/cat-food';
+import { EatingRecord } from 'models/diary';
 import { addRecord, getDiary, addExerciseTime as _addExerciseTime } from 'services/diary';
 
 interface CurrentDiary {
   status: 'idle' | 'loading' | 'success' | 'failed';
-  currentDiary: Diary | null;
+  currentDiary: { records: EatingRecord[]; excerciseTime: number; diaryDate: string } | null;
 }
 
 const initState: CurrentDiary = {
@@ -13,15 +14,18 @@ const initState: CurrentDiary = {
   currentDiary: null,
 };
 
-export const getCurrentDiary = createAsyncThunk<Diary, { catId: number; date: Date }>(
-  'diary/getCurrentDiary',
-  async args => await getDiary(args.catId, args.date)
-);
+export const getCurrentDiary = createAsyncThunk<
+  { records: EatingRecord[]; excerciseTime: number; diaryDate: string },
+  { catId: number; date: Date }
+>('diary/getCurrentDiary', async args => await getDiary(args.catId, args.date));
 
 export const addEatingRecord = createAsyncThunk<
-  EatingRecord,
-  { catId: number; foodId: number; weight: number; time: Date }
->('diary/addEatingRecord', async args => await addRecord(args.catId, args.foodId, args.weight, args.time));
+  any,
+  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date }
+>(
+  'diary/addEatingRecord',
+  async args => await addRecord(args.catId, args.foodType, args.brand, args.food, args.weight, args.time)
+);
 
 export const addExerciseTime = createAsyncThunk<
   { createdTime: string; exerciseTime: number },
@@ -44,12 +48,12 @@ const DiarySlice = createSlice({
       state.status = 'success';
     });
     builder.addCase(addEatingRecord.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.records[0]?.createdTime).isSame(action.payload.createdTime, 'day')) {
+      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
         state.currentDiary?.records.push(action.payload);
       }
     });
     builder.addCase(addExerciseTime.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.records[0]?.createdTime).isSame(action.payload.createdTime, 'day')) {
+      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
         state.currentDiary!.excerciseTime += action.payload.exerciseTime;
       }
     });

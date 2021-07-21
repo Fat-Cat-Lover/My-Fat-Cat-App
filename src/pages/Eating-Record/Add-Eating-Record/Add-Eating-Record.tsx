@@ -89,10 +89,15 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   }
 
   async function onSubmit(data: AddEatingRecordForm) {
+    const foodType = foodTypes.find(type => type.id === data.foodType)!;
+    const brand = brands.find(_brand => _brand.id === data.brand)!;
+    const food = catFoods.find(_food => _food.id === data.catFood)!;
     await dispatch(
       addEatingRecord({
         catId: cat.id,
-        foodId: data.catFood!,
+        foodType: foodType.type,
+        brand: brand.name,
+        food,
         weight: calcWeight(data.calory),
         time: dateTime,
       })
