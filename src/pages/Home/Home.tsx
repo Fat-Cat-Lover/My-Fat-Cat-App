@@ -15,7 +15,6 @@ import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
 import { useState } from 'react';
 import { ExerciseModal } from 'components/Exercise-Modal/Exercise-Modal';
-import { Loading } from 'components/Loading/Loading';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -25,16 +24,13 @@ export const Home: React.FC<HomeProps> = props => {
   const dispatch = useRootDispatch();
   const currentCat = cats[selectedCat];
   const [showExerciseModal, toggleShowExerciseModal] = useState<boolean>(false);
-  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
   }
 
   async function onDateChange(date: Date) {
-    setShowLoading(true);
     await dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
-    // setShowLoading(false);
   }
 
   function onCatSelect(index: number) {
@@ -123,7 +119,6 @@ export const Home: React.FC<HomeProps> = props => {
         <DatePicker onDateChange={onDateChange} />
       </HeaderBar>
       {mainContent}
-      <Loading show={showLoading} />
     </View>
   );
 };

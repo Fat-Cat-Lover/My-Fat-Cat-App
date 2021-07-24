@@ -14,9 +14,10 @@ import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { getCurrentDiary } from 'redux/diary/slice';
-import { checkOnboard } from 'redux/on-board/slice';
 import { selectCats } from 'redux/cats/selector';
 import { OnBoarding } from 'pages/On-Boarding/pages/On-Boarding';
+import { Loading } from 'components/Loading/Loading';
+import { selectLoading } from 'redux/loading/selector';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -30,11 +31,10 @@ const Stack = createStackNavigator<RootNavParams>();
 
 export const MfcNavigation = () => {
   const dispatch = useRootDispatch();
-  // const onBoard = useRootSelector(state => state.onBoard.finish);
   const cats = useRootSelector(selectCats);
+  const isLoading = useRootSelector(selectLoading);
 
   const init = useCallback(async () => {
-    // await dispatch(checkOnboard());
     await dispatch(getCats()).then(result => {
       const _cats = unwrapResult(result);
       if (_cats.length) {
@@ -86,6 +86,7 @@ export const MfcNavigation = () => {
         },
       }}>
       <Stack.Navigator>{initRoute}</Stack.Navigator>
+      <Loading show={isLoading} />
     </NavigationContainer>
   );
 };

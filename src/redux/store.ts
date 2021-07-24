@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { catsReducer } from './cats/slice';
 import { diaryDateResucer } from './diary-date/slice';
 import { diaryReducer } from './diary/slice';
+import { loadingReducer } from './loading/slice';
 import { onBoardReducer } from './on-board/slice';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     cats: catsReducer,
     diary: diaryReducer,
     onBoard: onBoardReducer,
+    loading: loadingReducer,
   },
 });
 

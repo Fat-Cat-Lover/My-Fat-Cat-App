@@ -19,6 +19,7 @@ import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { plainToClass } from 'class-transformer';
 import { WeightRecord } from 'models/diary';
 import { updateCatWeight } from 'redux/cats/slice';
+import { requestEnd, requestStart } from 'redux/loading/slice';
 
 export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
   const cats = useRootSelector(selectCats);
@@ -56,8 +57,10 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
   }, [cat.id, filter]);
 
   useEffect(() => {
+    dispatch(requestStart({}));
     getRecord();
-  }, [getRecord]);
+    dispatch(requestEnd({}));
+  }, [getRecord, dispatch]);
 
   const renderDataChart = (data: { x: string; y: number }, range: number[]) => {
     const height = (132 * (data.y - range[0])) / (range[range.length - 1] - range[0]);
@@ -152,9 +155,11 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
           style={WeightRecordStyle.newWeightButton}
           onPress={async () => {
             if (newWeight) {
+              dispatch(requestStart({}));
               await addWeightRecord(cat.id, new Date(), parseFloat(newWeight));
-              getRecord();
-              dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
+              await getRecord();
+              await dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
+              dispatch(requestEnd({}));
             }
           }}
           color="black">
