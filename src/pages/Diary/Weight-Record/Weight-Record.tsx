@@ -157,6 +157,7 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
             if (newWeight) {
               dispatch(requestStart({}));
               await addWeightRecord(cat.id, new Date(), parseFloat(newWeight));
+              setNewWeight('');
               await getRecord();
               await dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
               dispatch(requestEnd({}));
