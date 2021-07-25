@@ -29,8 +29,8 @@ export const Home: React.FC<HomeProps> = props => {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
   }
 
-  function onDateChange(date: Date) {
-    dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
+  async function onDateChange(date: Date) {
+    await dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
   }
 
   function onCatSelect(index: number) {
