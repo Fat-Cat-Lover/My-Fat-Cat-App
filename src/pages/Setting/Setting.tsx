@@ -39,7 +39,7 @@ export const Setting: React.FC<SettingProps> = props => {
             <MfcText type="medium" size="large" style={CommonStyle.grayText}>
               關於我們
             </MfcText>
-            <MfcIcon name={showAbout ? 'expandBack' : 'expandMore'} style={SettingStyle.icon}  />
+            <MfcIcon name={showAbout ? 'expandBack' : 'expandMore'} style={SettingStyle.icon} />
           </View>
         </MfcButton>
         {showAbout ? (
@@ -51,7 +51,7 @@ export const Setting: React.FC<SettingProps> = props => {
           </View>
         ) : undefined}
       </View>
-      <MfcButton color="white" onPress={() => {}} style={SettingStyle.infoBlock}>
+      <MfcButton color="white" onPress={() => props.navigation.navigate('contactUs')} style={SettingStyle.infoBlock}>
         <View style={SettingStyle.buttonContentContainer}>
           <MfcText type="medium" size="large" style={CommonStyle.grayText}>
             聯絡我們
