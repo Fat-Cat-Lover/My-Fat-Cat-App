@@ -18,6 +18,7 @@ import { selectCats } from 'redux/cats/selector';
 import { OnBoarding } from 'pages/On-Boarding/pages/On-Boarding';
 import { Loading } from 'components/Loading/Loading';
 import { selectLoading } from 'redux/loading/selector';
+import { ContactUs } from 'pages/Contact-Us/Contact-Us';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -25,6 +26,7 @@ export type RootNavParams = {
   EditCat: { catId: number };
   AddEatingRecord: NavigatorScreenParams<AddEatingRecordNavParams>;
   onBoard: undefined;
+  contactUs: undefined;
 };
 
 const Stack = createStackNavigator<RootNavParams>();
@@ -61,6 +63,11 @@ export const MfcNavigation = () => {
           options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
         />
         <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="contactUs"
+          component={ContactUs}
+          options={{ header: () => <HeaderBar>聯絡我們</HeaderBar> }}
+        />
       </>
     );
   } else {

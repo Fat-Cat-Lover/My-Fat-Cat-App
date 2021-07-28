@@ -38,7 +38,7 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
   }
 
   const getRecord = useCallback(() => {
-    getWeightRecord(cat.id, filter).then(data => {
+    return getWeightRecord(cat.id, filter).then(data => {
       const records = plainToClass(WeightRecord, data);
       const maxRange = Math.ceil(Math.max(...records.map(record => record.weight)));
       const minRange = Math.floor(Math.min(...records.map(record => record.weight))) - 1;
@@ -58,8 +58,7 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
 
   useEffect(() => {
     dispatch(requestStart({}));
-    getRecord();
-    dispatch(requestEnd({}));
+    getRecord().then(() => dispatch(requestEnd({})));
   }, [getRecord, dispatch]);
 
   const renderDataChart = (data: { x: string; y: number }, range: number[]) => {
@@ -159,7 +158,7 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
               await addWeightRecord(cat.id, new Date(), parseFloat(newWeight));
               setNewWeight('');
               await getRecord();
-              await dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
+              dispatch(updateCatWeight({ id: cat.id, weight: parseFloat(newWeight) }));
               dispatch(requestEnd({}));
             }
           }}

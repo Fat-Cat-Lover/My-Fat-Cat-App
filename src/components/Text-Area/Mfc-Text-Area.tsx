@@ -64,6 +64,7 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
       <View style={this.props.containerStyle}>
         {this.props.label && <InputLabel label={this.props.label} />}
         <TextInput
+          multiline={true}
           keyboardType="default"
           placeholder={this.props.placeholder}
           placeholderTextColor={colors.mainGray}
