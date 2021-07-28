@@ -51,14 +51,14 @@ export const Setting: React.FC<SettingProps> = props => {
           </View>
         ) : undefined}
       </View>
-      <MfcButton color="white" onPress={() => props.navigation.navigate('contactUs')} style={SettingStyle.infoBlock}>
+      {/* <MfcButton color="white" onPress={() => props.navigation.navigate('contactUs')} style={SettingStyle.infoBlock}>
         <View style={SettingStyle.buttonContentContainer}>
           <MfcText type="medium" size="large" style={CommonStyle.grayText}>
             聯絡我們
           </MfcText>
           <MfcIcon name="keyboardArrowRight" style={SettingStyle.icon} />
         </View>
-      </MfcButton>
+      </MfcButton> */}
     </View>
   );
 };
