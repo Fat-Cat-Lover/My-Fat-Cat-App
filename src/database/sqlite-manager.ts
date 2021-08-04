@@ -87,6 +87,21 @@ class SQLiteManager {
             REFERENCES Cats (id)
         );
     `);
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS CustomFood(
+          id INTEGER PRIMARY KEY,
+          createdTime TEXT NOT NULL,
+          weight REAL NOT NULL,
+          foodType TEXT,
+          brand TEXT,
+          foodName TEXT,
+          calories REAL NOT NULL,
+          crudeProtein REAL NOT NULL,
+          crudeFat REAL NOT NULL,
+          carbohydrate REAL NOT NULL,
+          moisture REAL NOT NULL,
+        );
+    `);
   }
 }
 

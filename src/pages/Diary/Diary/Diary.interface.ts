@@ -15,5 +15,4 @@ interface NavProps {
   route: RouteProps;
 }
 
-
 export interface DiaryProps extends NavProps {}
