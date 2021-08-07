@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Diary } from './Diary/Diary';
 import { WeightRecordPage } from './Weight-Record/Weight-Record';
-import { HeaderBar } from 'components/Header-Bar/Header-Bar';
+import colors from 'styles/colors';
 
 export type DiaryStackParams = {
   Diary: undefined;
@@ -18,7 +18,20 @@ export const DiaryStack = () => {
       <Stack.Screen
         name="WeightRecord"
         component={WeightRecordPage}
-        options={{ header: () => <HeaderBar>體重紀錄</HeaderBar> }}
+        options={{
+          title: '體重紀錄',
+          headerTitleStyle: {
+            color: colors.black,
+            fontSize: 19,
+            lineHeight: 18 * 1.4,
+          },
+          headerTitleAlign: 'center',
+          headerStyle: {
+            shadowOpacity: 0,
+            shadowRadius: 0,
+            elevation: 0,
+          },
+        }}
       />
     </Stack.Navigator>
   );

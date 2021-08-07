@@ -72,6 +72,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
       const brand = customBrands.find(b => b.name === customFood.brand)!;
       const customFoods = await getCustomFoods(foodType.type, brand.id);
       const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
+      setValue('calory', 0);
       setBrands([
         ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
         ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
@@ -125,7 +126,6 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
       _catFoods = await getCatFoodsFromApi(foodTypeId, parseInt(brandId, 10));
     }
     if (_catFoods.length < 1) {
-      //TODO: Change to custom alert
       changeAlertMessage('此品牌目前沒有該類別的食物喔');
       toggleAlert(true);
     }
