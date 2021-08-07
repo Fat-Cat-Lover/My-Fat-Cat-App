@@ -11,6 +11,8 @@ import { AddCustomFoodStyle } from './Add-Custom-Food.style';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootNavParams } from 'navigations';
+import { Alert } from 'components/Alert/Alert';
+import { useState } from 'react';
 
 type AddCustomFoodForm = {
   foodType: string;
@@ -23,7 +25,7 @@ type AddCustomFoodForm = {
   moisture: string;
 };
 
-type AddCustomFoodProps = StackScreenProps<RootNavParams>;
+type AddCustomFoodProps = StackScreenProps<RootNavParams, 'AddCustomFood'>;
 
 export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
   const {
@@ -31,10 +33,10 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
     formState: { isValid },
     handleSubmit,
   } = useForm<AddCustomFoodForm>({ mode: 'onChange' });
-
+  const [showAlert, toggleAlert] = useState<boolean>(false);
+  const [alertMessage, changeAlertMessage] = useState<string>('');
   async function onSubmit(data: AddCustomFoodForm) {
-    await addCustomFood({
-      createdTime: new Date().toISOString(),
+    const newData = {
       foodType: data.foodType,
       brand: data.brand,
       foodName: data.foodName,
@@ -43,13 +45,24 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
       crudeFat: parseFloat(data.crudeFat),
       carbohydrate: parseFloat(data.carbohydrate),
       moisture: parseFloat(data.moisture),
-    });
-    props.navigation.goBack();
+    };
+
+    try {
+      await addCustomFood(newData);
+      props.navigation.navigate('AddEatingRecord', {
+        newCustomFood: newData,
+      });
+    } catch (err) {
+      if (err.code === 0) {
+        changeAlertMessage('無法新增一模一樣的食物喔。');
+        toggleAlert(true);
+      }
+    }
   }
 
   return (
     <View style={AddCustomFoodStyle.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={AddCustomFoodStyle.foodTypeBlock}>
           <Controller
             name="foodType"
@@ -58,11 +71,11 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
               <SelectInput
                 label="種類"
                 options={[
-                  { label: '生食', value: 'raw' },
-                  { label: '主食罐', value: 'complete food' },
-                  { label: '副食罐', value: 'can' },
-                  { label: '乾飼料', value: 'dry' },
-                  { label: '其他', value: 'others' },
+                  { label: '生食', value: '生食' },
+                  { label: '主食罐', value: '主食罐' },
+                  { label: '副食罐', value: '副食罐' },
+                  { label: '乾飼料', value: '乾飼料' },
+                  { label: '其他', value: '其他' },
                 ]}
                 onChange={value => {
                   if (value && field.value !== value) {
@@ -184,7 +197,7 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
           />
         </View>
       </ScrollView>
-      <ButtonList>
+      <ButtonList style={AddCustomFoodStyle.buttonBlock}>
         <MfcButton color="white" onPress={props.navigation.goBack}>
           取消
         </MfcButton>
@@ -192,6 +205,7 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
           新增資訊
         </MfcButton>
       </ButtonList>
+      <Alert visable={showAlert} onClose={() => toggleAlert(false)} message={alertMessage} />
     </View>
   );
 };

@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, ImageSourcePropType, ScrollView, View } from 'react-native';
+import { ImageSourcePropType, ScrollView, View } from 'react-native';
 import { AddEatingRecordProps } from './Add-Eating-Record.interface';
 import { DateInput } from 'components/Date-Input/Date-Input';
 import { TimeInput } from 'components/Time-Input/Time-Input';
 import { SelectInput } from 'components/Select-Input/Select-Input';
-import { Brand, FoodType, CatFood } from 'models/cat-food';
-import { getFoodTypes, getBrands as _getBrands, getCatFoods as _getCatFoods } from 'services/cat-food';
+import { FoodType, CatFood } from 'models/cat-food';
+import {
+  getFoodTypes,
+  getBrands as getBrandsFromApi,
+  getCatFoods as getCatFoodsFromApi,
+  getCustomBrands,
+  getCustomFoods,
+} from 'services/cat-food';
 import { MfcTextInput } from 'components/Text-Input/Mfc-Text-Input';
 import { AddEatingRecordStyle } from './Add-Eating-Record.style';
 import { CatPhotoButton } from 'components/Cat-Photo-Button/Cat-Photo-Button';
@@ -22,10 +28,12 @@ import { addEatingRecord } from 'redux/diary/slice';
 import { getDiary } from 'services/diary';
 import { plainToClass } from 'class-transformer';
 import { Diary } from 'models/diary';
+import { requestEnd, requestStart } from 'redux/loading/slice';
+import { Alert } from 'components/Alert/Alert';
 
 interface AddEatingRecordForm {
   foodType: number;
-  brand: number | null;
+  brand: string | null;
   catFood: number | null;
   calory: number;
 }
@@ -41,19 +49,47 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     formState: { isValid },
     handleSubmit,
   } = useForm<AddEatingRecordForm>({ mode: 'onChange' });
-  const currentDate = new Date(props.route.params.date);
+  const currentDate = new Date(props.route.params.date!);
   currentDate.setHours(new Date().getHours());
   currentDate.setMinutes(new Date().getMinutes());
   const [dateTime, setDateTime] = useState<Date>(currentDate);
   const [foodTypes, setFoodTypes] = useState<FoodType[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
+  const [brands, setBrands] = useState<{ id: string; name: string }[]>([]);
   const [catFoods, setCatFoods] = useState<CatFood[]>([]);
-  const [remainCalories, setRemainCalories] = useState<string>(props.route.params.remainCalroies.toFixed(2));
+  const [remainCalories, setRemainCalories] = useState<string>(props.route.params.remainCalroies!.toFixed(2));
+  const [showAlert, toggleAlert] = useState<boolean>(false);
+  const [alertMessage, changeAlertMessage] = useState<string>('');
   const dispatch = useRootDispatch();
 
-  useEffect(() => {
-    getFoodTypes().then(types => setFoodTypes(types));
+  const handleCustomFood = useCallback(async (customFood: { foodType: string; brand: string; foodName: string }) => {
+    const foodType = foodTypes.find(t => t.type === customFood.foodType)!;
+    const [_brands, customBrands] = await Promise.all([getBrandsFromApi(foodType.id), getCustomBrands(foodType.type)]);
+    const brand = customBrands.find(b => b.name === customFood.brand)!;
+    const customFoods = await getCustomFoods(foodType.type, brand.id);
+    const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
+    setBrands([
+      ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
+      ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
+    ]);
+    setCatFoods(customFoods);
+    setValue('foodType', foodType.id);
+    setValue('brand', `${customFood.brand} [自訂]`);
+    setValue('catFood', _customFood.id);
   }, []);
+
+  useEffect(() => {
+    dispatch(requestStart({}));
+    getFoodTypes().then(types => {
+      setFoodTypes(types);
+      dispatch(requestEnd({}));
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (props.route.params?.newCustomFood) {
+      handleCustomFood(props.route.params.newCustomFood);
+    }
+  }, [handleCustomFood, props.route.params.newCustomFood]);
 
   let catImage: ImageSourcePropType;
   if (cat.image) {
@@ -63,18 +99,29 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   }
 
   async function getBrands(foodTypeId: number) {
-    const _brands = await _getBrands(foodTypeId);
-    setBrands(_brands);
+    const foodType = foodTypes.find(t => t.id === foodTypeId)!;
+    const [_brands, customBrands] = await Promise.all([getBrandsFromApi(foodTypeId), getCustomBrands(foodType.type)]);
+    setBrands([
+      ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
+      ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
+    ]);
   }
 
-  async function getCatFoods(brandId: number) {
+  async function getCatFoods(brandId: string) {
     const foodTypeId = getValues('foodType');
-    const catFood = await _getCatFoods(foodTypeId, brandId);
-    if (catFood.length < 1) {
-      //TODO: Change to custom alert
-      Alert.alert('此品牌目前沒有該類別的食物喔');
+    let _catFoods: CatFood[];
+    if (brandId.startsWith('自訂')) {
+      const foodType = foodTypes.find(t => t.id === foodTypeId)!;
+      _catFoods = await getCustomFoods(foodType.type, parseInt(brandId.substr(2), 10));
+    } else {
+      _catFoods = await getCatFoodsFromApi(foodTypeId, parseInt(brandId, 10));
     }
-    setCatFoods(catFood);
+    if (_catFoods.length < 1) {
+      //TODO: Change to custom alert
+      changeAlertMessage('此品牌目前沒有該類別的食物喔');
+      toggleAlert(true);
+    }
+    setCatFoods(_catFoods);
   }
 
   function calcWeight(calories: number): number {
@@ -107,10 +154,13 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
 
   return (
     <View style={AddEatingRecordStyle.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={AddEatingRecordStyle.topBlock}>
           <CatPhotoButton size={55} image={catImage} style={AddEatingRecordStyle.catImage} />
-          <MfcButton color="gray" style={AddEatingRecordStyle.addCatFoodButton}>
+          <MfcButton
+            color="gray"
+            style={AddEatingRecordStyle.addCatFoodButton}
+            onPress={() => props.navigation.navigate('AddCustomFood')}>
             <View style={AddEatingRecordStyle.addCatFoodButtonContent}>
               <MfcIcon name="add" />
               <MfcText type="medium" size="large" style={CommonStyle.grayText}>
@@ -183,7 +233,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               onChange={value => {
                 if (value && field.value !== value) {
                   field.onChange(value);
-                  getCatFoods(value as number);
+                  getCatFoods(value as string);
                   if (getValues('catFood')) {
                     setValue('catFood', null);
                     setValue('calory', 0);
@@ -253,6 +303,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           確定餵食
         </MfcButton>
       </ButtonList>
+      <Alert visable={showAlert} onClose={() => toggleAlert(false)} message={alertMessage} />
     </View>
   );
 };

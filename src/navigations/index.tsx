@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
-
+import { createStackNavigator } from '@react-navigation/stack';
 import Colors from 'styles/colors';
 import { TabBar, TabNavParams } from 'navigations/Tab-Bar/Tab-Bar';
 import { AddCatStack } from 'navigations/Stacks/Add-Cat';
-import { createStackNavigator } from '@react-navigation/stack';
 import { AddCatNavParams } from './Stacks/Add-Cat';
 import { EditCatPage } from 'pages/Edit-Cat/Edit-Cat';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
-import { AddEatingRecordNavParams, AddEatingRecordStack } from './Stacks/Add-Eating-Record';
 import RNBootSplash from 'react-native-bootsplash';
 import { getCats } from 'redux/cats/slice';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -20,12 +18,22 @@ import { Loading } from 'components/Loading/Loading';
 import { selectLoading } from 'redux/loading/selector';
 import { ContactUs } from 'pages/Contact-Us/Contact-Us';
 import { AddCustomFood } from 'pages/Eating-Record/Add-Custom-Food/Add-Custom-Food';
+import { AddEatingRecord } from 'pages/Eating-Record/Add-Eating-Record/Add-Eating-Record';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
   AddCat: NavigatorScreenParams<AddCatNavParams>;
   EditCat: { catId: number };
-  AddEatingRecord: NavigatorScreenParams<AddEatingRecordNavParams>;
+  AddEatingRecord: {
+    date?: string;
+    catId?: number;
+    remainCalroies?: number;
+    newCustomFood?: {
+      foodType: string;
+      brand: string;
+      foodName: string;
+    };
+  };
   AddCustomFood: undefined;
   onBoard: undefined;
   contactUs: undefined;
@@ -39,12 +47,7 @@ export const MfcNavigation = () => {
   const isLoading = useRootSelector(selectLoading);
 
   const init = useCallback(async () => {
-    await dispatch(getCats()).then(result => {
-      const _cats = unwrapResult(result);
-      if (_cats.length) {
-        dispatch(getCurrentDiary({ catId: _cats[0].id, date: new Date() }));
-      }
-    });
+    await dispatch(getCats());
     RNBootSplash.hide({ fade: true });
   }, [dispatch]);
 
@@ -64,7 +67,13 @@ export const MfcNavigation = () => {
           component={EditCatPage}
           options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
         />
-        <Stack.Screen name="AddEatingRecord" component={AddEatingRecordStack} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="AddEatingRecord"
+          component={AddEatingRecord}
+          options={({ route }) => ({
+            header: () => <HeaderBar>餵 {cats.find(cat => cat.id === route.params.catId)!.name} 吃飯</HeaderBar>,
+          })}
+        />
         <Stack.Screen
           name="AddCustomFood"
           component={AddCustomFood}

@@ -6,7 +6,6 @@ export interface FoodType {
 export interface Brand {
   id: number;
   name: string;
-  foodTypeIds: number[];
 }
 
 export interface CatFood {

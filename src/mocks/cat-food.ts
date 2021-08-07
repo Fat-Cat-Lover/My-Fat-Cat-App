@@ -7,7 +7,11 @@ export const mockCateories: FoodType[] = [
   { id: 4, type: '乾飼料' },
 ];
 
-export const mockBrands: Brand[] = [
+interface MockBrand extends Brand {
+  foodTypeIds: number[];
+}
+
+export const mockBrands: MockBrand[] = [
   { id: 1, name: '好味小姐', foodTypeIds: [2] },
   { id: 2, name: '野起來吃', foodTypeIds: [1, 2] },
   { id: 3, name: '汪喵星球', foodTypeIds: [1, 2, 3] },
