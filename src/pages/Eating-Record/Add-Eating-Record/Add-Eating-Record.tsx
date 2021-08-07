@@ -47,6 +47,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     watch,
     setValue,
     formState: { isValid },
+    trigger,
     handleSubmit,
   } = useForm<AddEatingRecordForm>({ mode: 'onChange' });
   const currentDate = new Date(props.route.params.date!);
@@ -61,21 +62,28 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   const [alertMessage, changeAlertMessage] = useState<string>('');
   const dispatch = useRootDispatch();
 
-  const handleCustomFood = useCallback(async (customFood: { foodType: string; brand: string; foodName: string }) => {
-    const foodType = foodTypes.find(t => t.type === customFood.foodType)!;
-    const [_brands, customBrands] = await Promise.all([getBrandsFromApi(foodType.id), getCustomBrands(foodType.type)]);
-    const brand = customBrands.find(b => b.name === customFood.brand)!;
-    const customFoods = await getCustomFoods(foodType.type, brand.id);
-    const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
-    setBrands([
-      ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
-      ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
-    ]);
-    setCatFoods(customFoods);
-    setValue('foodType', foodType.id);
-    setValue('brand', `${customFood.brand} [自訂]`);
-    setValue('catFood', _customFood.id);
-  }, []);
+  const handleCustomFood = useCallback(
+    async (customFood: { foodType: string; brand: string; foodName: string }) => {
+      const foodType = foodTypes.find(t => t.type === customFood.foodType)!;
+      const [_brands, customBrands] = await Promise.all([
+        getBrandsFromApi(foodType.id),
+        getCustomBrands(foodType.type),
+      ]);
+      const brand = customBrands.find(b => b.name === customFood.brand)!;
+      const customFoods = await getCustomFoods(foodType.type, brand.id);
+      const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
+      setBrands([
+        ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
+        ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
+      ]);
+      setCatFoods(customFoods);
+      setValue('foodType', foodType.id);
+      setValue('brand', `自訂${brand.id}`);
+      setValue('catFood', _customFood.id);
+      trigger();
+    },
+    [foodTypes]
+  );
 
   useEffect(() => {
     dispatch(requestStart({}));
