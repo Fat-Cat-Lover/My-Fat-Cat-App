@@ -1,5 +1,5 @@
 {
-  "name": "MyFatCat",
+  "name": "myfatcat",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postversion": "react-native-version"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.4.0",
