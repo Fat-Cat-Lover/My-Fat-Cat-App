@@ -8,6 +8,7 @@ import { MfcText } from 'components/Text/Text';
 import { RootNavParams } from 'navigations';
 import { CommonStyle } from 'styles/common-style';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
+import { version } from '../../../package.json';
 
 type NavProps = BottomTabScreenProps<RootNavParams, 'TabBar'>;
 
@@ -32,7 +33,7 @@ export const Setting: React.FC<SettingProps> = props => {
           </MfcButton>
           {showInfo ? (
             <View style={SettingStyle.infoContent}>
-              <MfcText style={CommonStyle.grayText}>目前版本： {}</MfcText>
+              <MfcText style={CommonStyle.grayText}>目前版本： {version}</MfcText>
             </View>
           ) : undefined}
         </View>
