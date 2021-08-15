@@ -116,12 +116,9 @@ export const Diary: React.FC<DiaryProps> = props => {
             style={DiaryStyle.bottomButton}
             onPress={() =>
               props.navigation.navigate('AddEatingRecord', {
-                screen: 'addEatingRecord',
-                params: {
-                  date: currentDate,
-                  catId: cats[selectedCat].id,
-                  remainCalroies: cats[selectedCat].dailyCalories - (diary?.caloriesEatenToday || 0),
-                },
+                date: currentDate,
+                catId: cats[selectedCat].id,
+                remainCalroies: cats[selectedCat].dailyCalories - (diary?.caloriesEatenToday || 0),
               })
             }>
             餵食

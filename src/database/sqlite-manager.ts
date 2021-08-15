@@ -87,6 +87,40 @@ class SQLiteManager {
             REFERENCES Cats (id)
         );
     `);
+
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS Brands(
+          id INTEGER PRIMARY KEY,
+          name TEXT NOT NULL UNIQUE
+        );
+    `);
+
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS Brand_FoodTypes(
+          id INTEGER PRIMARY KEY,
+          foodType TEXT NOT NULL,
+          brandId INTEGER NOT NULL,
+          FOREIGN KEY (brandId) REFERENCES Brands (id)
+          UNIQUE (foodType, brandId)
+        );
+    `);
+
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS CustomFoods(
+          id INTEGER PRIMARY KEY,
+          createdTime TEXT NOT NULL,
+          foodType TEXT NOT NULL,
+          brandId INTEGER NOT NULL,
+          foodName TEXT NOT NULL,
+          calories REAL NOT NULL,
+          crudeProtein REAL NOT NULL,
+          crudeFat REAL NOT NULL,
+          carbohydrate REAL NOT NULL,
+          moisture REAL NOT NULL,
+          FOREIGN KEY (brandId) REFERENCES Brands (id)
+          UNIQUE (foodType, brandId, foodName)
+        );
+    `);
   }
 }
 

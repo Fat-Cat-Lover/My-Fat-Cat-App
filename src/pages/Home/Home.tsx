@@ -15,6 +15,7 @@ import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { HomeProps } from './Home.interface';
 import { useState } from 'react';
 import { ExerciseModal } from 'components/Exercise-Modal/Exercise-Modal';
+import { useEffect } from 'react';
 
 export const Home: React.FC<HomeProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
@@ -24,6 +25,10 @@ export const Home: React.FC<HomeProps> = props => {
   const dispatch = useRootDispatch();
   const currentCat = cats[selectedCat];
   const [showExerciseModal, toggleShowExerciseModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    dispatch(getCurrentDiary({ catId: cats[0].id, date: new Date() }));
+  }, [])
 
   function navToAddCat() {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
@@ -93,12 +98,9 @@ export const Home: React.FC<HomeProps> = props => {
               buttonColor="primary"
               onPress={() =>
                 props.navigation.navigate('AddEatingRecord', {
-                  screen: 'addEatingRecord',
-                  params: {
-                    date: currentDate,
-                    catId: cats[selectedCat].id,
-                    remainCalroies: currentCat.dailyCalories - diary!.caloriesEatenToday,
-                  },
+                  date: currentDate,
+                  catId: cats[selectedCat].id,
+                  remainCalroies: currentCat.dailyCalories - (diary?.caloriesEatenToday || 0),
                 })
               }
             />
