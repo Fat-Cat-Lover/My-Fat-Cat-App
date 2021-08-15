@@ -38,7 +38,7 @@ export const EatingRecord: React.FC<EatingRecordProps> = props => {
             {props.record.foodType}
           </MfcText>
           <MfcText size="small" style={CommonStyle.grayText}>
-            {props.record.foodName}
+            {props.record.brand} {props.record.foodName}
           </MfcText>
         </View>
       </View>

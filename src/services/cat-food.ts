@@ -1,19 +1,42 @@
 import { Database } from 'database/sqlite-manager';
-import { mockBrands, mockCateories, mockCatFoods } from 'mocks/cat-food';
-import { Brand, CatFood } from 'models/cat-food';
+import { Brand, CatFood, FoodType } from 'models/cat-food';
 
-export function getFoodTypes() {
-  return Promise.resolve(mockCateories);
+const api = 'https://my-fat-cat-api.herokuapp.com/';
+
+export async function getFoodTypes(): Promise<FoodType[]> {
+  const res = await fetch(api + 'food-types');
+  const data: { id: number; food_type: string }[] = await res.json();
+  return data.map(d => ({ id: d.id, type: d.food_type }));
 }
 
-export function getBrands(foodTypeId: number): Promise<Brand[]> {
-  return Promise.resolve(mockBrands.filter(brand => brand.foodTypeIds.some(id => id === foodTypeId)));
+export async function getBrands(foodTypeId: number): Promise<Brand[]> {
+  const res = await fetch(api + `food-types/${foodTypeId}/brands`);
+  const data: { id: number; name: string }[] = await res.json();
+  return data;
 }
 
-export function getCatFoods(foodTypeId: number, brandId: number) {
-  return Promise.resolve(
-    mockCatFoods.filter(catFood => catFood.foodTypeId === foodTypeId && catFood.brandId === brandId)
-  );
+export async function getCatFoods(foodTypeId: number, brandId: number): Promise<CatFood[]> {
+  const res = await fetch(api + `food-types/${foodTypeId}/brands/${brandId}/foods`);
+  const data: {
+    id: number;
+    name: string;
+    calories: number;
+    crude_protein: number;
+    crude_fat: number;
+    carbohydrate: number;
+    moisture: number;
+  }[] = await res.json();
+  return data.map(d => ({
+    id: d.id,
+    brandId,
+    foodTypeId,
+    name: d.name,
+    calories: d.calories,
+    crudeProtein: d.crude_protein,
+    crudeFat: d.crude_fat,
+    carbohydrate: d.carbohydrate,
+    moisture: d.moisture,
+  }));
 }
 
 type IAddCustomFood = {
