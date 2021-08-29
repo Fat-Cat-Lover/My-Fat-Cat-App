@@ -25,20 +25,30 @@ export const AddEatingRecordStyle = StyleSheet.create({
   addCatFoodButtonContent: {
     flexDirection: 'row',
   },
-  caloryContainer: {
+  calcBlock: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 18,
   },
+  caloryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
   caloryInput: {
-    width: '50%',
+    width: '55%',
   },
   weight: {
-    paddingTop: 24,
     paddingLeft: spacings.spacing5,
-    justifyContent: 'center',
   },
   formField: {
     width: '100%',
     marginBottom: 18,
+  },
+  exchangeButton: {
+    borderWidth: 1,
+    borderColor: colors.mainGray,
+    padding: 4,
+    borderRadius: spacings.spacing1,
   },
 });
