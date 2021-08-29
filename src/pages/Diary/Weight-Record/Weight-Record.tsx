@@ -81,7 +81,10 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
   };
 
   return (
-    <ScrollView contentContainerStyle={WeightRecordStyle.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={WeightRecordStyle.container}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}>
       <View style={WeightRecordStyle.catBlock}>
         <CatPhotoButton size={55} image={catImage} style={WeightRecordStyle.catImage} />
         <MfcHeaderText size="large">{cat.name}</MfcHeaderText>
@@ -102,6 +105,7 @@ export const WeightRecordPage: React.FC<WeightRecordProps> = props => {
       </View>
       <ScrollView
         horizontal={true}
+        showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={WeightRecordStyle.chart}
         contentContainerStyle={WeightRecordStyle.chartContent}>

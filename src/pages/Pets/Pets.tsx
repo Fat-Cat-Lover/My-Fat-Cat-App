@@ -21,7 +21,10 @@ export const Pets: React.FC<PetsPageProps> = props => {
   return (
     <View style={PetsStyle.container}>
       <HeaderBar>寵物資訊</HeaderBar>
-      <ScrollView contentContainerStyle={PetsStyle.petsDetailContent}>
+      <ScrollView
+        contentContainerStyle={PetsStyle.petsDetailContent}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
         {cats.length > 0
           ? cats.map(cat => {
               return (

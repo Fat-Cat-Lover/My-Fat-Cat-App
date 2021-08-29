@@ -25,7 +25,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
   return (
     <View style={CatDiaryStyle.container}>
       <View style={CatDiaryStyle.listContainer}>
-        <ScrollView horizontal={true}>
+        <ScrollView horizontal={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
           {props.cats.map((cat, index) => {
             let image: ImageSourcePropType;
             if (cat.image) {
@@ -59,7 +59,7 @@ export const CatDiary: React.FC<CatDiaryProps> = props => {
         {props.cats.length > 0 && (
           <>
             <View style={CatDiaryStyle.DiaryHeader}>
-              <MfcHeaderText size="large">{props.cats[selectedCat]?.name}</MfcHeaderText>
+              <MfcHeaderText size="large">{props.cats[selectedCat!]?.name}</MfcHeaderText>
               <View style={CatDiaryStyle.HeaderRight}>{props.DiaryHeaderRight}</View>
             </View>
             <View style={CatDiaryStyle.DiaryContent}>{props.children}</View>

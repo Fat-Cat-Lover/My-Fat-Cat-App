@@ -1,21 +1,10 @@
 import { Database } from 'database/sqlite-manager';
 import { CatFood } from 'models/cat-food';
-import { EatingRecord } from 'models/diary';
-
-// export function getDiary(catId: number, date: Date): Promise<Diary> {
-//   const records = mockEatingRecords.filter(
-//     record => record.catId === catId && dayjs(date).isSame(record.createdTime, 'day')
-//   );
-
-//   const excerciseTime = mockExcerciseTime
-//     .filter(time => time.catId === catId && dayjs(date).isSame(time.createdTime, 'day'))
-//     .reduce((p, c) => p + c.time, 0);
-//   return Promise.resolve(JSON.parse(JSON.stringify(new MockDiary(records, excerciseTime))));
-// }
+import { DailyMemo, EatingRecord } from 'models/diary';
 
 export async function getDiary(catId: number, date: Date) {
   const db = await Database.getConnection();
-  const [[eatingRecordResult], [excerciseTimeResult]] = await Promise.all([
+  const [[eatingRecordResult], [excerciseTimeResult], [memoResult]] = await Promise.all([
     db.executeSql(
       `
     SELECT * FROM EatingRecord
@@ -32,6 +21,14 @@ export async function getDiary(catId: number, date: Date) {
     `,
       [catId, date.toISOString(), date.toISOString()]
     ),
+    db.executeSql(
+      `
+      SELECT id, memo FROM DailyMemo
+      WHERE catId = ?
+      AND date BETWEEN datetime(?, 'start of day') AND datetime(?, '+1 day', 'start of day');
+      `,
+      [catId, date.toISOString(), date.toISOString()]
+    ),
   ]);
 
   let records: EatingRecord[] = [];
@@ -41,14 +38,9 @@ export async function getDiary(catId: number, date: Date) {
     }
   }
   const excerciseTime = excerciseTimeResult ? excerciseTimeResult.rows.item(0)['SUM(time)'] : 0;
-  return { records, excerciseTime, diaryDate: date.toISOString() };
+  const memo = memoResult ? (memoResult.rows.item(0) as DailyMemo) : null;
+  return { records, excerciseTime, diaryDate: date.toISOString(), memo };
 }
-
-// export function addRecord(catId: number, foodId: number, weight: number, time: Date) {
-//   const record = new MockEatingRecord(catId, foodId, weight, time);
-//   mockEatingRecords.push(record);
-//   return Promise.resolve(JSON.parse(JSON.stringify(record)));
-// }
 
 export async function addRecord(
   catId: number,
@@ -113,12 +105,6 @@ export async function addRecord(
   };
 }
 
-// export function addExerciseTime(catId: number, createdTime: Date, exerciseTime: number) {
-//   const record = new MockExcerciseTime(catId, exerciseTime, createdTime);
-//   mockExcerciseTime.push(record);
-//   return Promise.resolve(JSON.parse(JSON.stringify(record)));
-// }
-
 export async function addExerciseTime(catId: number, createdTime: Date, exerciseTime: number) {
   const db = await Database.getConnection();
   await db.executeSql(
@@ -130,10 +116,6 @@ export async function addExerciseTime(catId: number, createdTime: Date, exercise
   );
   return exerciseTime;
 }
-
-// export function getWeightRecord(catId: number, filter: number) {
-//   return Promise.resolve(mockWeightRecord.filter(record => record.catId === catId).slice(-filter));
-// }
 
 export async function getWeightRecord(catId: number, filter: number) {
   const db = await Database.getConnection();
@@ -157,11 +139,6 @@ export async function getWeightRecord(catId: number, filter: number) {
   }
 }
 
-// export function addWeightRecord(catId: number, createdTime: Date, weight: number) {
-//   mockWeightRecord.push({ catId, createdTime, weight });
-//   return Promise.resolve({ catId, createdTime, weight });
-// }
-
 export async function addWeightRecord(catId: number, createdTime: Date, weight: number) {
   const db = await Database.getConnection();
   await db.transaction(tx => {
@@ -182,4 +159,33 @@ export async function addWeightRecord(catId: number, createdTime: Date, weight: 
     );
   });
   return { catId, createdTime: createdTime.toISOString(), weight };
+}
+
+export async function addDailyMemo(catId: number, date: Date, memo: string) {
+  const db = await Database.getConnection();
+  await db.executeSql(
+    `
+    INSERT INTO DailyMemo (memo, catId, date)
+    VALUES (
+      ?,
+      ?,
+      ?
+    )
+    `,
+    [memo, catId, date.toISOString()]
+  );
+  const [result] = await db.executeSql('SELECT last_insert_rowid()');
+  return { id: result.rows.item(0), memo };
+}
+
+export async function updateDailyMemo(memoId: number, memo: string) {
+  const db = await Database.getConnection();
+  await db.executeSql(
+    `
+      UPDATE DailyMemo
+      SET memo = ?
+      WHERE id = ?
+    `,
+    [memo, memoId]
+  );
 }

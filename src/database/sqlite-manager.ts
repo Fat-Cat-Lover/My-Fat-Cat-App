@@ -121,6 +121,16 @@ class SQLiteManager {
           UNIQUE (foodType, brandId, foodName)
         );
     `);
+    transaction.executeSql(`
+        CREATE TABLE IF NOT EXISTS DailyMemo(
+          id INTEGER PRIMARY KEY,
+          catId TEXT NOT NULL,
+          date TEXT NOT NULL,
+          memo TEXT,
+          FOREIGN KEY (catId)
+            REFERENCES Cats (id)
+        )
+    `);
   }
 }
 

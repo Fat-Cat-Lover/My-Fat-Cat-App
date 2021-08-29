@@ -5,12 +5,12 @@ import { getCats as _getCats, addCat as _addCat, editCat as _editCat, IAddCat, I
 
 interface CatsState {
   cats: Cat[];
-  selectedCat: number;
+  selectedCat?: number;
 }
 
 const initState: CatsState = {
   cats: [],
-  selectedCat: 0,
+  selectedCat: undefined,
 };
 
 export const getCats = createAsyncThunk('cats/getCats', async () => {
@@ -46,6 +46,7 @@ const catsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getCats.fulfilled, (state, action) => {
       state.cats = action.payload;
+      state.selectedCat = 0;
     });
     builder.addCase(addCat.fulfilled, (state, action) => {
       state.cats.push(action.payload as Cat);

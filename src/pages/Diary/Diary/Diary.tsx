@@ -23,18 +23,22 @@ export const Diary: React.FC<DiaryProps> = props => {
   const diary = useRootSelector(selectDiary);
   const dispatch = useRootDispatch();
 
-  function onDateChange(date: Date) {
-    dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
-  }
+  // function onDateChange(date: Date) {
+  //   dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
+  // }
 
-  function onCatSelect(index: number) {
-    dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
-  }
+  // function onCatSelect(index: number) {
+  //   dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
+  // }
 
   let content: React.ReactNode;
   if (diary && diary.records.length > 0) {
     content = (
-      <ScrollView style={DiaryStyle.diaryContainer} contentContainerStyle={DiaryStyle.diaryContent}>
+      <ScrollView
+        style={DiaryStyle.diaryContainer}
+        contentContainerStyle={DiaryStyle.diaryContent}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
         {diary.records
           .sort((a, b) => a.createdTime.getTime() - b.createdTime.getTime())
           .map(record => (
@@ -77,15 +81,15 @@ export const Diary: React.FC<DiaryProps> = props => {
 
   let caloriesSummary: React.ReactNode;
   if (cats.length > 0 && diary) {
-    if (diary.caloriesEatenToday > cats[selectedCat].dailyCalories) {
+    if (diary.caloriesEatenToday > cats[selectedCat!].dailyCalories) {
       caloriesSummary = (
         <MfcText type="medium">
-          超量進食：{(diary.caloriesEatenToday - cats[selectedCat].dailyCalories).toFixed(2)} cal
+          超量進食：{(diary.caloriesEatenToday - cats[selectedCat!].dailyCalories).toFixed(2)} cal
         </MfcText>
       );
-    } else if (diary.caloriesEatenToday < cats[selectedCat].dailyCalories) {
+    } else if (diary.caloriesEatenToday < cats[selectedCat!].dailyCalories) {
       caloriesSummary = (
-        <MfcText>尚未進食：{(cats[selectedCat].dailyCalories - diary.caloriesEatenToday).toFixed(2)} cal</MfcText>
+        <MfcText>尚未進食：{(cats[selectedCat!].dailyCalories - diary.caloriesEatenToday).toFixed(2)} cal</MfcText>
       );
     } else {
       caloriesSummary = <MfcText>吃飽啦！</MfcText>;
@@ -95,19 +99,19 @@ export const Diary: React.FC<DiaryProps> = props => {
   return (
     <View style={DiaryStyle.container}>
       <HeaderBar>
-        <DatePicker onDateChange={onDateChange} />
+        <DatePicker />
       </HeaderBar>
       <CatDiary
         cats={cats}
         DiaryHeaderRight={caloriesSummary}
-        onCatSelect={onCatSelect}
+        // onCatSelect={onCatSelect}
         addButtonOnPress={() => props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' })}>
         {content}
         <View style={DiaryStyle.bottomButtonContainer}>
           <MfcButton
             color="green"
             style={DiaryStyle.bottomButton}
-            onPress={() => props.navigation.navigate('WeightRecord', { catId: cats[selectedCat].id })}>
+            onPress={() => props.navigation.navigate('WeightRecord', { catId: cats[selectedCat!].id })}>
             體重記錄
           </MfcButton>
           <View style={DiaryStyle.bottomButtonSpacing} />
@@ -117,8 +121,8 @@ export const Diary: React.FC<DiaryProps> = props => {
             onPress={() =>
               props.navigation.navigate('AddEatingRecord', {
                 date: currentDate,
-                catId: cats[selectedCat].id,
-                remainCalroies: cats[selectedCat].dailyCalories - (diary?.caloriesEatenToday || 0),
+                catId: cats[selectedCat!].id,
+                remainCalroies: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
               })
             }>
             餵食

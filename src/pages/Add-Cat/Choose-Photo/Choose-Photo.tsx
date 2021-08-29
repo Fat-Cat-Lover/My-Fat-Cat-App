@@ -88,6 +88,7 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
       <ScrollView
         horizontal={true}
         contentContainerStyle={ChoosePhotoStyle.catButtonList}
+        showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}>
         {defaultCats.map((cat, index) => {
           return (

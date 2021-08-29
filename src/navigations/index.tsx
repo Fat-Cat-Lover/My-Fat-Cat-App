@@ -10,13 +10,15 @@ import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import RNBootSplash from 'react-native-bootsplash';
 import { getCats } from 'redux/cats/slice';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
-import { selectCats } from 'redux/cats/selector';
+import { getSelectedCat, selectCats } from 'redux/cats/selector';
 import { OnBoarding } from 'pages/On-Boarding/pages/On-Boarding';
 import { Loading } from 'components/Loading/Loading';
 import { selectLoading } from 'redux/loading/selector';
 import { ContactUs } from 'pages/Contact-Us/Contact-Us';
 import { AddCustomFood } from 'pages/Eating-Record/Add-Custom-Food/Add-Custom-Food';
 import { AddEatingRecord } from 'pages/Eating-Record/Add-Eating-Record/Add-Eating-Record';
+import { getCurrentDiary } from 'redux/diary/slice';
+import { selectDiaryDate } from 'redux/diary-date/selector';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -42,7 +44,9 @@ const Stack = createStackNavigator<RootNavParams>();
 export const MfcNavigation = () => {
   const dispatch = useRootDispatch();
   const cats = useRootSelector(selectCats);
+  const selectedCat = useRootSelector(getSelectedCat);
   const isLoading = useRootSelector(selectLoading);
+  const currentDate = useRootSelector(selectDiaryDate);
 
   const init = useCallback(async () => {
     await dispatch(getCats());
@@ -52,6 +56,12 @@ export const MfcNavigation = () => {
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    if (selectedCat !== undefined && cats.length > 0 && currentDate) {
+      dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date: new Date(currentDate) }));
+    }
+  }, [selectedCat, currentDate]);
 
   let initRoute: React.ReactNode;
 

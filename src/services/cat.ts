@@ -4,10 +4,6 @@ import { DailyCaloriesCalculator } from './daliy-calories-calculator';
 import CameraRoll from '@react-native-community/cameraroll';
 import { Image } from 'react-native-image-crop-picker';
 
-// export function getCats(): Promise<Cat[]> {
-//   return Promise.resolve(MockCats);
-// }
-
 export async function getCats(): Promise<Cat[]> {
   const db = await Database.getConnection();
   let cats: Cat[] = [];
@@ -21,12 +17,6 @@ export async function getCats(): Promise<Cat[]> {
     return [];
   }
 }
-
-// export function addCat(cat: Partial<Cat>): Promise<Cat> {
-//   const id = Math.random() * (10 - 3) + 3;
-//   cat.id = id;
-//   return Promise.resolve(JSON.parse(JSON.stringify(cat)) as Cat);
-// }
 
 export type IAddCat = {
   name: string;
@@ -117,11 +107,6 @@ export async function addCat(cat: IAddCat): Promise<Partial<Cat>> {
   const [result] = await db.executeSql('SELECT * FROM Cat WHERE name=?', [cat.name]);
   return result.rows.item(0);
 }
-
-// export function editCat(data: Partial<Cat>): Promise<Cat> {
-//   const cat = (MockCats as Cat[]).find(_cat => _cat.id === data.id)!;
-//   return Promise.resolve({ ...cat, ...data });
-// }
 
 export type IEditCat = {
   id: number;
