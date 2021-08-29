@@ -84,7 +84,7 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
         onImageSelect={image => setNewImage(image)}
         onClose={() => toggleShowSelect(false)}
       />
-      <ScrollView style={EditCatStyle.form}>
+      <ScrollView style={EditCatStyle.form} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={EditCatStyle.changePhotoBlock}>
           <CatPhotoButton size={55} image={catImage} />
           <MfcButton color="gray" style={EditCatStyle.changePhotoButton} onPress={() => toggleShowSelect(true)}>

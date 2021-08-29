@@ -15,7 +15,7 @@ export const ContactUs: React.FC<StackScreenProps<any, any>> = props => {
 
   return (
     <View style={{ padding: spacings.spacing5, flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <MfcTextInput label="您的名字" required={true} value={name} onChange={setName} placeholder="輸入您的名字" />
         <MfcTextInput
           label="您的 E-mail"

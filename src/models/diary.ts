@@ -15,13 +15,7 @@ export class EatingRecord {
   calories: number;
   crudeProtein: number;
   crudeFat: number;
-  // crudeFiber?: number;
   carbohydrate: number;
-  // ash?: number;
-  // calcium?: number;
-  // phosphorus?: number;
-  // sodium?: number;
-  // magnesium?: number;
   moisture: number;
 }
 
@@ -29,7 +23,7 @@ export class Diary {
   @Type(() => EatingRecord)
   records: EatingRecord[];
   excerciseTime: number;
-
+  memo?: DailyMemo;
   @Transform(({ value }) => new Date(value), { toClassOnly: true })
   diaryDate: Date;
 
@@ -39,10 +33,20 @@ export class Diary {
 }
 
 export class WeightRecord {
-  id: string;
+  id: number;
   catId: string;
   weight: number;
 
   @Transform(({ value }) => new Date(value), { toClassOnly: true })
   createdTime: Date;
+}
+
+export class DailyMemo {
+  id: number;
+  // catId: number;
+
+  // @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  // date: Date;
+
+  memo: string;
 }

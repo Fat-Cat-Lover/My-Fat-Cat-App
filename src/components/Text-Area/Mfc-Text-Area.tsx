@@ -1,7 +1,7 @@
-import { InputLabel } from 'components/Input-Label/Input-Label';
 import React from 'react';
 import { Keyboard, TextInput, TextStyle, View } from 'react-native';
 import colors from 'styles/colors';
+import { InputLabel } from 'components/Input-Label/Input-Label';
 import { MfcTextAreaProps } from './Mfc-Text-Area.interface';
 import { MfcTextAreaStyle } from './Mfc-Text-Area.style';
 
@@ -68,7 +68,7 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
           keyboardType="default"
           placeholder={this.props.placeholder}
           placeholderTextColor={colors.mainGray}
-          style={[MfcTextAreaStyle.textInput, this.state.inputStyle]}
+          style={[MfcTextAreaStyle.textInput, this.state.inputStyle, this.props.inputStyle]}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}

@@ -12,4 +12,5 @@ export interface MfcTextAreaProps {
   filledInputStyle?: StyleProp<TextStyle>;
   placeholder?: string;
   containerStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
 }

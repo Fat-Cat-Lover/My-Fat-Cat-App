@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { CatFood } from 'models/cat-food';
-import { EatingRecord } from 'models/diary';
+import { DailyMemo, EatingRecord } from 'models/diary';
 import { requestEnd, requestStart } from 'redux/loading/slice';
 import { addRecord, getDiary, addExerciseTime as _addExerciseTime } from 'services/diary';
 
 interface CurrentDiary {
   status: 'idle' | 'loading' | 'success' | 'failed';
-  currentDiary: { records: EatingRecord[]; excerciseTime: number; diaryDate: string } | null;
+  currentDiary: { records: EatingRecord[]; excerciseTime: number; diaryDate: string; memo?: DailyMemo } | null;
 }
 
 const initState: CurrentDiary = {
@@ -48,7 +48,13 @@ export const addExerciseTime = createAsyncThunk<
 const DiarySlice = createSlice({
   name: 'diary',
   initialState: initState,
-  reducers: {},
+  reducers: {
+    addMemo: (state, action) => {
+      if (state.currentDiary) {
+        state.currentDiary.memo = action.payload;
+      }
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getCurrentDiary.pending, (state, action) => {
       state.status = 'loading';
@@ -70,4 +76,5 @@ const DiarySlice = createSlice({
   },
 });
 
+export const { addMemo } = DiarySlice.actions;
 export const diaryReducer = DiarySlice.reducer;
