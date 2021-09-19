@@ -19,7 +19,7 @@ export const Loading: React.FC<{ show: boolean }> = props => {
 
   useEffect(() => {
     Animated.loop(Animated.stagger(300, [jumpIcon(icon1), jumpIcon(icon2), jumpIcon(icon3)])).start();
-  }, []);
+  });
 
   return (
     <Modal transparent={true} visible={props.show}>
