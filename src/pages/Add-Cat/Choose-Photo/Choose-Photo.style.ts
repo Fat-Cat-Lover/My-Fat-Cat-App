@@ -5,10 +5,13 @@ import spacings from 'styles/spacings';
 export const ChoosePhotoStyle = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'flex-end',
   },
   uploadContainer: {
     paddingTop: 44,
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   uploadButtonContainer: {
     marginTop: spacings.spacing7,

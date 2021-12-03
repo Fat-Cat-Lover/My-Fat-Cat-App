@@ -30,12 +30,13 @@ import { plainToClass } from 'class-transformer';
 import { Diary } from 'models/diary';
 import { requestEnd, requestStart } from 'redux/loading/slice';
 import { Alert } from 'components/Alert/Alert';
+import { InputLabel } from 'components/Input-Label/Input-Label';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface AddEatingRecordForm {
   foodType: number;
   brand: string | null;
   catFood: number | null;
-  calory: number;
 }
 
 export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
@@ -58,6 +59,10 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   const [brands, setBrands] = useState<{ id: string; name: string }[]>([]);
   const [catFoods, setCatFoods] = useState<CatFood[]>([]);
   const [remainCalories, setRemainCalories] = useState<string>(props.route.params.remainCalroies!.toFixed(2));
+  const [calcType, setCalcType] = useState<'calroies' | 'weight'>('calroies');
+  const [eatingCalories, setCalories] = useState<number>(0);
+  const [eatingWeight, setWeight] = useState<number>(0);
+
   const [showAlert, toggleAlert] = useState<boolean>(false);
   const [alertMessage, changeAlertMessage] = useState<string>('');
   const dispatch = useRootDispatch();
@@ -72,7 +77,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
       const brand = customBrands.find(b => b.name === customFood.brand)!;
       const customFoods = await getCustomFoods(foodType.type, brand.id);
       const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
-      setValue('calory', 0);
+      resetCalcValue();
       setBrands([
         ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
         ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
@@ -132,15 +137,37 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     setCatFoods(_catFoods);
   }
 
-  function calcWeight(calories: number): number {
+  function resetCalcValue() {
+    setCalories(0);
+    setWeight(0);
+  }
+
+  function onCaloriesChange(calories: number) {
     if (calories) {
       const catFoodId = getValues('catFood');
       if (catFoodId) {
         const catFood = catFoods.find(_catFood => _catFood.id === catFoodId);
-        return parseFloat(((calories / catFood!.calories) * 100).toFixed(1));
+        setCalories(calories);
+        setWeight(parseFloat(((calories / catFood!.calories) * 100).toFixed(1)));
+        return;
       }
     }
-    return 0;
+    setCalories(0);
+    setWeight(0);
+  }
+
+  function onWeightChange(weight: number) {
+    if (weight) {
+      const catFoodId = getValues('catFood');
+      if (catFoodId) {
+        const catFood = catFoods.find(_catFood => _catFood.id === catFoodId);
+        setWeight(0);
+        setCalories(parseFloat((weight * (catFood!.calories / 100)).toFixed(1)));
+        return;
+      }
+    }
+    setWeight(0);
+    setCalories(0);
   }
 
   async function onSubmit(data: AddEatingRecordForm) {
@@ -153,7 +180,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
         foodType: foodType.type,
         brand: brand.name,
         food,
-        weight: calcWeight(data.calory),
+        weight: eatingWeight,
         time: dateTime,
       })
     );
@@ -219,7 +246,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
                   if (getValues('brand')) {
                     setValue('brand', null);
                     setValue('catFood', null);
-                    setValue('calory', 0);
+                    resetCalcValue();
                   }
                 }
               }}
@@ -244,7 +271,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
                   getCatFoods(value as string);
                   if (getValues('catFood')) {
                     setValue('catFood', null);
-                    setValue('calory', 0);
+                    resetCalcValue();
                   }
                 }
               }}
@@ -265,7 +292,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
               options={catFoods.map(catFood => ({ label: catFood.name, value: catFood.id }))}
               onChange={value => {
                 if (value && field.value !== value) {
-                  setValue('calory', 0);
+                  resetCalcValue();
                   field.onChange(value);
                 }
               }}
@@ -277,31 +304,60 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           )}
           rules={{ required: true }}
         />
-        <View style={AddEatingRecordStyle.caloryContainer}>
-          <Controller
-            name="calory"
-            control={control}
-            render={({ field }) => (
-              <MfcTextInput
-                label="卡路里"
-                keyboardType="number-pad"
-                value={field.value ? field.value.toString() : ''}
-                onChange={value => field.onChange(parseInt(value, 10))}
-                containerStyle={AddEatingRecordStyle.caloryInput}
-                disabled={!watch('catFood')}
-              />
-            )}
-            rules={{ required: true, validate: { positive: v => parseInt(v, 10) > 0 || '此欄需大於0' } }}
-          />
-          <View style={AddEatingRecordStyle.weight}>
-            <MfcText size="large" type="medium">
-              = {calcWeight(watch('calory', 0))} g
+        {calcType === 'calroies' ? (
+          <>
+            <InputLabel label="卡路里" />
+            <View style={AddEatingRecordStyle.calcBlock}>
+              <View style={AddEatingRecordStyle.caloryContainer}>
+                <MfcTextInput
+                  keyboardType="number-pad"
+                  value={eatingCalories ? eatingCalories.toString() : ''}
+                  onChange={value => onCaloriesChange(parseInt(value, 10))}
+                  containerStyle={AddEatingRecordStyle.caloryInput}
+                  disabled={!watch('catFood')}
+                />
+                <View style={AddEatingRecordStyle.weight}>
+                  <MfcText size="large" type="medium">
+                    = {eatingWeight} g
+                  </MfcText>
+                </View>
+              </View>
+              <TouchableOpacity onPress={() => setCalcType('weight')} style={AddEatingRecordStyle.exchangeButton}>
+                <MfcIcon name="transfer" />
+              </TouchableOpacity>
+            </View>
+            <MfcText style={[AddEatingRecordStyle.formField, CommonStyle.grayText]}>
+              今日尚未進食: {remainCalories} cal
             </MfcText>
-          </View>
-        </View>
-        <MfcText style={[AddEatingRecordStyle.formField, CommonStyle.grayText]}>
-          今日尚未進食: {remainCalories} cal
-        </MfcText>
+          </>
+        ) : (
+          <>
+            <InputLabel label="重量" />
+            <View style={AddEatingRecordStyle.calcBlock}>
+              <View style={AddEatingRecordStyle.caloryContainer}>
+                <MfcTextInput
+                  keyboardType="number-pad"
+                  value={eatingWeight ? eatingWeight.toString() : ''}
+                  onChange={value => onWeightChange(parseInt(value, 10))}
+                  containerStyle={AddEatingRecordStyle.caloryInput}
+                  disabled={!watch('catFood')}
+                />
+                <View style={AddEatingRecordStyle.weight}>
+                  <MfcText size="large" type="medium">
+                    = {eatingCalories} cal
+                  </MfcText>
+                </View>
+              </View>
+              <TouchableOpacity onPress={() => setCalcType('calroies')} style={AddEatingRecordStyle.exchangeButton}>
+                <MfcIcon name="transfer" />
+              </TouchableOpacity>
+            </View>
+
+            <MfcText style={[AddEatingRecordStyle.formField, CommonStyle.grayText]}>
+              今日尚未進食: {remainCalories} cal
+            </MfcText>
+          </>
+        )}
       </ScrollView>
       <ButtonList>
         <MfcButton color="white" onPress={props.navigation.goBack}>
