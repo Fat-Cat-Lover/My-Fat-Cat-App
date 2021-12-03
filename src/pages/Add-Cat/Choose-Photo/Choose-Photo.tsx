@@ -85,28 +85,30 @@ export const ChoosePhoto: React.FC<ChoosePhotoProps> = props => {
         </MfcText>
         <View style={ChoosePhotoStyle.uploadButtonContainer}>{imageButton}</View>
       </View>
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={ChoosePhotoStyle.catButtonList}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}>
-        {defaultCats.map((cat, index) => {
-          return (
-            <View
-              key={index}
-              style={[
-                ChoosePhotoStyle.catButtonContainer,
-                index === 0 ? { marginLeft: spacings.spacing6 } : undefined,
-                index === defaultCats.length - 1 ? { marginRight: spacings.spacing6 } : undefined,
-              ]}>
-              <CatPhotoButton image={DefaultCatsImages[cat]} onPress={() => onDefaultCatSelect(cat)} />
-              {selectedImage && defaultCats.indexOf(selectedImage) === index ? (
-                <SelectedCheckmark style={ChoosePhotoStyle.selectedCheckmark} size={45} />
-              ) : undefined}
-            </View>
-          );
-        })}
-      </ScrollView>
+      <View>
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={ChoosePhotoStyle.catButtonList}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
+          {defaultCats.map((cat, index) => {
+            return (
+              <View
+                key={index}
+                style={[
+                  ChoosePhotoStyle.catButtonContainer,
+                  index === 0 ? { marginLeft: spacings.spacing6 } : undefined,
+                  index === defaultCats.length - 1 ? { marginRight: spacings.spacing6 } : undefined,
+                ]}>
+                <CatPhotoButton image={DefaultCatsImages[cat]} onPress={() => onDefaultCatSelect(cat)} />
+                {selectedImage && defaultCats.indexOf(selectedImage) === index ? (
+                  <SelectedCheckmark style={ChoosePhotoStyle.selectedCheckmark} size={45} />
+                ) : undefined}
+              </View>
+            );
+          })}
+        </ScrollView>
+      </View>
       <View style={ChoosePhotoStyle.BottomButtonsContainer}>
         <MfcButton color="white" style={ChoosePhotoStyle.BottomButton} onPress={props.navigation.goBack}>
           取消

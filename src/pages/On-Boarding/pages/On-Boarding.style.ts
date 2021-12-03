@@ -8,6 +8,12 @@ export const OnBoardingStyle = StyleSheet.create({
     paddingVertical: spacings.spacing7,
     backgroundColor: colors.lightWhite,
     flex: 1,
+    justifyContent: 'flex-end',
+  },
+  imageBlock: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     marginTop: spacings.spacing6,

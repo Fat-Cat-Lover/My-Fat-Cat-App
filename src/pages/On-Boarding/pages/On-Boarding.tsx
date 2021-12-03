@@ -51,32 +51,34 @@ export const OnBoarding: React.FC<OnBoardProps> = props => {
         }
       }}>
       <View style={OnBoardingStyle.container}>
-        <View>
+        <View style={OnBoardingStyle.imageBlock}>
           <Image source={steps[step].image} />
         </View>
-        <View style={OnBoardingStyle.title}>
-          <MfcHeaderText size="large" type="medium" style={CommonStyle.grayText}>
-            {steps[step].title}
-          </MfcHeaderText>
-          <MfcText size="large" style={CommonStyle.grayText}>
-            {steps[step].subtitle}
-          </MfcText>
-        </View>
         <View>
-          {step < 2 ? (
-            <View style={OnBoardingStyle.stepBlock}>
-              <Step step={step + 1} />
-              <MfcButton style={OnBoardingStyle.nextButton} onPress={() => setStep(step + 1)}>
-                Next
-              </MfcButton>
-            </View>
-          ) : (
-            <View>
-              <MfcButton style={OnBoardingStyle.finishButton} onPress={() => props.navigation.navigate('AddCat')}>
-                開始記錄
-              </MfcButton>
-            </View>
-          )}
+          <View style={OnBoardingStyle.title}>
+            <MfcHeaderText size="large" type="medium" style={CommonStyle.grayText}>
+              {steps[step].title}
+            </MfcHeaderText>
+            <MfcText size="large" style={CommonStyle.grayText}>
+              {steps[step].subtitle}
+            </MfcText>
+          </View>
+          <View>
+            {step < 2 ? (
+              <View style={OnBoardingStyle.stepBlock}>
+                <Step step={step + 1} />
+                <MfcButton style={OnBoardingStyle.nextButton} onPress={() => setStep(step + 1)}>
+                  Next
+                </MfcButton>
+              </View>
+            ) : (
+              <View>
+                <MfcButton style={OnBoardingStyle.finishButton} onPress={() => props.navigation.navigate('AddCat')}>
+                  開始記錄
+                </MfcButton>
+              </View>
+            )}
+          </View>
         </View>
       </View>
     </FlingGestureHandler>
