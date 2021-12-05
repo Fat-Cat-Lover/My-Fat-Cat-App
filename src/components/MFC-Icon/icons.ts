@@ -18,4 +18,5 @@ export const ICONS = {
   perm_media: require('./images/perm_media.png'),
   done: require('./images/done.png'),
   transfer: require('./images/transfer.png'),
+  cancel: require('./images/cancel.png'),
 };

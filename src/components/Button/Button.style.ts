@@ -21,7 +21,7 @@ export const ButtonMainStyle = StyleSheet.create({
     opacity: 0.6,
   },
   icon: {
-    marginRight: spacings.spacing5,
+    marginRight: spacings.spacing3,
   },
   contentContainer: {
     flexDirection: 'row',

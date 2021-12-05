@@ -191,6 +191,9 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
           )}
           defaultValue={cat.description}
         />
+        <MfcButton iconName="cancel" color="gray" textStyle={CommonStyle.grayText}>
+          刪除此筆貓咪資料
+        </MfcButton>
       </ScrollView>
       <ButtonList>
         <MfcButton color="white" onPress={props.navigation.goBack}>
