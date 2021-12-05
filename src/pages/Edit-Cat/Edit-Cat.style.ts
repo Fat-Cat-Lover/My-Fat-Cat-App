@@ -17,12 +17,6 @@ export const EditCatStyle = StyleSheet.create({
     paddingHorizontal: spacings.spacing6,
     paddingVertical: spacings.spacing3,
   },
-  changePhotoButtonContent: {
-    flexDirection: 'row',
-  },
-  changeButtonIcon: {
-    marginRight: spacings.spacing3,
-  },
   form: {
     marginBottom: spacings.spacing5,
   },

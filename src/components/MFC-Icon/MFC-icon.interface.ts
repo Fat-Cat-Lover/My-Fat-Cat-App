@@ -6,4 +6,4 @@ export interface MfcIconProps {
   style?: StyleProp<ImageStyle>;
 }
 
-type IconName = keyof typeof ICONS;
+export type IconName = keyof typeof ICONS;

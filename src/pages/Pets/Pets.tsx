@@ -7,8 +7,6 @@ import { PetsStyle } from './Pets.style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { selectCats } from 'redux/cats/selector';
 import { MfcButton } from 'components/Button/Button';
-import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { MfcText } from 'components/Text/Text';
 import { CommonStyle } from 'styles/common-style';
 import { PetsPageProps } from './Pets.interface';
 
@@ -40,13 +38,10 @@ export const Pets: React.FC<PetsPageProps> = props => {
         <MfcButton
           style={PetsStyle.elementVerticalSpacing}
           color="gray"
+          iconName="add"
+          textStyle={CommonStyle.grayText}
           onPress={() => props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' })}>
-          <View style={PetsStyle.addButton}>
-            <MfcIcon style={PetsStyle.addButtonIcon} name="add" />
-            <MfcText size="large" type="medium" style={CommonStyle.grayText}>
-              新增新的貓主子
-            </MfcText>
-          </View>
+          新增新的貓主子
         </MfcButton>
       </ScrollView>
     </View>

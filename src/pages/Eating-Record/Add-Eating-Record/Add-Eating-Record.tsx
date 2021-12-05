@@ -195,13 +195,10 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           <MfcButton
             color="gray"
             style={AddEatingRecordStyle.addCatFoodButton}
+            iconName="add"
+            textStyle={CommonStyle.grayText}
             onPress={() => props.navigation.navigate('AddCustomFood')}>
-            <View style={AddEatingRecordStyle.addCatFoodButtonContent}>
-              <MfcIcon name="add" />
-              <MfcText type="medium" size="large" style={CommonStyle.grayText}>
-                新增自定義食物資訊
-              </MfcText>
-            </View>
+            新增自定義食物資訊
           </MfcButton>
         </View>
         <DateInput

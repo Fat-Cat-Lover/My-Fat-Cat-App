@@ -19,8 +19,6 @@ import { RootState } from 'redux/store';
 import { DefaultCatsImages } from 'common/default-cat-images';
 import { Cat } from 'models/cat';
 import { MfcButton } from 'components/Button/Button';
-import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
-import { MfcText } from 'components/Text/Text';
 import { CommonStyle } from 'styles/common-style';
 import { useRootDispatch } from 'redux/hooks';
 import { editCat } from 'redux/cats/slice';
@@ -87,13 +85,13 @@ export const EditCatPage: React.FC<EditCatProps> = props => {
       <ScrollView style={EditCatStyle.form} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <View style={EditCatStyle.changePhotoBlock}>
           <CatPhotoButton size={55} image={catImage} />
-          <MfcButton color="gray" style={EditCatStyle.changePhotoButton} onPress={() => toggleShowSelect(true)}>
-            <View style={EditCatStyle.changePhotoButtonContent}>
-              <MfcIcon style={EditCatStyle.changeButtonIcon} name="perm_media" />
-              <MfcText type="medium" size="large" style={CommonStyle.grayText}>
-                更改照片
-              </MfcText>
-            </View>
+          <MfcButton
+            color="gray"
+            iconName="perm_media"
+            textStyle={CommonStyle.grayText}
+            style={EditCatStyle.changePhotoButton}
+            onPress={() => toggleShowSelect(true)}>
+            更改照片
           </MfcButton>
         </View>
         <Controller

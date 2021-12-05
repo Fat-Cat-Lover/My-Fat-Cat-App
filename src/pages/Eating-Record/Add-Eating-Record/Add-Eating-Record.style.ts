@@ -22,9 +22,6 @@ export const AddEatingRecordStyle = StyleSheet.create({
     paddingHorizontal: spacings.spacing5,
     paddingVertical: spacings.spacing3,
   },
-  addCatFoodButtonContent: {
-    flexDirection: 'row',
-  },
   calcBlock: {
     flexDirection: 'row',
     alignItems: 'center',
