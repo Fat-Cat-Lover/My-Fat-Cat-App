@@ -11,8 +11,8 @@ import { AddCustomFoodStyle } from './Add-Custom-Food.style';
 import { MfcHeaderText } from 'components/Header-Text/Header-Text';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootNavParams } from 'navigations';
-import { Alert } from 'components/Alert/Alert';
-import { useState } from 'react';
+import { useRootDispatch } from 'redux/hooks';
+import { showAlert } from 'redux/alert/slice';
 
 type AddCustomFoodForm = {
   foodType: string;
@@ -33,8 +33,8 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
     formState: { isValid },
     handleSubmit,
   } = useForm<AddCustomFoodForm>({ mode: 'onChange' });
-  const [showAlert, toggleAlert] = useState<boolean>(false);
-  const [alertMessage, changeAlertMessage] = useState<string>('');
+  const dispatch = useRootDispatch();
+
   async function onSubmit(data: AddCustomFoodForm) {
     const newData = {
       foodType: data.foodType,
@@ -54,8 +54,16 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
       });
     } catch (err) {
       if (err.code === 0) {
-        changeAlertMessage('無法新增一模一樣的食物喔。');
-        toggleAlert(true);
+        dispatch(
+          showAlert({
+            message: '無法新增一模一樣的食物喔。',
+            buttons: [
+              {
+                text: '好的',
+              },
+            ],
+          })
+        );
       }
     }
   }
@@ -205,7 +213,6 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
           新增資訊
         </MfcButton>
       </ButtonList>
-      <Alert visable={showAlert} onClose={() => toggleAlert(false)} message={alertMessage} />
     </View>
   );
 };

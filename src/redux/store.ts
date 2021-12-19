@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { alertReducer } from './alert/slice';
 import { catsReducer } from './cats/slice';
 import { diaryDateResucer } from './diary-date/slice';
 import { diaryReducer } from './diary/slice';
@@ -12,9 +13,9 @@ export const store = configureStore({
     diary: diaryReducer,
     onBoard: onBoardReducer,
     loading: loadingReducer,
+    alert: alertReducer,
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type RootDispatch = typeof store.dispatch;
-const {d} = store.getState()

@@ -19,6 +19,7 @@ import { AddCustomFood } from 'pages/Eating-Record/Add-Custom-Food/Add-Custom-Fo
 import { AddEatingRecord } from 'pages/Eating-Record/Add-Eating-Record/Add-Eating-Record';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
+import { Alert } from 'components/Alert/Alert';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -118,6 +119,7 @@ export const MfcNavigation = () => {
       }}>
       <Stack.Navigator>{initRoute}</Stack.Navigator>
       <Loading show={isLoading} />
+      <Alert />
     </NavigationContainer>
   );
 };

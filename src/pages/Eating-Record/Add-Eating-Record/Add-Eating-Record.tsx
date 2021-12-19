@@ -29,9 +29,9 @@ import { getDiary } from 'services/diary';
 import { plainToClass } from 'class-transformer';
 import { Diary } from 'models/diary';
 import { requestEnd, requestStart } from 'redux/loading/slice';
-import { Alert } from 'components/Alert/Alert';
 import { InputLabel } from 'components/Input-Label/Input-Label';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { showAlert } from 'redux/alert/slice';
 
 interface AddEatingRecordForm {
   foodType: number;
@@ -63,8 +63,6 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
   const [eatingCalories, setCalories] = useState<number>(0);
   const [eatingWeight, setWeight] = useState<number>(0);
 
-  const [showAlert, toggleAlert] = useState<boolean>(false);
-  const [alertMessage, changeAlertMessage] = useState<string>('');
   const dispatch = useRootDispatch();
 
   const handleCustomFood = useCallback(
@@ -131,8 +129,12 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
       _catFoods = await getCatFoodsFromApi(foodTypeId, parseInt(brandId, 10));
     }
     if (_catFoods.length < 1) {
-      changeAlertMessage('此品牌目前沒有該類別的食物喔');
-      toggleAlert(true);
+      dispatch(
+        showAlert({
+          message: '此品牌目前沒有該類別的食物喔',
+          buttons: [{ text: '好的' }],
+        })
+      );
     }
     setCatFoods(_catFoods);
   }
@@ -364,7 +366,6 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           確定餵食
         </MfcButton>
       </ButtonList>
-      <Alert visable={showAlert} onClose={() => toggleAlert(false)} message={alertMessage} />
     </View>
   );
 };
