@@ -20,11 +20,12 @@ import { AddEatingRecord } from 'pages/Eating-Record/Add-Eating-Record/Add-Eatin
 import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
 import { Alert } from 'components/Alert/Alert';
+import { Cat } from 'models/cat';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
   AddCat: NavigatorScreenParams<AddCatNavParams>;
-  EditCat: { catId: number };
+  EditCat: { cat: Cat };
   AddEatingRecord: {
     date?: string;
     catId?: number;
@@ -62,7 +63,7 @@ export const MfcNavigation = () => {
     if (selectedCat !== undefined && cats.length > 0 && currentDate) {
       dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date: new Date(currentDate) }));
     }
-  }, [selectedCat, currentDate]);
+  }, [selectedCat, currentDate, dispatch]);
 
   let initRoute: React.ReactNode;
 

@@ -57,6 +57,7 @@ class SQLiteManager {
           createdTime TEXT NOT NULL,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
+              ON DELETE CASCADE
         );
     `);
     transaction.executeSql(`
@@ -75,6 +76,7 @@ class SQLiteManager {
           moisture REAL NOT NULL,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
+              ON DELETE CASCADE
         );
     `);
     transaction.executeSql(`
@@ -85,6 +87,7 @@ class SQLiteManager {
           time INTEGER NOT NULL,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
+              ON DELETE CASCADE
         );
     `);
 
@@ -101,6 +104,7 @@ class SQLiteManager {
           foodType TEXT NOT NULL,
           brandId INTEGER NOT NULL,
           FOREIGN KEY (brandId) REFERENCES Brands (id)
+            ON DELETE CASCADE
           UNIQUE (foodType, brandId)
         );
     `);
@@ -118,6 +122,7 @@ class SQLiteManager {
           carbohydrate REAL NOT NULL,
           moisture REAL NOT NULL,
           FOREIGN KEY (brandId) REFERENCES Brands (id)
+            ON DELETE CASCADE
           UNIQUE (foodType, brandId, foodName)
         );
     `);
@@ -129,6 +134,7 @@ class SQLiteManager {
           memo TEXT,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
+              ON DELETE CASCADE
         )
     `);
   }

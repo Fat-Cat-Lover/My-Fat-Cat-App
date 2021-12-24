@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface AlertProps {
-  title?: string;
   message?: string;
   buttons: {
     text: string;

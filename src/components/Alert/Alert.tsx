@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native';
 import { CommonStyle } from 'styles/common-style';
 import { useRootDispatch, useRootSelector } from 'redux/hooks';
 import { dismissAlert } from 'redux/alert/slice';
+import colors from 'styles/colors';
 
 export const Alert: React.FC = () => {
   const { show, alertProps } = useRootSelector(state => state.alert);
@@ -18,8 +19,8 @@ export const Alert: React.FC = () => {
       animationInTiming={1}
       animationOutTiming={1}
       isVisible={show}
-      onBackButtonPress={() => dispatch(dismissAlert)}
-      onBackdropPress={() => dispatch(dismissAlert)}>
+      onBackButtonPress={() => dispatch(dismissAlert())}
+      onBackdropPress={() => dispatch(dismissAlert())}>
       <View style={AlertStyle.container}>
         <View style={AlertStyle.modal}>
           {alertProps?.message ? (
@@ -29,10 +30,14 @@ export const Alert: React.FC = () => {
               </MfcText>
             </View>
           ) : undefined}
-          {alertProps?.buttons
-            ? alertProps.buttons.map((button, i) => (
+          {alertProps?.buttons ? (
+            <View style={AlertStyle.buttonContainer}>
+              {alertProps.buttons.map((button, i) => (
                 <TouchableOpacity
-                  style={AlertStyle.button}
+                  style={[
+                    AlertStyle.button,
+                    i > 0 ? { borderLeftWidth: 1, borderLeftColor: colors.lightGray } : undefined,
+                  ]}
                   onPress={() => {
                     if (button.onClick) {
                       button.onClick();
@@ -44,8 +49,9 @@ export const Alert: React.FC = () => {
                     {button.text}
                   </MfcText>
                 </TouchableOpacity>
-              ))
-            : undefined}
+              ))}
+            </View>
+          ) : undefined}
         </View>
       </View>
     </Modal>

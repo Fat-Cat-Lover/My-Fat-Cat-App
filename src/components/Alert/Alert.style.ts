@@ -17,12 +17,16 @@ export const AlertStyle = StyleSheet.create({
     paddingHorizontal: spacings.spacing5,
     paddingVertical: spacings.spacing7,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightGray,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
   },
   button: {
     padding: spacings.spacing5,
     alignItems: 'center',
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: colors.lightGray,
   },
   text: {
     color: colors.darkOrange,

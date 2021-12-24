@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Cat } from 'models/cat';
 import { requestEnd, requestStart } from 'redux/loading/slice';
-import { getCats as _getCats, addCat as _addCat, editCat as _editCat, IAddCat, IEditCat } from 'services/cat';
+import {
+  getCats as _getCats,
+  addCat as _addCat,
+  editCat as _editCat,
+  IAddCat,
+  IEditCat,
+  deleteCat as _deleteCat,
+} from 'services/cat';
 
 interface CatsState {
   cats: Cat[];
@@ -32,6 +39,13 @@ export const editCat = createAsyncThunk<Cat, IEditCat>('cats/editCat', async (ca
   return newCat;
 });
 
+export const deleteCatAction = createAsyncThunk<number, number>('cats/deleteCat', async (catId, thunkApi) => {
+  thunkApi.dispatch(requestStart({}));
+  await _deleteCat(catId);
+  thunkApi.dispatch(requestEnd({}));
+  return catId;
+});
+
 const catsSlice = createSlice({
   name: 'cats',
   initialState: initState,
@@ -55,6 +69,18 @@ const catsSlice = createSlice({
     builder.addCase(editCat.fulfilled, (state, action) => {
       const index = state.cats.findIndex(_cat => _cat.id === action.payload.id);
       state.cats[index] = action.payload;
+    });
+    builder.addCase(deleteCatAction.fulfilled, (state, action) => {
+      const catId = action.payload;
+      const index = state.cats.findIndex(cat => cat.id === catId);
+      state.cats.splice(index, 1);
+      if (state.cats.length > 0) {
+        if (state.selectedCat! >= index) {
+          state.selectedCat = state.selectedCat! - 1 < 0 ? 0 : state.selectedCat! - 1;
+        }
+      } else {
+        state.selectedCat = undefined;
+      }
     });
   },
 });

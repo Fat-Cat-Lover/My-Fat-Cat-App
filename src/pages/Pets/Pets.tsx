@@ -9,10 +9,11 @@ import { selectCats } from 'redux/cats/selector';
 import { MfcButton } from 'components/Button/Button';
 import { CommonStyle } from 'styles/common-style';
 import { PetsPageProps } from './Pets.interface';
+import { Cat } from 'models/cat';
 
 export const Pets: React.FC<PetsPageProps> = props => {
-  function navToDetail(catId: number) {
-    props.navigation.navigate('EditCat', { catId });
+  function navToDetail(cat: Cat) {
+    props.navigation.navigate('EditCat', { cat });
   }
 
   const cats = useRootSelector(selectCats);

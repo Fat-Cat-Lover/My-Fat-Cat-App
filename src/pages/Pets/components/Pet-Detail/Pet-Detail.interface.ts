@@ -4,5 +4,5 @@ import { ViewStyle } from 'react-native';
 export interface PetDetailProps {
   cat: Cat;
   style?: ViewStyle;
-  editButtonPress?: (catId: number) => void;
+  editButtonPress?: (cat: Cat) => void;
 }
