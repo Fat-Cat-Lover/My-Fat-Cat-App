@@ -43,14 +43,6 @@ export const Home: React.FC<HomeProps> = props => {
     props.navigation.navigate('AddCat', { screen: 'ChoosePhoto' });
   }
 
-  // async function onDateChange(date: Date) {
-  //   await dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
-  // }
-
-  // function onCatSelect(index: number) {
-  //   dispatch(getCurrentDiary({ catId: cats[index].id, date: new Date(currentDate) }));
-  // }
-
   function addExercise(time: number) {
     dispatch(addExerciseTime({ catId: cats[selectedCat!].id, createdTime: new Date(currentDate), exerciseTime: time }));
     toggleShowExerciseModal(false);
@@ -116,10 +108,13 @@ export const Home: React.FC<HomeProps> = props => {
               buttonText="餵食"
               buttonColor="primary"
               onPress={() =>
-                props.navigation.navigate('AddEatingRecord', {
-                  date: currentDate,
-                  catId: cats[selectedCat!].id,
-                  remainCalroies: currentCat.dailyCalories - (diary?.caloriesEatenToday || 0),
+                props.navigation.navigate('EatingRecord', {
+                  screen: 'AddEatingRecord',
+                  params: {
+                    date: currentDate,
+                    catId: cats[selectedCat!].id,
+                    remainCalroies: currentCat.dailyCalories - (diary?.caloriesEatenToday || 0),
+                  },
                 })
               }
             />

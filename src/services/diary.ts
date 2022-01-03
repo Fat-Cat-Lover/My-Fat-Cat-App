@@ -105,6 +105,76 @@ export async function addRecord(
   };
 }
 
+export async function editRecord(
+  recordId: number,
+  time: Date,
+  foodType: string,
+  brand: string,
+  food: CatFood,
+  weight: number
+) {
+  const ratio = weight / 100;
+  const calories = parseFloat((food.calories * ratio).toFixed(2));
+  const crudeProtein = parseFloat((food.crudeProtein * ratio).toFixed(2));
+  const crudeFat = parseFloat((food.crudeFat * ratio).toFixed(2));
+  const moisture = parseFloat((food.moisture * ratio).toFixed(2));
+  const carbohydrate = parseFloat((food.carbohydrate * ratio).toFixed(2));
+  const db = await Database.getConnection();
+  const [result] = await db.executeSql(
+    `
+    UPDATE EatingRecord
+    SET createdTime = ?,
+    weight = ?,
+    foodType = ?,
+    brand = ?,
+    foodName = ?,
+    calories = ?,
+    crudeProtein = ?,
+    crudeFat = ?,
+    carbohydrate = ?,
+    moisture = ?
+    WHERE id = ?;
+  `,
+    [
+      time.toISOString(),
+      weight,
+      foodType,
+      brand,
+      food.name,
+      calories,
+      crudeProtein,
+      crudeFat,
+      carbohydrate,
+      moisture,
+      recordId,
+    ]
+  );
+  return {
+    id: result.insertId,
+    createdTime: time.toISOString(),
+    weight,
+    foodType,
+    brand,
+    foodName: food.name,
+    calories,
+    crudeProtein,
+    crudeFat,
+    carbohydrate,
+    moisture,
+  };
+}
+
+export async function deleteRecord(recordId: number) {
+  const db = await Database.getConnection();
+  await db.executeSql(
+    `
+    DELETE FROM EatingRecord
+    WHERE id = ?;
+  `,
+    [recordId]
+  );
+}
+
 export async function addExerciseTime(catId: number, createdTime: Date, exerciseTime: number) {
   const db = await Database.getConnection();
   await db.executeSql(

@@ -4,15 +4,14 @@ import { RootNavParams } from 'navigations';
 import { EatingRecordParams } from '../navigation';
 
 type NavigatorProps = CompositeNavigationProp<
-  StackNavigationProp<EatingRecordParams, 'AddEatingRecord'>,
+  StackNavigationProp<EatingRecordParams, 'EditEatingRecord'>,
   StackNavigationProp<RootNavParams>
 >;
 
-type RouteProps = RouteProp<EatingRecordParams, 'AddEatingRecord'>;
+type RouteProps = RouteProp<EatingRecordParams, 'EditEatingRecord'>;
 
 interface NavProps {
   navigation: NavigatorProps;
   route: RouteProps;
 }
-
-export interface AddEatingRecordProps extends NavProps {}
+export interface EditEatingRecordProps extends NavProps {}

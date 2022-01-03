@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { selectDiary } from 'redux/diary/selector';
-import { useRootDispatch, useRootSelector } from 'redux/hooks';
+import { useRootSelector } from 'redux/hooks';
 import { CatDiary } from 'components/Cat-Diary-Panel/Cat-Diary-Panel';
 import { DatePicker } from 'components/Date-Picker/Date-Picker';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
@@ -12,7 +12,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CommonStyle } from 'styles/common-style';
 import { NutritionBlock } from '../components/Nutrition-Block/Nutrition-Block';
 import { MfcButton } from 'components/Button/Button';
-import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
 import { DiaryProps } from './Diary.interface';
 
@@ -21,7 +20,6 @@ export const Diary: React.FC<DiaryProps> = props => {
   const currentDate = useRootSelector(selectDiaryDate);
   const selectedCat = useRootSelector(state => state.cats.selectedCat);
   const diary = useRootSelector(selectDiary);
-  const dispatch = useRootDispatch();
 
   // function onDateChange(date: Date) {
   //   dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date }));
@@ -42,9 +40,21 @@ export const Diary: React.FC<DiaryProps> = props => {
         {diary.records
           .sort((a, b) => a.createdTime.getTime() - b.createdTime.getTime())
           .map(record => (
-            <View key={record.id} style={DiaryStyle.eatingRecord}>
+            <TouchableOpacity
+              key={record.id}
+              style={DiaryStyle.eatingRecord}
+              onPress={() =>
+                props.navigation.navigate('EatingRecord', {
+                  screen: 'EditEatingRecord',
+                  params: {
+                    catId: cats[selectedCat!].id,
+                    recordId: record.id,
+                    remainCalories: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
+                  },
+                })
+              }>
               <EatingRecord record={record} />
-            </View>
+            </TouchableOpacity>
           ))}
         <View style={DiaryStyle.nutritionCotainer}>
           <View style={DiaryStyle.nutritionBlock}>
@@ -119,10 +129,13 @@ export const Diary: React.FC<DiaryProps> = props => {
             color="lightOrange"
             style={DiaryStyle.bottomButton}
             onPress={() =>
-              props.navigation.navigate('AddEatingRecord', {
-                date: currentDate,
-                catId: cats[selectedCat!].id,
-                remainCalroies: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
+              props.navigation.navigate('EatingRecord', {
+                screen: 'AddEatingRecord',
+                params: {
+                  date: currentDate,
+                  catId: cats[selectedCat!].id,
+                  remainCalroies: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
+                },
               })
             }>
             餵食

@@ -16,26 +16,17 @@ import { Loading } from 'components/Loading/Loading';
 import { selectLoading } from 'redux/loading/selector';
 import { ContactUs } from 'pages/Contact-Us/Contact-Us';
 import { AddCustomFood } from 'pages/Eating-Record/Add-Custom-Food/Add-Custom-Food';
-import { AddEatingRecord } from 'pages/Eating-Record/Add-Eating-Record/Add-Eating-Record';
 import { getCurrentDiary } from 'redux/diary/slice';
 import { selectDiaryDate } from 'redux/diary-date/selector';
 import { Alert } from 'components/Alert/Alert';
 import { Cat } from 'models/cat';
+import { EatingRecordParams, EatingRecordStack } from 'pages/Eating-Record/navigation';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
   AddCat: NavigatorScreenParams<AddCatNavParams>;
   EditCat: { cat: Cat };
-  AddEatingRecord: {
-    date?: string;
-    catId?: number;
-    remainCalroies?: number;
-    newCustomFood?: {
-      foodType: string;
-      brand: string;
-      foodName: string;
-    };
-  };
+  EatingRecord: NavigatorScreenParams<EatingRecordParams>;
   AddCustomFood: undefined;
   onBoard: undefined;
   contactUs: undefined;
@@ -77,13 +68,7 @@ export const MfcNavigation = () => {
           component={EditCatPage}
           options={{ header: () => <HeaderBar>編輯寵物資訊</HeaderBar> }}
         />
-        <Stack.Screen
-          name="AddEatingRecord"
-          component={AddEatingRecord}
-          options={({ route }) => ({
-            header: () => <HeaderBar>餵 {cats.find(cat => cat.id === route.params.catId)!.name} 吃飯</HeaderBar>,
-          })}
-        />
+        <Stack.Screen name="EatingRecord" component={EatingRecordStack} options={{ headerShown: false }} />
         <Stack.Screen
           name="AddCustomFood"
           component={AddCustomFood}
