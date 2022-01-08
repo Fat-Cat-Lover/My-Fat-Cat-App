@@ -27,10 +27,18 @@ export const getCurrentDiary = createAsyncThunk<
 
 export const addEatingRecord = createAsyncThunk<
   any,
-  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date }
+  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date; customFood: boolean }
 >('diary/addEatingRecord', async (args, thunkApi) => {
   thunkApi.dispatch(requestStart({}));
-  const record = await addRecord(args.catId, args.foodType, args.brand, args.food, args.weight, args.time);
+  const record = await addRecord(
+    args.catId,
+    args.foodType,
+    args.brand,
+    args.food,
+    args.weight,
+    args.time,
+    args.customFood
+  );
   thunkApi.dispatch(requestEnd({}));
   return record;
 });
@@ -72,7 +80,7 @@ const DiarySlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(getCurrentDiary.pending, (state, action) => {
+    builder.addCase(getCurrentDiary.pending, state => {
       state.status = 'loading';
     });
     builder.addCase(getCurrentDiary.fulfilled, (state, action) => {

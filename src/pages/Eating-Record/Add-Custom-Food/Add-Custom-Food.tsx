@@ -49,8 +49,11 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
 
     try {
       await addCustomFood(newData);
-      props.navigation.navigate('AddEatingRecord', {
-        newCustomFood: newData,
+      props.navigation.navigate('EatingRecord', {
+        screen: 'AddEatingRecord',
+        params: {
+          newCustomFood: newData,
+        },
       });
     } catch (err) {
       if (err.code === 0) {

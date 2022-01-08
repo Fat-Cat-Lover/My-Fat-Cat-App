@@ -9,7 +9,8 @@ export class EatingRecord {
   @Transform(({ value }) => new Date(value), { toClassOnly: true })
   createdTime: Date;
   weight: number;
-  foodId: number;
+  foodId: string;
+  customFood: boolean;
   foodType: string;
   brand: string;
   foodName: string;

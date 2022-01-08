@@ -5,8 +5,7 @@ const api = 'https://my-fat-cat-api.herokuapp.com/';
 
 export async function getFoodTypes(): Promise<FoodType[]> {
   const res = await fetch(api + 'food-types');
-  const data: { id: number; food_type: string }[] = await res.json();
-  return data.map(d => ({ id: d.id, type: d.food_type }));
+  return await res.json();
 }
 
 export async function getBrands(foodTypeId: number): Promise<Brand[]> {
@@ -37,6 +36,11 @@ export async function getCatFoods(foodTypeId: number, brandId: number): Promise<
     carbohydrate: d.carbohydrate,
     moisture: d.moisture,
   }));
+}
+
+export async function getCatFoodDetail(foodId: string): Promise<CatFood & { foodType: FoodType } & { brand: Brand }> {
+  const res = await fetch(api + `foods/${foodId}`);
+  return await res.json();
 }
 
 type IAddCustomFood = {
@@ -93,6 +97,25 @@ export async function getCustomFoods(foodType: string, brandId: number): Promise
     data.push(result.rows.item(i));
   }
   return data;
+}
+
+export async function getCustomFoodDetail(foodId: string): Promise<(CatFood & { brand: Brand }) | null> {
+  const db = await Database.getConnection();
+  const [result] = await db.executeSql(
+    `
+    SELECT *
+    FROM CustomFoods
+    WHERE id = ?
+    INNER JOIN Brand
+    ON Brand.id = CustomFoods.brandId;
+    `,
+    [foodId]
+  );
+  if (result.rows.length > 0) {
+    return result.rows.item(0);
+  } else {
+    return null;
+  }
 }
 
 export async function addCustomFood(data: IAddCustomFood) {

@@ -48,7 +48,8 @@ export async function addRecord(
   brand: string,
   food: CatFood,
   weight: number,
-  time: Date
+  time: Date,
+  customFood: boolean
 ) {
   const ratio = weight / 100;
   const calories = parseFloat((food.calories * ratio).toFixed(2));
@@ -71,9 +72,11 @@ export async function addRecord(
       crudeProtein,
       crudeFat,
       carbohydrate,
-      moisture
+      moisture,
+      foodId,
+      customFood
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `,
     [
       catId,
@@ -87,6 +90,8 @@ export async function addRecord(
       crudeFat,
       carbohydrate,
       moisture,
+      food.id,
+      customFood ? 1 : 0,
     ]
   );
 

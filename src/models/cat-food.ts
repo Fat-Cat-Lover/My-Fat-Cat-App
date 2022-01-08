@@ -1,6 +1,6 @@
 export interface FoodType {
   id: number;
-  type: string;
+  food_type: string;
 }
 
 export interface Brand {

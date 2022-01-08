@@ -67,13 +67,13 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
 
   const handleCustomFood = useCallback(
     async (customFood: { foodType: string; brand: string; foodName: string }) => {
-      const foodType = foodTypes.find(t => t.type === customFood.foodType)!;
+      const foodType = foodTypes.find(t => t.food_type === customFood.foodType)!;
       const [_brands, customBrands] = await Promise.all([
         getBrandsFromApi(foodType.id),
-        getCustomBrands(foodType.type),
+        getCustomBrands(foodType.food_type),
       ]);
       const brand = customBrands.find(b => b.name === customFood.brand)!;
-      const customFoods = await getCustomFoods(foodType.type, brand.id);
+      const customFoods = await getCustomFoods(foodType.food_type, brand.id);
       const _customFood = customFoods.find(f => f.name === customFood.foodName)!;
       resetCalcValue();
       setBrands([
@@ -86,7 +86,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
       setValue('catFood', _customFood.id);
       trigger();
     },
-    [foodTypes]
+    [foodTypes, setValue, trigger]
   );
 
   useEffect(() => {
@@ -112,7 +112,10 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
 
   async function getBrands(foodTypeId: number) {
     const foodType = foodTypes.find(t => t.id === foodTypeId)!;
-    const [_brands, customBrands] = await Promise.all([getBrandsFromApi(foodTypeId), getCustomBrands(foodType.type)]);
+    const [_brands, customBrands] = await Promise.all([
+      getBrandsFromApi(foodTypeId),
+      getCustomBrands(foodType.food_type),
+    ]);
     setBrands([
       ..._brands.map(b => ({ id: b.id.toString(), name: b.name })),
       ...customBrands.map(b => ({ id: `自訂${b.id}`, name: `${b.name} [自訂]` })),
@@ -124,7 +127,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     let _catFoods: CatFood[];
     if (brandId.startsWith('自訂')) {
       const foodType = foodTypes.find(t => t.id === foodTypeId)!;
-      _catFoods = await getCustomFoods(foodType.type, parseInt(brandId.substr(2), 10));
+      _catFoods = await getCustomFoods(foodType.food_type, parseInt(brandId.substr(2), 10));
     } else {
       _catFoods = await getCatFoodsFromApi(foodTypeId, parseInt(brandId, 10));
     }
@@ -179,11 +182,12 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
     await dispatch(
       addEatingRecord({
         catId: cat.id,
-        foodType: foodType.type,
+        foodType: foodType.food_type,
         brand: brand.name,
         food,
         weight: eatingWeight,
         time: dateTime,
+        customFood: brand.id.startsWith('自訂'),
       })
     );
     props.navigation.goBack();
@@ -237,7 +241,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
           render={({ field }) => (
             <SelectInput
               label="種類"
-              options={foodTypes.map(type => ({ label: type.type, value: type.id }))}
+              options={foodTypes.map(type => ({ label: type.food_type, value: type.id }))}
               onChange={value => {
                 if (value && field.value !== value) {
                   field.onChange(value);
