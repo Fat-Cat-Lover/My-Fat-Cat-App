@@ -1,7 +1,7 @@
 import { Database } from 'database/sqlite-manager';
-import { Brand, CatFood, FoodType } from 'models/cat-food';
+import { Brand, CatFood, CatFoodDetail, CustomFood, FoodType } from 'models/cat-food';
 
-const api = 'https://my-fat-cat-api.herokuapp.com/';
+const api = 'https://my-fat-cat-api.herokuapp.com/my-fat-cat-api/';
 
 export async function getFoodTypes(): Promise<FoodType[]> {
   const res = await fetch(api + 'food-types');
@@ -38,7 +38,7 @@ export async function getCatFoods(foodTypeId: number, brandId: number): Promise<
   }));
 }
 
-export async function getCatFoodDetail(foodId: string): Promise<CatFood & { foodType: FoodType } & { brand: Brand }> {
+export async function getCatFoodDetail(foodId: number): Promise<CatFoodDetail | null> {
   const res = await fetch(api + `foods/${foodId}`);
   return await res.json();
 }
@@ -74,7 +74,7 @@ export async function getCustomBrands(type: string): Promise<Brand[]> {
   return data;
 }
 
-export async function getCustomFoods(foodType: string, brandId: number): Promise<CatFood[]> {
+export async function getCustomFoods(foodType: string, brandId: number): Promise<CustomFood[]> {
   const db = await Database.getConnection();
   const [result] = await db.executeSql(
     `
@@ -99,80 +99,104 @@ export async function getCustomFoods(foodType: string, brandId: number): Promise
   return data;
 }
 
-export async function getCustomFoodDetail(foodId: string): Promise<(CatFood & { brand: Brand }) | null> {
+export async function getCustomFoodDetail(foodId: number): Promise<CatFoodDetail | null> {
   const db = await Database.getConnection();
   const [result] = await db.executeSql(
     `
-    SELECT *
+    SELECT CustomFoods.*, Brands.name as brandName
     FROM CustomFoods
-    WHERE id = ?
-    INNER JOIN Brand
-    ON Brand.id = CustomFoods.brandId;
+    INNER JOIN Brands
+    ON Brands.id = CustomFoods.brandId AND CustomFoods.id = ?;
     `,
     [foodId]
   );
   if (result.rows.length > 0) {
-    return result.rows.item(0);
+    const data = result.rows.item(0);
+    return {
+      id: data.id,
+      name: data.foodName,
+      calories: data.calories,
+      crudeProtein: data.crudeProtein,
+      crudeFat: data.crudeFat,
+      carbohydrate: data.carbohydrate,
+      moisture: data.moisture,
+      food_type: {
+        id: 0,
+        food_type: data.foodType,
+      },
+      brand: {
+        id: data.brandId,
+        name: data.brandName,
+      },
+    };
   } else {
     return null;
   }
 }
 
-export async function addCustomFood(data: IAddCustomFood) {
-  const db = await Database.getConnection();
-  await db.transaction(tx => {
-    tx.executeSql(
-      `
-    INSERT OR IGNORE INTO Brands(name)
-    VALUES(?);
-    `,
-      [data.brand]
-    );
+export async function addCustomFood(data: IAddCustomFood): Promise<number> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const db = await Database.getConnection();
+      await db.transaction(tx => {
+        tx.executeSql(
+          `
+        INSERT OR IGNORE INTO Brands(name)
+        VALUES(?);
+        `,
+          [data.brand]
+        );
 
-    tx.executeSql(
-      `
-    INSERT OR IGNORE INTO Brand_FoodTypes(foodType, brandId)
-    VALUES(?, (SELECT id FROM Brands WHERE name = ?));
-    `,
-      [data.foodType, data.brand]
-    );
+        tx.executeSql(
+          `
+        INSERT OR IGNORE INTO Brand_FoodTypes(foodType, brandId)
+        VALUES(?, (SELECT id FROM Brands WHERE name = ?));
+        `,
+          [data.foodType, data.brand]
+        );
 
-    tx.executeSql(
-      `
-    INSERT INTO CustomFoods(
-      createdTime,
-      foodType,
-      brandId,
-      foodName,
-      calories,
-      crudeProtein,
-      crudeFat,
-      carbohydrate,
-      moisture
-    )
-    VALUES(
-      datetime('now'),
-      ?,
-      (SELECT id FROM Brands WHERE name = ?),
-      ?,
-      ?,
-      ?,
-      ?,
-      ?,
-      ?
-    );
-  `,
-      [
-        data.foodType,
-        data.brand,
-        data.foodName,
-        data.calories,
-        data.crudeProtein,
-        data.crudeFat,
-        data.carbohydrate,
-        data.moisture,
-      ]
-    );
+        tx.executeSql(
+          `
+        INSERT INTO CustomFoods(
+          createdTime,
+          foodType,
+          brandId,
+          foodName,
+          calories,
+          crudeProtein,
+          crudeFat,
+          carbohydrate,
+          moisture
+        )
+        VALUES(
+          datetime('now'),
+          ?,
+          (SELECT id FROM Brands WHERE name = ?),
+          ?,
+          ?,
+          ?,
+          ?,
+          ?,
+          ?
+        );
+      `,
+          [
+            data.foodType,
+            data.brand,
+            data.foodName,
+            data.calories,
+            data.crudeProtein,
+            data.crudeFat,
+            data.carbohydrate,
+            data.moisture,
+          ],
+          (transaction, result) => {
+            resolve(result.insertId);
+          }
+        );
+      });
+    } catch (err) {
+      reject(err);
+    }
   });
-  return;
 }

@@ -107,6 +107,8 @@ export async function addRecord(
     crudeFat,
     carbohydrate,
     moisture,
+    foodId: food.id,
+    customFood,
   };
 }
 
@@ -116,7 +118,8 @@ export async function editRecord(
   foodType: string,
   brand: string,
   food: CatFood,
-  weight: number
+  weight: number,
+  customFood?: boolean
 ) {
   const ratio = weight / 100;
   const calories = parseFloat((food.calories * ratio).toFixed(2));
@@ -125,7 +128,7 @@ export async function editRecord(
   const moisture = parseFloat((food.moisture * ratio).toFixed(2));
   const carbohydrate = parseFloat((food.carbohydrate * ratio).toFixed(2));
   const db = await Database.getConnection();
-  const [result] = await db.executeSql(
+  await db.executeSql(
     `
     UPDATE EatingRecord
     SET createdTime = ?,
@@ -137,7 +140,9 @@ export async function editRecord(
     crudeProtein = ?,
     crudeFat = ?,
     carbohydrate = ?,
-    moisture = ?
+    moisture = ?,
+    foodId = ?,
+    customFood = ?
     WHERE id = ?;
   `,
     [
@@ -151,11 +156,13 @@ export async function editRecord(
       crudeFat,
       carbohydrate,
       moisture,
+      food.id,
+      customFood ? 1 : 0,
       recordId,
     ]
   );
   return {
-    id: result.insertId,
+    id: recordId,
     createdTime: time.toISOString(),
     weight,
     foodType,
@@ -166,6 +173,8 @@ export async function editRecord(
     crudeFat,
     carbohydrate,
     moisture,
+    foodId: food.id,
+    customFood,
   };
 }
 

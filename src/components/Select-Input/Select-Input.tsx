@@ -7,7 +7,7 @@ import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import colors from 'styles/colors';
 import { InputLabel } from 'components/Input-Label/Input-Label';
 
-export const SelectInput: React.FC<SelectInputProps> = props => {
+export const SelectInput = <T extends {}>(props: SelectInputProps<T>) => {
   return (
     <View style={props.style}>
       {props.label ? <InputLabel label={props.label} /> : undefined}

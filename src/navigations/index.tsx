@@ -3,8 +3,6 @@ import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/na
 import { createStackNavigator } from '@react-navigation/stack';
 import Colors from 'styles/colors';
 import { TabBar, TabNavParams } from 'navigations/Tab-Bar/Tab-Bar';
-import { AddCatStack } from 'navigations/Stacks/Add-Cat';
-import { AddCatNavParams } from './Stacks/Add-Cat';
 import { EditCatPage } from 'pages/Edit-Cat/Edit-Cat';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import RNBootSplash from 'react-native-bootsplash';
@@ -21,6 +19,7 @@ import { selectDiaryDate } from 'redux/diary-date/selector';
 import { Alert } from 'components/Alert/Alert';
 import { Cat } from 'models/cat';
 import { EatingRecordParams, EatingRecordStack } from 'pages/Eating-Record/navigation';
+import { AddCatNavParams, AddCatStack } from 'pages/Add-Cat/navigator';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;

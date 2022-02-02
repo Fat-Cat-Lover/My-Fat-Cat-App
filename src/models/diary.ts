@@ -3,13 +3,13 @@ import { Transform, Type } from 'class-transformer';
 export class EatingRecord {
   id: number;
 
-  @Transform(({ value }) => value.toISOString(), {
-    toPlainOnly: true,
-  })
-  @Transform(({ value }) => new Date(value), { toClassOnly: true })
-  createdTime: Date;
+  // @Transform(({ value }) => value.toISOString(), {
+  //   toPlainOnly: true,
+  // })
+  // @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  createdTime: string;
   weight: number;
-  foodId: string;
+  foodId: number;
   customFood: boolean;
   foodType: string;
   brand: string;

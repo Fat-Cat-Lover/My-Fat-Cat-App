@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, TextInput, TextStyle, View } from 'react-native';
+import { EmitterSubscription, Keyboard, TextInput, TextStyle, View } from 'react-native';
 import colors from 'styles/colors';
 import { InputLabel } from 'components/Input-Label/Input-Label';
 import { MfcTextAreaProps } from './Mfc-Text-Area.interface';
@@ -7,6 +7,7 @@ import { MfcTextAreaStyle } from './Mfc-Text-Area.style';
 
 export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle: TextStyle }> {
   ref: React.RefObject<TextInput>;
+  keyboardListener: EmitterSubscription;
   constructor(props: MfcTextAreaProps) {
     super(props);
     this.onFocus = this.onFocus.bind(this);
@@ -20,15 +21,13 @@ export class MfcTextArea extends React.Component<MfcTextAreaProps, { inputStyle:
   }
 
   componentDidMount() {
-    Keyboard.addListener('keyboardDidHide', () => {
+    this.keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
       this.ref.current?.blur();
     });
   }
 
   componentWillUnmount() {
-    Keyboard.removeListener('keyboardDidHide', () => {
-      this.ref.current?.blur();
-    });
+    this.keyboardListener.remove();
   }
 
   onFocus() {

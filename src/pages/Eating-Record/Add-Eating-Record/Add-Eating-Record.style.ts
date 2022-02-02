@@ -22,30 +22,7 @@ export const AddEatingRecordStyle = StyleSheet.create({
     paddingHorizontal: spacings.spacing5,
     paddingVertical: spacings.spacing3,
   },
-  calcBlock: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  caloryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  caloryInput: {
-    width: '55%',
-  },
-  weight: {
-    paddingLeft: spacings.spacing5,
-  },
-  formField: {
-    width: '100%',
-    marginBottom: 18,
-  },
-  exchangeButton: {
-    borderWidth: 1,
-    borderColor: colors.mainGray,
-    padding: 4,
-    borderRadius: spacings.spacing1,
+  buttonList: {
+    paddingTop: spacings.spacing5,
   },
 });

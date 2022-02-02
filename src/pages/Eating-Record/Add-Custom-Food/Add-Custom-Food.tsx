@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import * as yup from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ButtonList } from 'components/Button-List/Button-List';
 import { MfcButton } from 'components/Button/Button';
@@ -13,6 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootNavParams } from 'navigations';
 import { useRootDispatch } from 'redux/hooks';
 import { showAlert } from 'redux/alert/slice';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type AddCustomFoodForm = {
   foodType: string;
@@ -27,14 +29,38 @@ type AddCustomFoodForm = {
 
 type AddCustomFoodProps = StackScreenProps<RootNavParams, 'AddCustomFood'>;
 
+const schema = yup.object().shape({
+  brand: yup.string().required('必填'),
+  foodName: yup.string().required('必填'),
+  calories: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+  crudeProtein: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+  crudeFat: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+  carbohydrate: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+  moisture: yup
+    .string()
+    .matches(/^\d+(\.\d+)?$/, { message: '需為數字', excludeEmptyString: true })
+    .required('必填'),
+});
+
 export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
   const {
     control,
     formState: { isValid },
     handleSubmit,
-  } = useForm<AddCustomFoodForm>({ mode: 'onChange' });
+  } = useForm<AddCustomFoodForm>({ mode: 'onTouched', resolver: yupResolver(schema) });
   const dispatch = useRootDispatch();
-
   async function onSubmit(data: AddCustomFoodForm) {
     const newData = {
       foodType: data.foodType,
@@ -48,14 +74,15 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
     };
 
     try {
-      await addCustomFood(newData);
-      props.navigation.navigate('EatingRecord', {
-        screen: 'AddEatingRecord',
+      const newFoodId = await addCustomFood(newData);
+      props.navigation.navigate({
+        name: 'AddEatingRecord',
         params: {
-          newCustomFood: newData,
+          newCustomFoodId: newFoodId,
         },
+        merge: true,
       });
-    } catch (err) {
+    } catch (err: any) {
       if (err.code === 0) {
         dispatch(
           showAlert({
@@ -98,35 +125,36 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
                 icon="expandMore"
               />
             )}
-            rules={{ required: true }}
           />
           <Controller
             name="brand"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="品牌"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true }}
           />
           <Controller
             name="foodName"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="食物內容"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true }}
           />
         </View>
         <View>
@@ -134,77 +162,82 @@ export const AddCustomFood: React.FC<AddCustomFoodProps> = props => {
           <Controller
             name="calories"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="熱量"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 keyboardType="number-pad"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true, pattern: { message: '需為數字', value: /^\d+(\.\d+)?$/ } }}
           />
           <Controller
             name="crudeProtein"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="蛋白質"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 keyboardType="number-pad"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true, pattern: { message: '需為數字', value: /^\d+(\.\d+)?$/ } }}
           />
           <Controller
             name="carbohydrate"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="碳水化合物"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 keyboardType="number-pad"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true, pattern: { message: '需為數字', value: /^\d+(\.\d+)?$/ } }}
           />
           <Controller
             name="crudeFat"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="脂肪"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 keyboardType="number-pad"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true, pattern: { message: '需為數字', value: /^\d+(\.\d+)?$/ } }}
           />
           <Controller
             name="moisture"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <MfcTextInput
                 label="水份"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="點此輸入"
                 keyboardType="number-pad"
                 containerStyle={AddCustomFoodStyle.input}
+                errorMessage={fieldState.error && fieldState.error.message}
               />
             )}
-            rules={{ required: true, pattern: { message: '需為數字', value: /^\d+(\.\d+)?$/ } }}
           />
         </View>
       </ScrollView>

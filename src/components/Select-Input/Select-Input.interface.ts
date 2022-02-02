@@ -1,18 +1,19 @@
-import { ItemValue } from '@react-native-picker/picker/typings/Picker';
 import { ICONS } from 'components/MFC-Icon/icons';
 import { StyleProp, ViewStyle } from 'react-native';
 
-type Option = {
+type Option<T> = {
   label: string;
-  value: ItemValue;
+  value: T;
+  key?: string | number;
 };
 
-export interface SelectInputProps {
+export interface SelectInputProps<T> {
   label?: string;
-  options: Option[];
-  onChange: (value: ItemValue, index: number) => void;
+  options: Option<T>[];
+  onChange: (value: T, index: number) => void;
   placeholder?: string;
   style?: StyleProp<ViewStyle>;
-  value?: ItemValue | null;
+  value?: T | null;
   icon?: keyof typeof ICONS;
+  itemKey?: string | number;
 }

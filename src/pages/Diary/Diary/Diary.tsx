@@ -14,6 +14,7 @@ import { NutritionBlock } from '../components/Nutrition-Block/Nutrition-Block';
 import { MfcButton } from 'components/Button/Button';
 import { selectDiaryDate } from 'redux/diary-date/selector';
 import { DiaryProps } from './Diary.interface';
+import dayjs from 'dayjs';
 
 export const Diary: React.FC<DiaryProps> = props => {
   const cats = useRootSelector(state => state.cats.cats);
@@ -38,7 +39,7 @@ export const Diary: React.FC<DiaryProps> = props => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}>
         {diary.records
-          .sort((a, b) => a.createdTime.getTime() - b.createdTime.getTime())
+          .sort((a, b) => dayjs(a.createdTime).unix() - dayjs(b.createdTime).unix())
           .map(record => (
             <TouchableOpacity
               key={record.id}
@@ -47,9 +48,9 @@ export const Diary: React.FC<DiaryProps> = props => {
                 props.navigation.navigate('EatingRecord', {
                   screen: 'EditEatingRecord',
                   params: {
-                    catId: cats[selectedCat!].id,
-                    recordId: record.id,
-                    remainCalories: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
+                    cat: cats[selectedCat!],
+                    record: record,
+                    remainCalories: cats[selectedCat!].dailyCalories - (diary.caloriesEatenToday - record.calories),
                   },
                 })
               }>

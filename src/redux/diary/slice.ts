@@ -45,19 +45,31 @@ export const addEatingRecord = createAsyncThunk<
 
 export const editEatingRecord = createAsyncThunk<
   any,
-  { recordId: number; time: Date; foodType: string; brand: string; food: CatFood; weight: number }
+  { recordId: number; time: Date; foodType: string; brand: string; food: CatFood; weight: number; customFood: boolean }
 >('diary/editEatingRecord', async (args, thunkApi) => {
   thunkApi.dispatch(requestStart({}));
-  const record = await editRecord(args.recordId, args.time, args.foodType, args.brand, args.food, args.weight);
+  const record = await editRecord(
+    args.recordId,
+    args.time,
+    args.foodType,
+    args.brand,
+    args.food,
+    args.weight,
+    args.customFood
+  );
   thunkApi.dispatch(requestEnd({}));
   return record;
 });
 
-export const deleteEatingRecord = createAsyncThunk<any, number>('diary/deleteEatingRecord', async (args, thunkApi) => {
-  thunkApi.dispatch(requestStart({}));
-  await deleteRecord(args);
-  thunkApi.dispatch(requestEnd({}));
-});
+export const deleteEatingRecord = createAsyncThunk<number, number>(
+  'diary/deleteEatingRecord',
+  async (args, thunkApi) => {
+    thunkApi.dispatch(requestStart({}));
+    await deleteRecord(args);
+    thunkApi.dispatch(requestEnd({}));
+    return args;
+  }
+);
 
 export const addExerciseTime = createAsyncThunk<
   { createdTime: string; exerciseTime: number },
@@ -98,16 +110,13 @@ const DiarySlice = createSlice({
       }
     });
     builder.addCase(editEatingRecord.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
-        const index = state.currentDiary!.records.findIndex(record => record.id === action.payload.id);
+      const index = state.currentDiary!.records.findIndex(record => record.id === action.payload.id);
+      if (index >= 0) {
         state.currentDiary!.records[index] = action.payload;
       }
     });
     builder.addCase(deleteEatingRecord.fulfilled, (state, action) => {
-      if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
-        const index = state.currentDiary!.records.findIndex(record => record.id === action.payload.id);
-        state.currentDiary!.records.splice(index, 1);
-      }
+      state.currentDiary!.records = state.currentDiary!.records.filter(record => record.id !== action.payload);
     });
   },
 });

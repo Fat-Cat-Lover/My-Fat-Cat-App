@@ -75,7 +75,7 @@ class SQLiteManager {
           carbohydrate REAL NOT NULL,
           moisture REAL NOT NULL,
           foodId TEXT NOT NULL,
-          customFood INTEGER NOT NULL
+          customFood INTEGER NOT NULL,
           FOREIGN KEY (catId)
             REFERENCES Cats (id)
               ON DELETE CASCADE

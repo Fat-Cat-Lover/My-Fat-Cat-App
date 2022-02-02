@@ -26,7 +26,7 @@ interface ProfileForm {
 
 const schema = yup.object().shape({
   name: yup.string().required('必填'),
-  age: yup.number().typeError('需為數字').integer().positive().required('必填'),
+  age: yup.number().typeError('需為數字').integer('需為整數').positive().required('必填'),
   sex: yup.string().required('必填'),
   currentWeight: yup
     .string()
@@ -115,7 +115,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               keyboardType="number-pad"
             />
           )}
-          defaultValue=""
         />
         <Controller
           name="sex"
@@ -132,7 +131,6 @@ export const AddBasicProfile: React.FC<AddBasicProfileProps> = props => {
               />
             </View>
           )}
-          defaultValue=""
         />
         <Controller
           name="currentWeight"

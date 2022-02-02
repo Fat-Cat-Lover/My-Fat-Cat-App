@@ -41,10 +41,11 @@ export const TabBar = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: Colors.darkOrange,
-        inactiveTintColor: Colors.lightGray,
-        style: TabBarStyle.container,
+      screenOptions={{
+        tabBarActiveTintColor: Colors.darkOrange,
+        tabBarInactiveTintColor: Colors.lightGray,
+        tabBarStyle: TabBarStyle.container,
+        headerShown: false,
       }}>
       <Tab.Screen
         name="Home"
@@ -55,7 +56,7 @@ export const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="Diary"
+        name="DiaryStack"
         component={DiaryStack}
         options={{
           tabBarLabel: props => createTabLabel(props, '日記'),
