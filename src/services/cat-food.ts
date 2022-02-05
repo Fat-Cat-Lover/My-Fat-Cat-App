@@ -200,3 +200,20 @@ export async function addCustomFood(data: IAddCustomFood): Promise<number> {
     }
   });
 }
+
+export async function getCustomFoodList(): Promise<(CustomFood & { brandName: string })[]> {
+  const db = await Database.getConnection();
+  const [result] = await db.executeSql(`
+    SELECT * FROM CustomFoods, Brands.name as brandName
+    INNER JOIN Brands
+    ON Brands.id = CustomFoods.brandId
+  `);
+  let data = [];
+  if (result.rows.length > 0) {
+    for (let i = 0; i < result.rows.length; i++) {
+      data.push(result.rows.item(i));
+    }
+  } else {
+  }
+  return data;
+}

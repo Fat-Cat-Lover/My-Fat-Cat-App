@@ -22,6 +22,16 @@ export const Setting: React.FC<SettingProps> = props => {
     <View>
       <HeaderBar>設定</HeaderBar>
       <View style={SettingStyle.container}>
+        <MfcButton
+          color="lightOrange"
+          onPress={() => props.navigation.navigate('CustomFood', { screen: 'customFoodList' })}>
+          <View style={SettingStyle.buttonContentContainer}>
+            <MfcText type="medium" size="large" style={CommonStyle.grayText}>
+              自定義食物資訊列表
+            </MfcText>
+            <MfcIcon name="keyboardArrowRight" style={SettingStyle.icon} />
+          </View>
+        </MfcButton>
         <View style={SettingStyle.infoBlock}>
           <MfcButton color="white" onPress={() => toggleShowInfo(!showInfo)}>
             <View style={SettingStyle.buttonContentContainer}>
@@ -55,14 +65,6 @@ export const Setting: React.FC<SettingProps> = props => {
             </View>
           ) : undefined}
         </View>
-        {/* <MfcButton color="white" onPress={() => props.navigation.navigate('contactUs')} style={SettingStyle.infoBlock}>
-        <View style={SettingStyle.buttonContentContainer}>
-          <MfcText type="medium" size="large" style={CommonStyle.grayText}>
-            聯絡我們
-          </MfcText>
-          <MfcIcon name="keyboardArrowRight" style={SettingStyle.icon} />
-        </View>
-      </MfcButton> */}
       </View>
     </View>
   );

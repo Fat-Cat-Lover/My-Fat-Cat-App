@@ -25,6 +25,7 @@ export interface CatFood {
 }
 
 export interface CustomFood extends CatFood {
+  createdTime: string;
   foodType: string;
   brandId: number;
 }
