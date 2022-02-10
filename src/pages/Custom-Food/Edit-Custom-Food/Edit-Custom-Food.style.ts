@@ -5,4 +5,7 @@ export const EditCustomFoodStyle = StyleSheet.create({
   container: {
     padding: spacings.spacing5,
   },
+  buttonBlock: {
+    marginTop: spacings.spacing1,
+  },
 });

@@ -4,6 +4,7 @@ import { AddCustomFood } from './Add-Custom-Food/Add-Custom-Food';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { CustomFoodParams } from './navigation.params';
 import { CustomFoodList } from './Custom-Food-List/Custom-Food-List';
+import { EditCustomFood } from './Edit-Custom-Food/Edit-Custom-Food';
 
 const Stack = createStackNavigator<CustomFoodParams>();
 
@@ -21,7 +22,7 @@ export const CustomFoodStack = () => (
     />
     <Stack.Screen
       name="editCustomFood"
-      component={}
+      component={EditCustomFood}
       options={{ header: () => <HeaderBar>編輯自定義食物資訊</HeaderBar> }}
     />
   </Stack.Navigator>
