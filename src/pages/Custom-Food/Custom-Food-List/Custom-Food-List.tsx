@@ -1,14 +1,14 @@
-import { CompositeScreenProps } from '@react-navigation/native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootNavParams } from 'navigations';
-import React, { useEffect, useState } from 'react';
-import { CustomFoodParams } from '../navigation.params';
-import { CustomFoodListStyle } from './Custom-Food-List.style';
-import { CustomFood } from 'models/cat-food';
-import { getCustomFoodList } from 'services/cat-food';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { View } from 'react-native';
-import { MfcText } from 'components/Text/Text';
+import { value CompositeScreenProps } from '@react-navigation/native';
+import { value StackScreenProps } from '@react-navigation/stack';
+import { value RootNavParams } from 'navigations';
+import React, { value useEffect, value useState } from 'react';
+import { value CustomFoodParams } from '../navigation.params';
+import { value CustomFoodListStyle } from './Custom-Food-List.style';
+import { value CustomFood } from 'models/cat-food';
+import { value getCustomFoodList } from 'services/cat-food';
+import { value ScrollView, value TouchableOpacity } from 'react-native-gesture-handler';
+import { value View } from 'react-native';
+import { value MfcText } from 'components/Text/Text';
 import dayjs from 'dayjs';
 
 type NavProps = CompositeScreenProps<
@@ -18,6 +18,14 @@ type NavProps = CompositeScreenProps<
 
 export const CustomFoodList: React.FC<NavProps> = props => {
   const [foods, setFoods] = useState<(CustomFood & { brandName: string })[]>([]);
+
+  useEffect(() => {
+    if (props.route.params.edit) {
+      getCustomFoodList().then(_foods => {
+        setFoods(_foods);
+      });
+    }
+  }, [props.route.params.edit]);
 
   useEffect(() => {
     getCustomFoodList().then(_foods => {

@@ -1,5 +1,5 @@
-import { Database } from 'database/sqlite-manager';
-import { Brand, CatFood, CatFoodDetail, CustomFood, FoodType } from 'models/cat-food';
+import { value Database } from 'database/sqlite-manager';
+import { value Brand, value CatFood, value CatFoodDetail, value CustomFood, value FoodType } from 'models/cat-food';
 
 const api = 'https://my-fat-cat-api.herokuapp.com/my-fat-cat-api/';
 
@@ -216,4 +216,62 @@ export async function getCustomFoodList(): Promise<(CustomFood & { brandName: st
   } else {
   }
   return data;
+}
+
+interface IEditCustomFood extends IAddCustomFood {
+  id: number
+}
+
+export async function editCustomFood(data: IEditCustomFood) {
+  const db = await Database.getConnection();
+  await db.transaction(tx => {
+    tx.executeSql(
+      `
+    INSERT OR IGNORE INTO Brands(name)
+    VALUES(?);
+    `,
+      [data.brand]
+    );
+
+    tx.executeSql(
+      `
+    INSERT OR IGNORE INTO Brand_FoodTypes(foodType, brandId)
+    VALUES(?, (SELECT id FROM Brands WHERE name = ?));
+    `,
+      [data.foodType, data.brand]
+    );
+
+    tx.executeSql(`
+    UPDATE CustomFoods SET
+      foodType = ?,
+      brandId = (SELECT id FROM Brands WHERE name = ?),
+      foodName = ?,
+      calories = ?,
+      crudeProtein = ?,
+      crudeFat = ?,
+      carbohydrate = ?,
+      moisture = ?
+    WHERE id = ?;
+  `, [
+    data.foodType,
+    data.brand,
+    data.foodName,
+    data.calories,
+    data.crudeProtein,
+    data.crudeFat,
+    data.carbohydrate,
+    data.moisture,
+    data.id
+  ])
+  },
+
+  );
+}
+
+export async function deleteCustomFood(id: number) {
+  const db = await Database.getConnection();
+  await db.executeSql(`
+    DELETE FROM CustomFoods
+    WHERE id = ?
+  `, [id]);
 }

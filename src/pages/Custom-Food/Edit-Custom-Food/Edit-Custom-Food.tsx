@@ -6,8 +6,9 @@ import { RootNavParams } from 'navigations';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ScrollView, View } from 'react-native';
-import { dismissAlert, showAlert } from 'redux/alert/slice';
 import { useRootDispatch } from 'redux/hooks';
+import { requestEnd, requestStart } from 'redux/loading/slice';
+import { deleteCustomFood, editCustomFood } from 'services/cat-food';
 import { CommonStyle } from 'styles/common-style';
 import { CustomFoodForm } from '../components/Custom-Food-Form';
 import { CustomFoodParams } from '../navigation.params';
@@ -22,13 +23,39 @@ export const EditCustomFood: React.FC<EditCustomFoodProps> = props => {
   const formMethods = useForm<CustomFoodForm>();
   const dispatch = useRootDispatch();
 
-  function onSubmit(data: CustomFoodForm) {
+  async function onSubmit(data: CustomFoodForm) {
     try {
-      dispatch(showAlert);
+      dispatch(requestStart({}));
+      const food = props.route.params;
 
+      await editCustomFood({
+        id: food.id,
+        foodType: data.foodType,
+        brand: data.brand,
+        foodName: data.foodName,
+        calories: parseFloat(data.calories),
+        crudeProtein: parseFloat(data.crudeProtein),
+        crudeFat: parseFloat(data.crudeFat),
+        carbohydrate: parseFloat(data.carbohydrate),
+        moisture: parseFloat(data.moisture),
+      });
+
+      props.navigation.navigate('customFoodList', { edit: true });
     } catch (err) {
     } finally {
-      dispatch(dismissAlert);
+      dispatch(requestEnd({}));
+    }
+  }
+
+  async function deleteFood() {
+    try {
+      dispatch(requestStart({}));
+      await deleteCustomFood(props.route.params.id);
+      props.navigation.navigate('customFoodList', { edit: true });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      dispatch(requestEnd({}));
     }
   }
 
@@ -38,7 +65,7 @@ export const EditCustomFood: React.FC<EditCustomFoodProps> = props => {
         <FormProvider {...formMethods}>
           <CustomFoodForm food={props.route.params} />
         </FormProvider>
-        <MfcButton iconName="cancel" color="gray" textStyle={CommonStyle.grayText} onPress={deleteEatingRecord}>
+        <MfcButton iconName="cancel" color="gray" textStyle={CommonStyle.grayText} onPress={deleteFood}>
           刪除此筆自定義食物資訊
         </MfcButton>
       </ScrollView>
