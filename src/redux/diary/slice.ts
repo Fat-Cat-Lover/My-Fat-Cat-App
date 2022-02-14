@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { CatFood } from 'models/cat-food';
 import { DailyMemo, EatingRecord } from 'models/diary';
 import { requestEnd, requestStart } from 'redux/loading/slice';
-import { addRecord, getDiary, addExerciseTime as _addExerciseTime } from 'services/diary';
+import { addRecord, getDiary, addExerciseTime as _addExerciseTime, editRecord, deleteRecord } from 'services/diary';
 
 interface CurrentDiary {
   status: 'idle' | 'loading' | 'success' | 'failed';
@@ -27,13 +27,49 @@ export const getCurrentDiary = createAsyncThunk<
 
 export const addEatingRecord = createAsyncThunk<
   any,
-  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date }
+  { catId: number; foodType: string; brand: string; food: CatFood; weight: number; time: Date; customFood: boolean }
 >('diary/addEatingRecord', async (args, thunkApi) => {
   thunkApi.dispatch(requestStart({}));
-  const record = await addRecord(args.catId, args.foodType, args.brand, args.food, args.weight, args.time);
+  const record = await addRecord(
+    args.catId,
+    args.foodType,
+    args.brand,
+    args.food,
+    args.weight,
+    args.time,
+    args.customFood
+  );
   thunkApi.dispatch(requestEnd({}));
   return record;
 });
+
+export const editEatingRecord = createAsyncThunk<
+  any,
+  { recordId: number; time: Date; foodType: string; brand: string; food: CatFood; weight: number; customFood: boolean }
+>('diary/editEatingRecord', async (args, thunkApi) => {
+  thunkApi.dispatch(requestStart({}));
+  const record = await editRecord(
+    args.recordId,
+    args.time,
+    args.foodType,
+    args.brand,
+    args.food,
+    args.weight,
+    args.customFood
+  );
+  thunkApi.dispatch(requestEnd({}));
+  return record;
+});
+
+export const deleteEatingRecord = createAsyncThunk<number, number>(
+  'diary/deleteEatingRecord',
+  async (args, thunkApi) => {
+    thunkApi.dispatch(requestStart({}));
+    await deleteRecord(args);
+    thunkApi.dispatch(requestEnd({}));
+    return args;
+  }
+);
 
 export const addExerciseTime = createAsyncThunk<
   { createdTime: string; exerciseTime: number },
@@ -56,7 +92,7 @@ const DiarySlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(getCurrentDiary.pending, (state, action) => {
+    builder.addCase(getCurrentDiary.pending, state => {
       state.status = 'loading';
     });
     builder.addCase(getCurrentDiary.fulfilled, (state, action) => {
@@ -72,6 +108,15 @@ const DiarySlice = createSlice({
       if (dayjs(state.currentDiary?.diaryDate).isSame(action.payload.createdTime, 'day')) {
         state.currentDiary!.excerciseTime += action.payload.exerciseTime;
       }
+    });
+    builder.addCase(editEatingRecord.fulfilled, (state, action) => {
+      const index = state.currentDiary!.records.findIndex(record => record.id === action.payload.id);
+      if (index >= 0) {
+        state.currentDiary!.records[index] = action.payload;
+      }
+    });
+    builder.addCase(deleteEatingRecord.fulfilled, (state, action) => {
+      state.currentDiary!.records = state.currentDiary!.records.filter(record => record.id !== action.payload);
     });
   },
 });

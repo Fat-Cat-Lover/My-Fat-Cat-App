@@ -165,3 +165,14 @@ export async function editCat(data: IEditCat): Promise<Cat> {
   const [result] = await db.executeSql('SELECT * FROM Cat WHERE id=?', [data.id]);
   return result.rows.item(0);
 }
+
+export async function deleteCat(catId: number) {
+  const db = await Database.getConnection();
+  await db.executeSql(
+    `
+    DELETE FROM CAT
+    WHERE id = ?
+  `,
+    [catId]
+  );
+}

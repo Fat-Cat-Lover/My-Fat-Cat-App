@@ -1,6 +1,6 @@
 export interface FoodType {
   id: number;
-  type: string;
+  food_type: string;
 }
 
 export interface Brand {
@@ -10,8 +10,6 @@ export interface Brand {
 
 export interface CatFood {
   id: number;
-  foodTypeId: number;
-  brandId: number;
   name: string;
   calories: number;
   crudeProtein: number;
@@ -24,4 +22,15 @@ export interface CatFood {
   // sodium?: number;
   // magnesium?: number;
   moisture: number;
+}
+
+export interface CustomFood extends CatFood {
+  createdTime: string;
+  foodType: string;
+  brandId: number;
+}
+
+export interface CatFoodDetail extends CatFood {
+  food_type: FoodType;
+  brand: Brand;
 }

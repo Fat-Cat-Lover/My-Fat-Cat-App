@@ -1,5 +1,6 @@
 import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import baseColors from 'styles/colors';
+import spacings from 'styles/spacings';
 import Spacings from 'styles/spacings';
 
 interface ButtonStyle {
@@ -18,6 +19,14 @@ export const ButtonMainStyle = StyleSheet.create({
   },
   disabled: {
     opacity: 0.6,
+  },
+  icon: {
+    marginRight: spacings.spacing3,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

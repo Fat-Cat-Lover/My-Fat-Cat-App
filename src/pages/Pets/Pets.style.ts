@@ -13,12 +13,4 @@ export const PetsStyle = StyleSheet.create({
   elementVerticalSpacing: {
     marginVertical: spacings.spacing1,
   },
-  addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addButtonIcon: {
-    marginRight: spacings.spacing5,
-  },
 });

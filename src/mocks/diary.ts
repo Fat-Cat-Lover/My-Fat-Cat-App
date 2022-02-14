@@ -13,16 +13,16 @@ export class MockDiary extends Diary {
 }
 
 export class MockEatingRecord extends EatingRecord {
-  id: string;
+  id: number;
   constructor(public catId: number, foodId: number, weight: number, createdTime: Date) {
     super();
     const food = mockCatFoods.find(c => c.id === foodId)!;
     const foodType = mockCateories.find(c => c.id === food.foodTypeId)!;
     const brand = mockBrands.find(b => b.id === food.brandId)!;
-    this.id = Math.random().toString(36).substr(2, 9);
+    this.id = Math.random();
     this.createdTime = createdTime;
     this.weight = weight;
-    this.foodType = foodType.type;
+    this.foodType = foodType.food_type;
     this.brand = brand.name;
     this.foodName = food.name;
     const ratio = weight / 100;

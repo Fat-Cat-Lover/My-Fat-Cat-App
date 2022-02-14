@@ -59,7 +59,7 @@ export const PetDetail: React.FC<PetDetailProps> = props => {
           </View>
         </View>
         <View>
-          <TouchableOpacity onPress={() => props.editButtonPress && props.editButtonPress(cat.id)}>
+          <TouchableOpacity onPress={() => props.editButtonPress && props.editButtonPress(cat)}>
             <MfcIcon name="create" />
           </TouchableOpacity>
         </View>
