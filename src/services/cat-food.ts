@@ -1,5 +1,5 @@
-import { value Database } from 'database/sqlite-manager';
-import { value Brand, value CatFood, value CatFoodDetail, value CustomFood, value FoodType } from 'models/cat-food';
+import { Database } from 'database/sqlite-manager';
+import { Brand, CatFood, CatFoodDetail, CustomFood, FoodType } from 'models/cat-food';
 
 const api = 'https://my-fat-cat-api.herokuapp.com/my-fat-cat-api/';
 
@@ -204,7 +204,8 @@ export async function addCustomFood(data: IAddCustomFood): Promise<number> {
 export async function getCustomFoodList(): Promise<(CustomFood & { brandName: string })[]> {
   const db = await Database.getConnection();
   const [result] = await db.executeSql(`
-    SELECT * FROM CustomFoods, Brands.name as brandName
+    SELECT CustomFoods.*, CustomFoods.foodName as name , Brands.name as brandName
+    FROM CustomFoods
     INNER JOIN Brands
     ON Brands.id = CustomFoods.brandId
   `);
@@ -219,7 +220,7 @@ export async function getCustomFoodList(): Promise<(CustomFood & { brandName: st
 }
 
 interface IEditCustomFood extends IAddCustomFood {
-  id: number
+  id: number;
 }
 
 export async function editCustomFood(data: IEditCustomFood) {
@@ -241,7 +242,8 @@ export async function editCustomFood(data: IEditCustomFood) {
       [data.foodType, data.brand]
     );
 
-    tx.executeSql(`
+    tx.executeSql(
+      `
     UPDATE CustomFoods SET
       foodType = ?,
       brandId = (SELECT id FROM Brands WHERE name = ?),
@@ -252,26 +254,29 @@ export async function editCustomFood(data: IEditCustomFood) {
       carbohydrate = ?,
       moisture = ?
     WHERE id = ?;
-  `, [
-    data.foodType,
-    data.brand,
-    data.foodName,
-    data.calories,
-    data.crudeProtein,
-    data.crudeFat,
-    data.carbohydrate,
-    data.moisture,
-    data.id
-  ])
-  },
-
-  );
+  `,
+      [
+        data.foodType,
+        data.brand,
+        data.foodName,
+        data.calories,
+        data.crudeProtein,
+        data.crudeFat,
+        data.carbohydrate,
+        data.moisture,
+        data.id,
+      ]
+    );
+  });
 }
 
 export async function deleteCustomFood(id: number) {
   const db = await Database.getConnection();
-  await db.executeSql(`
+  await db.executeSql(
+    `
     DELETE FROM CustomFoods
     WHERE id = ?
-  `, [id]);
+  `,
+    [id]
+  );
 }

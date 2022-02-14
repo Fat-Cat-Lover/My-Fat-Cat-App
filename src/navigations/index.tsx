@@ -19,7 +19,8 @@ import { Alert } from 'components/Alert/Alert';
 import { Cat } from 'models/cat';
 import { EatingRecordParams, EatingRecordStack } from 'pages/Eating-Record/navigation';
 import { AddCatNavParams, AddCatStack } from 'pages/Add-Cat/navigator';
-import { CustomFoodParams, CustomFoodStack } from 'pages/Custom-Food/navigation';
+import { CustomFoodStack } from 'pages/Custom-Food/navigation';
+import { CustomFoodParams } from 'pages/Custom-Food/navigation.params';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;

@@ -1,18 +1,19 @@
-import { value CompositeScreenProps } from '@react-navigation/native';
-import { value StackScreenProps } from '@react-navigation/stack';
-import { value RootNavParams } from 'navigations';
-import React, { value useEffect, value useState } from 'react';
-import { value CustomFoodParams } from '../navigation.params';
-import { value CustomFoodListStyle } from './Custom-Food-List.style';
-import { value CustomFood } from 'models/cat-food';
-import { value getCustomFoodList } from 'services/cat-food';
-import { value ScrollView, value TouchableOpacity } from 'react-native-gesture-handler';
-import { value View } from 'react-native';
-import { value MfcText } from 'components/Text/Text';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootNavParams } from 'navigations';
+import React, { useEffect, useState } from 'react';
+import { CustomFoodListStyle } from './Custom-Food-List.style';
+import { CustomFood } from 'models/cat-food';
+import { getCustomFoodList } from 'services/cat-food';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { View } from 'react-native';
+import { MfcText } from 'components/Text/Text';
 import dayjs from 'dayjs';
+import { CommonStyle } from 'styles/common-style';
+import { SettingStackParams } from 'pages/Setting/navigation.params';
 
 type NavProps = CompositeScreenProps<
-  StackScreenProps<CustomFoodParams, 'customFoodList'>,
+  StackScreenProps<SettingStackParams, 'customFoodList'>,
   StackScreenProps<RootNavParams>
 >;
 
@@ -20,12 +21,12 @@ export const CustomFoodList: React.FC<NavProps> = props => {
   const [foods, setFoods] = useState<(CustomFood & { brandName: string })[]>([]);
 
   useEffect(() => {
-    if (props.route.params.edit) {
+    if (props.route.params && props.route.params.edit) {
       getCustomFoodList().then(_foods => {
         setFoods(_foods);
       });
     }
-  }, [props.route.params.edit]);
+  }, [props.route.params]);
 
   useEffect(() => {
     getCustomFoodList().then(_foods => {
@@ -41,16 +42,19 @@ export const CustomFoodList: React.FC<NavProps> = props => {
       {foods.map(food => (
         <TouchableOpacity
           style={CustomFoodListStyle.foodButton}
-          onPress={() => props.navigation.navigate('editCustomFood', food)}>
+          onPress={() => props.navigation.navigate('CustomFood', { screen: 'editCustomFood', params: food })}
+          key={food.id}>
           <View style={CustomFoodListStyle.foodDetailContainer}>
-            <MfcText size="normal">
+            <MfcText size="large" style={CommonStyle.grayText}>
               {food.foodType} - {food.brandName}
             </MfcText>
-            <MfcText size="small">{food.name}</MfcText>
+            <MfcText style={CommonStyle.grayText}>{food.name}</MfcText>
           </View>
           <View style={CustomFoodListStyle.dateContainer}>
-            <MfcText>{dayjs(food.createdTime).format('MM/DD')}</MfcText>
-            <MfcText>新增</MfcText>
+            <MfcText size="large" type="medium">
+              {dayjs(food.createdTime).format('MM/DD')}
+            </MfcText>
+            <MfcText size="large">新增</MfcText>
           </View>
         </TouchableOpacity>
       ))}

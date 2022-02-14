@@ -8,14 +8,16 @@ import { TabBarStyle } from './Tab-Bar.style';
 import { MfcText } from 'components/Text/Text';
 import { Home } from 'pages/Home/Home';
 import { Pets } from 'pages/Pets/Pets';
-import { Setting } from 'pages/Setting/Setting';
-import { DiaryStack } from 'pages/Diary/navigation';
+import { DiaryStack, DiaryStackParams } from 'pages/Diary/navigation';
+import { SettingStack } from 'pages/Setting/navigator';
+import { SettingStackParams } from 'pages/Setting/navigation.params';
+import { NavigatorScreenParams } from '@react-navigation/native';
 
 export type TabNavParams = {
   Home: undefined;
-  Diary: undefined;
+  DiaryStack: NavigatorScreenParams<DiaryStackParams>;
   Pets: undefined;
-  Setting: undefined;
+  SettingStack: NavigatorScreenParams<SettingStackParams>;
 };
 
 function createTabLabel(props: { focused: boolean; color: string; position: LabelPosition }, labelName: string) {
@@ -72,8 +74,8 @@ export const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="Setting"
-        component={Setting}
+        name="SettingStack"
+        component={SettingStack}
         options={{
           tabBarLabel: props => createTabLabel(props, '設定'),
           tabBarIcon: props => createTabIcon(props, 'setting'),

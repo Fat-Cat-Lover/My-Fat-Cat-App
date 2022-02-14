@@ -69,7 +69,7 @@ export const AddEatingRecord: React.FC<AddEatingRecordProps> = props => {
             style={AddEatingRecordStyle.addCatFoodButton}
             iconName="add"
             textStyle={CommonStyle.grayText}
-            onPress={() => props.navigation.navigate('AddCustomFood')}>
+            onPress={() => props.navigation.navigate('CustomFood', { screen: 'addCustomFood' })}>
             新增自定義食物資訊
           </MfcButton>
         </View>

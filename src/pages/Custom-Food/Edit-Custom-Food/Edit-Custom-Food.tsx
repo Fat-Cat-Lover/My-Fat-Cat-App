@@ -40,7 +40,10 @@ export const EditCustomFood: React.FC<EditCustomFoodProps> = props => {
         moisture: parseFloat(data.moisture),
       });
 
-      props.navigation.navigate('customFoodList', { edit: true });
+      props.navigation.navigate('TabBar', {
+        screen: 'SettingStack',
+        params: { screen: 'customFoodList', params: { edit: true } },
+      });
     } catch (err) {
     } finally {
       dispatch(requestEnd({}));
@@ -51,7 +54,10 @@ export const EditCustomFood: React.FC<EditCustomFoodProps> = props => {
     try {
       dispatch(requestStart({}));
       await deleteCustomFood(props.route.params.id);
-      props.navigation.navigate('customFoodList', { edit: true });
+      props.navigation.navigate('TabBar', {
+        screen: 'SettingStack',
+        params: { screen: 'customFoodList', params: { edit: true } },
+      });
     } catch (err) {
       console.error(err);
     } finally {
@@ -77,7 +83,7 @@ export const EditCustomFood: React.FC<EditCustomFoodProps> = props => {
           color="primary"
           onPress={formMethods.handleSubmit(onSubmit)}
           disabled={!formMethods.formState.isValid}>
-          新增資訊
+          確定修改
         </MfcButton>
       </ButtonList>
     </View>
