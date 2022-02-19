@@ -52,7 +52,7 @@ export const MfcNavigation = () => {
 
   useEffect(() => {
     if (selectedCat !== undefined && cats.length > 0 && currentDate) {
-      dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date: new Date(currentDate) }));
+      dispatch(getCurrentDiary({ catId: cats[selectedCat].id, date: currentDate }));
     }
   }, [selectedCat, currentDate, dispatch]);
 
