@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Colors from 'styles/colors';
@@ -21,6 +22,7 @@ import { EatingRecordParams, EatingRecordStack } from 'pages/Eating-Record/navig
 import { AddCatNavParams, AddCatStack } from 'pages/Add-Cat/navigator';
 import { CustomFoodStack } from 'pages/Custom-Food/navigation';
 import { CustomFoodParams } from 'pages/Custom-Food/navigation.params';
+import { setDiaryDate } from 'redux/diary-date/slice';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -40,6 +42,7 @@ export const MfcNavigation = () => {
   const selectedCat = useRootSelector(getSelectedCat);
   const isLoading = useRootSelector(selectLoading);
   const currentDate = useRootSelector(selectDiaryDate);
+  const appState = useRef(AppState.currentState);
 
   const init = useCallback(async () => {
     await dispatch(getCats());
@@ -48,6 +51,15 @@ export const MfcNavigation = () => {
 
   useEffect(() => {
     init();
+    const subscription = AppState.addEventListener('change', state => {
+      console.log(appState)
+      console.log('app state is', state)
+      if (appState.current.match(/inactive|background/) && state === 'active') {
+        dispatch(setDiaryDate(new Date().toISOString()))
+      }
+      appState.current = state;
+    });
+    return () => subscription.remove();
   }, []);
 
   useEffect(() => {
