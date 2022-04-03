@@ -19,4 +19,5 @@ export const ICONS = {
   done: require('./images/done.png'),
   transfer: require('./images/transfer.png'),
   cancel: require('./images/cancel.png'),
+  catPunch: require('./images/cat-punch.png'),
 };

@@ -21,15 +21,17 @@ export const Setting: React.FC<SettingProps> = props => {
 
   return (
     <View style={SettingStyle.container}>
-      <MfcButton color="lightOrange" onPress={() => props.navigation.navigate('customFoodList', {})}>
-        <View style={SettingStyle.buttonContentContainer}>
-          <MfcText type="medium" size="large" style={CommonStyle.grayText}>
-            自定義食物資訊列表
-          </MfcText>
-          <MfcIcon name="keyboardArrowRight" style={SettingStyle.icon} />
-        </View>
-      </MfcButton>
-      <View style={SettingStyle.infoBlock}>
+      <View style={SettingStyle.button}>
+        <MfcButton color="lightOrange" onPress={() => props.navigation.navigate('customFoodList', {})}>
+          <View style={SettingStyle.buttonContentContainer}>
+            <MfcText type="medium" size="large" style={CommonStyle.grayText}>
+              自定義食物資訊列表
+            </MfcText>
+            <MfcIcon name="keyboardArrowRight" style={SettingStyle.icon} />
+          </View>
+        </MfcButton>
+      </View>
+      <View style={SettingStyle.button}>
         <MfcButton color="white" onPress={() => toggleShowInfo(!showInfo)}>
           <View style={SettingStyle.buttonContentContainer}>
             <MfcText type="medium" size="large" style={CommonStyle.grayText}>
@@ -44,7 +46,7 @@ export const Setting: React.FC<SettingProps> = props => {
           </View>
         ) : undefined}
       </View>
-      <View style={SettingStyle.infoBlock}>
+      <View style={SettingStyle.button}>
         <MfcButton color="white" onPress={() => toggleShowAbout(!showAbout)}>
           <View style={SettingStyle.buttonContentContainer}>
             <MfcText type="medium" size="large" style={CommonStyle.grayText}>

@@ -6,7 +6,7 @@ export const SettingStyle = StyleSheet.create({
   container: {
     padding: 16,
   },
-  infoBlock: {
+  button: {
     marginVertical: spacings.spacing1,
   },
   buttonContentContainer: {
@@ -17,7 +17,6 @@ export const SettingStyle = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.lightGray,
     borderRadius: 8,
-    marginVertical: spacings.spacing1,
   },
   icon: {
     marginLeft: spacings.spacing3,
