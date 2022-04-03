@@ -1,33 +1,34 @@
 import { Database } from 'database/sqlite-manager';
+import dayjs from 'dayjs';
 import { CatFood } from 'models/cat-food';
 import { DailyMemo, EatingRecord } from 'models/diary';
 
-export async function getDiary(catId: number, date: Date) {
+export async function getDiary(catId: number, date: string) {
   const db = await Database.getConnection();
   const [[eatingRecordResult], [excerciseTimeResult], [memoResult]] = await Promise.all([
     db.executeSql(
       `
     SELECT * FROM EatingRecord
     WHERE catId = ?
-    AND createdTime BETWEEN datetime(?, 'start of day') AND datetime(?, '+1 day', 'start of day');
+    AND createdTime BETWEEN ? AND ?;
   `,
-      [catId, date.toISOString(), date.toISOString()]
+      [catId, dayjs(date).startOf('day').toISOString(), dayjs(date).add(1, 'day').startOf('day').toISOString()]
     ),
     db.executeSql(
       `
       SELECT SUM(time) FROM ExcerciseTime
       WHERE catId = ?
-      AND createdTime BETWEEN datetime(?, 'start of day') AND datetime(?, '+1 day', 'start of day');
+      AND createdTime BETWEEN ? AND ?;
     `,
-      [catId, date.toISOString(), date.toISOString()]
+      [catId, dayjs(date).startOf('day').toISOString(), dayjs(date).add(1, 'day').startOf('day').toISOString()]
     ),
     db.executeSql(
       `
       SELECT id, memo FROM DailyMemo
       WHERE catId = ?
-      AND date BETWEEN datetime(?, 'start of day') AND datetime(?, '+1 day', 'start of day');
+      AND date BETWEEN ? AND ?;
       `,
-      [catId, date.toISOString(), date.toISOString()]
+      [catId, dayjs(date).startOf('day').toISOString(), dayjs(date).add(1, 'day').startOf('day').toISOString()]
     ),
   ]);
 
@@ -39,7 +40,7 @@ export async function getDiary(catId: number, date: Date) {
   }
   const excerciseTime = excerciseTimeResult ? excerciseTimeResult.rows.item(0)['SUM(time)'] : 0;
   const memo = memoResult ? (memoResult.rows.item(0) as DailyMemo) : null;
-  return { records, excerciseTime, diaryDate: date.toISOString(), memo };
+  return { records, excerciseTime, diaryDate: date, memo };
 }
 
 export async function addRecord(

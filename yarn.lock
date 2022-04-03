@@ -2429,12 +2429,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-native@npm:^0.63.2":
-  version: 0.63.59
-  resolution: "@types/react-native@npm:0.63.59"
+"@types/react-native@npm:^0.66.16":
+  version: 0.66.16
+  resolution: "@types/react-native@npm:0.66.16"
   dependencies:
     "@types/react": "*"
-  checksum: cf4e1d36d7ae5426102630f73835df102856f7fc15c7f527c90a7dd0df5d1e78c5f2db40718a8e395f686fdf754fc2c68bd8062e81ec402dd772abb56300798a
+  checksum: c8f8783bea1ab51086240fa84008ff00a4996bb56c7e642dc78400b60ea2bc1f0adb04f30a1f7a89c6f83bfe028380e8749c923d7b179d89b7fb5e2c05065e09
   languageName: node
   linkType: hard
 
@@ -8202,7 +8202,7 @@ __metadata:
     "@react-navigation/stack": ^6.0.11
     "@reduxjs/toolkit": ^1.5.0
     "@types/jest": ^25.2.3
-    "@types/react-native": ^0.63.2
+    "@types/react-native": ^0.66.16
     "@types/react-native-sqlite-storage": ^5.0.0
     "@types/react-redux": ^7.1.16
     "@types/react-test-renderer": ^16.9.2
