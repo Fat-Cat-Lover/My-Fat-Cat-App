@@ -17,7 +17,7 @@ const initState: CurrentDiary = {
 
 export const getCurrentDiary = createAsyncThunk<
   { records: EatingRecord[]; excerciseTime: number; diaryDate: string },
-  { catId: number; date: Date }
+  { catId: number; date: string }
 >('diary/getCurrentDiary', async (args, thunkApi) => {
   thunkApi.dispatch(requestStart({}));
   const diary = await getDiary(args.catId, args.date);

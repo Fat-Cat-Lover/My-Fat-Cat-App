@@ -103,7 +103,7 @@ export const Home: React.FC<HomeProps> = props => {
             <ProgressButton
               icon="food"
               progress={(diary?.caloriesEatenToday || 0) / (currentCat.dailyCalories || 0) || 0}
-              progressText={`${diary?.caloriesEatenToday || 0}/${currentCat.dailyCalories || 0} Cal`}
+              progressText={`${diary?.caloriesEatenToday.toFixed(1) || 0}/${currentCat.dailyCalories.toFixed(1) || 0} Cal`}
               progressBarColor="#FF9F1C"
               buttonText="餵食"
               buttonColor="primary"
@@ -111,7 +111,7 @@ export const Home: React.FC<HomeProps> = props => {
                 props.navigation.navigate('EatingRecord', {
                   screen: 'AddEatingRecord',
                   params: {
-                    date: currentDate,
+                    date: new Date().toISOString(),
                     catId: cats[selectedCat!].id,
                     remainCalroies: currentCat.dailyCalories - (diary?.caloriesEatenToday || 0),
                   },

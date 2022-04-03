@@ -133,7 +133,7 @@ export const Diary: React.FC<DiaryProps> = props => {
               props.navigation.navigate('EatingRecord', {
                 screen: 'AddEatingRecord',
                 params: {
-                  date: currentDate,
+                  date: new Date().toISOString(),
                   catId: cats[selectedCat!].id,
                   remainCalroies: cats[selectedCat!].dailyCalories - (diary?.caloriesEatenToday || 0),
                 },

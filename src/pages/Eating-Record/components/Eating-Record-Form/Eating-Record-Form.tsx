@@ -153,7 +153,7 @@ export const EatingRecordForm: React.FC<EatingRecordFormProps> = props => {
             value={field.value.toDate()}
             onChange={async date => {
               field.onChange(field.value.year(date.getFullYear()).month(date.getMonth()).date(date.getDate()));
-              const diary = plainToClass(Diary, await getDiary(props.cat.id, date));
+              const diary = plainToClass(Diary, await getDiary(props.cat.id, date.toDateString()));
               setRemainCalories(props.cat.dailyCalories - diary.caloriesEatenToday);
             }}
             style={EatingRecordFormStyle.formField}
