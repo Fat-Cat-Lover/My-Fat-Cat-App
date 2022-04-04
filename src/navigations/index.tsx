@@ -3,7 +3,6 @@ import { AppState } from 'react-native';
 import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Colors from 'styles/colors';
-import { TabBar, TabNavParams } from 'navigations/Tab-Bar/Tab-Bar';
 import { EditCatPage } from 'pages/Edit-Cat/Edit-Cat';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import RNBootSplash from 'react-native-bootsplash';
@@ -23,6 +22,7 @@ import { AddCatNavParams, AddCatStack } from 'pages/Add-Cat/navigator';
 import { CustomFoodStack } from 'pages/Custom-Food/navigation';
 import { CustomFoodParams } from 'pages/Custom-Food/navigation.params';
 import { setDiaryDate } from 'redux/diary-date/slice';
+import { TabNavigator, TabNavParams } from './Tab-Bar';
 
 export type RootNavParams = {
   TabBar: NavigatorScreenParams<TabNavParams>;
@@ -52,10 +52,10 @@ export const MfcNavigation = () => {
   useEffect(() => {
     init();
     const subscription = AppState.addEventListener('change', state => {
-      console.log(appState)
-      console.log('app state is', state)
+      console.log(appState);
+      console.log('app state is', state);
       if (appState.current.match(/inactive|background/) && state === 'active') {
-        dispatch(setDiaryDate(new Date().toISOString()))
+        dispatch(setDiaryDate(new Date().toISOString()));
       }
       appState.current = state;
     });
@@ -73,7 +73,7 @@ export const MfcNavigation = () => {
   if (cats && cats.length > 0) {
     initRoute = (
       <>
-        <Stack.Screen name="TabBar" component={TabBar} options={{ headerShown: false }} />
+        <Stack.Screen name="TabBar" component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="AddCat" component={AddCatStack} options={{ headerShown: false }} />
         <Stack.Screen
           name="EditCat"

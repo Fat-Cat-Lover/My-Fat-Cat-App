@@ -1,33 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { LabelPosition } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import Colors from 'styles/colors';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { MfcIcon } from 'components/MFC-Icon/MFC-Icon';
 import { TabBarStyle } from './Tab-Bar.style';
 import { MfcText } from 'components/Text/Text';
-import { Home } from 'pages/Home/Home';
-import { Pets } from 'pages/Pets/Pets';
-import { DiaryStack, DiaryStackParams } from 'pages/Diary/navigation';
-import { SettingStack } from 'pages/Setting/navigator';
-import { SettingStackParams } from 'pages/Setting/navigation.params';
-import { NavigatorScreenParams } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { IconName } from 'components/MFC-Icon/MFC-icon.interface';
 
-export type TabNavParams = {
-  Home: undefined;
-  DiaryStack: NavigatorScreenParams<DiaryStackParams>;
-  Pets: undefined;
-  SettingStack: NavigatorScreenParams<SettingStackParams>;
-};
-
-function createTabLabel(props: { focused: boolean; color: string; position: LabelPosition }, labelName: string) {
-  return (
-    <View style={TabBarStyle.label}>
-      <MfcText size="normal" type="medium" style={{ color: props.color }}>
-        {labelName}
-      </MfcText>
-    </View>
-  );
+interface TabBarProps extends BottomTabBarProps {
+  routes: {
+    label: string;
+    icon: IconName;
+  }[];
 }
 
 function createTabIcon(
@@ -37,50 +21,46 @@ function createTabIcon(
   return <MfcIcon name={iconName} style={{ tintColor: props.color }} />;
 }
 
-const Tab = createBottomTabNavigator();
-
-export const TabBar = () => {
+export const TabBar: React.FC<TabBarProps> = props => {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        tabBarActiveTintColor: Colors.darkOrange,
-        tabBarInactiveTintColor: Colors.lightGray,
-        tabBarStyle: TabBarStyle.container,
-        headerShown: false,
-      }}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: props => createTabLabel(props, '首頁'),
-          tabBarIcon: props => createTabIcon(props, 'home'),
-        }}
-      />
-      <Tab.Screen
-        name="DiaryStack"
-        component={DiaryStack}
-        options={{
-          tabBarLabel: props => createTabLabel(props, '日記'),
-          tabBarIcon: props => createTabIcon(props, 'bookmark'),
-        }}
-      />
-      <Tab.Screen
-        name="Pets"
-        component={Pets}
-        options={{
-          tabBarLabel: props => createTabLabel(props, '寵物'),
-          tabBarIcon: props => createTabIcon(props, 'pet'),
-        }}
-      />
-      <Tab.Screen
-        name="SettingStack"
-        component={SettingStack}
-        options={{
-          tabBarLabel: props => createTabLabel(props, '設定'),
-          tabBarIcon: props => createTabIcon(props, 'setting'),
-        }}
-      />
-    </Tab.Navigator>
+    <View style={TabBarStyle.container}>
+      {props.state.routes.map((route, i) => {
+        const isFocused = props.state.index === i;
+
+        const onPress = () => {
+          const event = props.navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+          if (!isFocused && !event.defaultPrevented) {
+            props.navigation.navigate({ name: route.name, merge: true, params: {} });
+          }
+        };
+
+        return (
+          <View style={TabBarStyle.tabBarButtonContainer}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={isFocused ? { selected: true } : {}}
+              onPress={onPress}>
+              <View style={TabBarStyle.tabBarButtonContent}>
+                <MfcIcon
+                  name={props.routes[i].icon}
+                  style={[TabBarStyle.iconColor, isFocused ? TabBarStyle.focusedIcon : undefined]}
+                />
+                <MfcText
+                  size="normal"
+                  type="medium"
+                  style={[TabBarStyle.textColor, isFocused ? TabBarStyle.focusedText : undefined]}>
+                  {props.routes[i].label}
+                </MfcText>
+              </View>
+            </TouchableOpacity>
+            {isFocused ? <MfcIcon name="catPunch" style={TabBarStyle.focusedMark} /> : undefined}
+          </View>
+        );
+      })}
+    </View>
   );
 };

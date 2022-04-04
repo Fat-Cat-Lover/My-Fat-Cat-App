@@ -4,6 +4,7 @@ import { Setting } from './Setting';
 import { CustomFoodList } from '../Custom-Food/Custom-Food-List/Custom-Food-List';
 import { HeaderBar } from 'components/Header-Bar/Header-Bar';
 import { SettingStackParams } from './navigation.params';
+import colors from 'styles/colors';
 
 const Stack = createStackNavigator<SettingStackParams>();
 
@@ -13,7 +14,11 @@ export const SettingStack = () => (
     <Stack.Screen
       name="customFoodList"
       component={CustomFoodList}
-      options={{ header: () => <HeaderBar>自定義食物資訊列表</HeaderBar> }}
+      options={{
+        title: '自定義食物資訊列表',
+        headerTitleAlign: 'center',
+        headerTitleStyle: { fontFamily: 'NotoSansTC-Regular', color: colors.black, fontSize: 18, lineHeight: 18 * 1.4 },
+      }}
     />
   </Stack.Navigator>
 );
